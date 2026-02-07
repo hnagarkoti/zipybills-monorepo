@@ -1,0 +1,18 @@
+{
+  "name": "@zipybills/factory-shifts-service-runtime",
+  "version": "0.1.0",
+  "description": "FactoryOS Shifts Service Runtime – shift management routes",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@zipybills/factory-shifts-service-interface": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "express": "catalog:"
+  },
+  "devDependencies": { "@types/express": "catalog:", "@types/node": "catalog:", "typescript": "catalog:" },
+  "private": true
+}

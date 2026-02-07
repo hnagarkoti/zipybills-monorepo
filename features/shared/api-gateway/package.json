@@ -1,0 +1,35 @@
+{
+  "name": "@zipybills/factory-api-gateway",
+  "version": "0.1.0",
+  "description": "FactoryOS API Gateway – mounts all feature service routers into a single Express server",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm exec tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-auth-service-runtime": "workspace:*",
+    "@zipybills/factory-machines-service-runtime": "workspace:*",
+    "@zipybills/factory-shifts-service-runtime": "workspace:*",
+    "@zipybills/factory-planning-service-runtime": "workspace:*",
+    "@zipybills/factory-downtime-service-runtime": "workspace:*",
+    "@zipybills/factory-dashboard-service-runtime": "workspace:*",
+    "@zipybills/factory-reports-service-runtime": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "cors": "catalog:",
+    "dotenv": "catalog:",
+    "express": "catalog:"
+  },
+  "devDependencies": {
+    "@types/cors": "catalog:",
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

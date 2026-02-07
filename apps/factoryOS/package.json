@@ -25,6 +25,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-native": "catalog:",
+    "react-native-safe-area-context": "catalog:",
     "react-native-web": "catalog:",
     "tailwindcss": "catalog:"
   },

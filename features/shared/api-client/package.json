@@ -1,0 +1,21 @@
+{
+  "name": "@zipybills/factory-api-client",
+  "version": "0.1.0",
+  "description": "Shared HTTP client for FactoryOS frontend – handles auth tokens, base URL, and typed fetch",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react-native": "catalog:"
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

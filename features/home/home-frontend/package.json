@@ -1,0 +1,33 @@
+{
+  "name": "@zipybills/factory-home-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Home Frontend - Production monitoring dashboard (Web & Mobile)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./HomePage": "./src/components/HomePage.tsx"
+  },
+  "peerDependencies": {
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-native": "catalog:",
+    "react-native-safe-area-context": "catalog:"
+  },
+  "dependencies": {
+    "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/factory-auth-frontend": "workspace:*",
+    "@zipybills/factory-dashboard-frontend": "workspace:*",
+    "@zipybills/factory-machines-frontend": "workspace:*",
+    "@zipybills/factory-shifts-frontend": "workspace:*",
+    "@zipybills/factory-planning-frontend": "workspace:*",
+    "@zipybills/factory-downtime-frontend": "workspace:*",
+    "@zipybills/factory-reports-frontend": "workspace:*",
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

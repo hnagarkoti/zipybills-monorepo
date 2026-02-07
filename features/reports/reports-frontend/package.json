@@ -1,0 +1,12 @@
+{
+  "name": "@zipybills/factory-reports-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Reports Frontend – production analytics and reports",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "peerDependencies": { "nativewind": "catalog:", "react": "catalog:", "react-native": "catalog:" },
+  "dependencies": { "@zipybills/factory-api-client": "workspace:*", "@zipybills/ts-config": "workspace:*" },
+  "devDependencies": { "@types/react": "catalog:", "typescript": "catalog:" },
+  "private": true
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@zipybills/factory-database-config",
+  "version": "0.1.0",
+  "description": "FactoryOS Shared Database Configuration – PostgreSQL pool management",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "dotenv": "catalog:",
+    "pg": "catalog:"
+  },
+  "devDependencies": {
+    "@types/pg": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

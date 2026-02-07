@@ -1,0 +1,11 @@
+{
+  "name": "@zipybills/factory-dashboard-service-interface",
+  "version": "0.1.0",
+  "description": "FactoryOS Dashboard Service Interface – types and API contract for dashboard & live stats",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@zipybills/ts-config": "workspace:*" },
+  "devDependencies": { "typescript": "catalog:" },
+  "private": true
+}
