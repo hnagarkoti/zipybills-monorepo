@@ -1,0 +1,23 @@
+{
+  "name": "@zipybills/barcode-scanning-service-interface",
+  "version": "0.1.0",
+  "description": "Barcode Scanning Service Interface - Auto-generated TypeScript SDK",
+  "type": "module",
+  "main": "./dist/index.ts",
+  "exports": {
+    ".": "./dist/index.ts",
+    "./dist/client": "./dist/client.ts"
+  },
+  "scripts": {
+    "build": "openapi-ts -i openapi.yml -o ./dist -c @hey-api/client-fetch",
+    "prebuild": "rm -rf dist"
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

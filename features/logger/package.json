@@ -1,0 +1,31 @@
+{
+  "name": "@zipybills/logger",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser-logger.ts",
+    "./node": "./src/node-logger.ts"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,json}\""
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "pino": "^9.6.0",
+    "pino-pretty": "^12.0.0"
+  },
+  "devDependencies": {
+    "@zipybills/eslint-config": "workspace:*",
+    "@zipybills/prettier-config": "workspace:*",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

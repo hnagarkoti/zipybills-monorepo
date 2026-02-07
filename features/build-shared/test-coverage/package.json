@@ -1,0 +1,15 @@
+{
+  "name": "@zipybills/test-coverage",
+  "version": "0.0.0",
+  "description": "Test coverage aggregation tool",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Intentional no-op.'",
+    "combine-coverage": "node ./scripts/combine-coverage.mjs",
+    "lint": "echo 'Intentional no-op.'",
+    "lint:fix": "echo 'Intentional no-op.'",
+    "test": "echo 'Intentional no-op.'"
+  },
+  "private": true
+}

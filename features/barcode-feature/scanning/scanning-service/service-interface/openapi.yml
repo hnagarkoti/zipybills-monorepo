@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: Barcode Scanning Service API
+  description: API for barcode generation and scanning operations
+  version: 1.0.0
+servers:
+  - url: http://localhost:3003
+    description: Local development server
+tags:
+  - name: Barcode
+    description: Barcode operations
+paths:
+  /api/barcode/generate:
+    post:
+      tags:
+        - Barcode
+      summary: Generate a new barcode
+      description: Generate a unique barcode for a specific machine
+      operationId: generateBarcode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateBarcodeRequest'
+      responses:
+        '200':
+          description: Barcode generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateBarcodeResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/scan:
+    post:
+      tags:
+        - Barcode
+      summary: Scan and process a barcode
+      description: Process a barcode at a specific machine station
+      operationId: scanBarcode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanBarcodeRequest'
+      responses:
+        '200':
+          description: Barcode processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanBarcodeResponse'
+        '400':
+          description: Invalid request or validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/barcode/{barcode}/history:
+    get:
+      tags:
+        - Barcode
+      summary: Get barcode processing history
+      description: Retrieve the complete processing history for a barcode
+      operationId: getBarcodeHistory
+      parameters:
+        - name: barcode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Barcode identifier
+      responses:
+        '200':
+          description: History retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BarcodeHistoryResponse'
+        '404':
+          description: Barcode not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/dashboard:
+    get:
+      tags:
+        - Barcode
+      summary: Get dashboard statistics
+      description: Retrieve summary statistics for the dashboard
+      operationId: getDashboard
+      responses:
+        '200':
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+components:
+  schemas:
+    GenerateBarcodeRequest:
+      type: object
+      properties:
+        machineId:
+          type: integer
+          description: ID of the machine generating the barcode
+      required:
+        - machineId
+    GenerateBarcodeResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        barcode:
+          type: string
+          description: Generated barcode
+        message:
+          type: string
+      required:
+        - success
+        - barcode
+    ScanBarcodeRequest:
+      type: object
+      properties:
+        barcode:
+          type: string
+          description: Barcode to process
+        machineId:
+          type: integer
+          description: ID of the machine processing the barcode
+        parameters:
+          type: object
+          description: Machine-specific processing parameters
+          additionalProperties: true
+      required:
+        - barcode
+        - machineId
+    ScanBarcodeResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessingHistoryItem'
+      required:
+        - success
+        - message
+    ProcessingHistoryItem:
+      type: object
+      properties:
+        data_id:
+          type: integer
+        barcode:
+          type: string
+        machine_id:
+          type: integer
+        machine_name:
+          type: string
+        processed_at:
+          type: string
+          format: date-time
+        machine_parameters:
+          type: object
+          additionalProperties: true
+        notes:
+          type: string
+        status:
+          type: string
+    BarcodeHistoryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessingHistoryItem'
+      required:
+        - success
+        - history
+    DashboardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        stats:
+          $ref: '#/components/schemas/DashboardStats'
+      required:
+        - success
+        - stats
+    DashboardStats:
+      type: object
+      properties:
+        totalBarcodes:
+          type: integer
+        totalProcessed:
+          type: integer
+        completedToday:
+          type: integer
+        machineStats:
+          type: array
+          items:
+            type: object
+            properties:
+              machine_id:
+                type: integer
+              machine_name:
+                type: string
+              count:
+                type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        error:
+          type: string
+      required:
+        - success
+        - error

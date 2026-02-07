@@ -1,0 +1,3 @@
+{
+  "extends": "@zipybills/ts-config/base"
+}

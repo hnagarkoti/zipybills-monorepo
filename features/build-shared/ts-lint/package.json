@@ -1,0 +1,26 @@
+{
+  "name": "@zipybills/ts-lint",
+  "version": "0.0.0",
+  "description": "Shared ESLint and Prettier configurations",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./eslint.config.js",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./prettier": "./prettier.config.js"
+  },
+  "scripts": {
+    "build": "echo 'Intentional no-op.'",
+    "lint": "echo 'Intentional no-op.'",
+    "lint:fix": "echo 'Intentional no-op.'",
+    "test": "echo 'Intentional no-op.'"
+  },
+  "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "catalog:",
+    "eslint": "catalog:",
+    "globals": "catalog:",
+    "prettier": "catalog:",
+    "typescript-eslint": "^8.29.0"
+  },
+  "private": true
+}

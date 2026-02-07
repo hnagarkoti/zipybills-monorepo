@@ -1,0 +1,278 @@
+openapi: 3.0.3
+info:
+  title: Machines Service API
+  description: API for managing manufacturing machines configuration
+  version: 1.0.0
+servers:
+  - url: http://localhost:3006
+    description: Local development server
+tags:
+  - name: Machines
+    description: Machine configuration management endpoints
+paths:
+  /api/machines:
+    get:
+      tags:
+        - Machines
+      summary: Get all machines
+      description: Retrieve all machines ordered by sequence
+      operationId: getAllMachines
+      responses:
+        '200':
+          description: List of machines retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachinesResponse'
+    post:
+      tags:
+        - Machines
+      summary: Create a new machine
+      description: Add a new machine to the system
+      operationId: createMachine
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMachineRequest'
+      responses:
+        '201':
+          description: Machine created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/machines/{id}:
+    get:
+      tags:
+        - Machines
+      summary: Get machine by ID
+      description: Retrieve a specific machine by its ID
+      operationId: getMachineById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Machine ID
+      responses:
+        '200':
+          description: Machine retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineResponse'
+        '404':
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Machines
+      summary: Update machine
+      description: Update an existing machine's configuration
+      operationId: updateMachine
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Machine ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMachineRequest'
+      responses:
+        '200':
+          description: Machine updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineResponse'
+        '404':
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Machines
+      summary: Delete machine
+      description: Soft delete a machine (sets is_active to false)
+      operationId: deleteMachine
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Machine ID
+      responses:
+        '200':
+          description: Machine deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    get:
+      tags:
+        - Machines
+      summary: Health check
+      description: Check if the service is running
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  schemas:
+    Machine:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          description: Unique machine identifier
+        machine_name:
+          type: string
+          description: Human-readable machine name
+        machine_code:
+          type: string
+          description: Short machine code (e.g., M1, M2)
+        sequence_order:
+          type: integer
+          description: Processing sequence order
+        description:
+          type: string
+          description: Machine description
+        is_active:
+          type: boolean
+          description: Whether the machine is active
+        can_generate_barcode:
+          type: boolean
+          description: Whether this machine can generate barcodes
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - machine_id
+        - machine_name
+        - machine_code
+        - sequence_order
+        - is_active
+        - can_generate_barcode
+    MachinesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        machines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Machine'
+      required:
+        - success
+        - machines
+    MachineResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        machine:
+          $ref: '#/components/schemas/Machine'
+      required:
+        - success
+        - machine
+    CreateMachineRequest:
+      type: object
+      properties:
+        machineId:
+          type: integer
+        machineName:
+          type: string
+        machineCode:
+          type: string
+        sequenceOrder:
+          type: integer
+        description:
+          type: string
+        canGenerateBarcode:
+          type: boolean
+      required:
+        - machineId
+        - machineName
+        - machineCode
+        - sequenceOrder
+    UpdateMachineRequest:
+      type: object
+      properties:
+        machineName:
+          type: string
+        machineCode:
+          type: string
+        sequenceOrder:
+          type: integer
+        description:
+          type: string
+        canGenerateBarcode:
+          type: boolean
+        isActive:
+          type: boolean
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        error:
+          type: string
+      required:
+        - success
+        - error
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - status

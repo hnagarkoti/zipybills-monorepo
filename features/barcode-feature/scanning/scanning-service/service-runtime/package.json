@@ -1,0 +1,31 @@
+{
+  "name": "@zipybills/barcode-scanning-service-runtime",
+  "version": "0.1.0",
+  "description": "Barcode Scanning Service Runtime - API implementation",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm exec tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,json}\""
+  },
+  "dependencies": {
+    "@zipybills/barcode-scanning-service-interface": "workspace:*",
+    "better-sqlite3": "^11.8.1",
+    "cors": "catalog:",
+    "dotenv": "catalog:",
+    "express": "catalog:",
+    "mssql": "catalog:"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/cors": "catalog:",
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

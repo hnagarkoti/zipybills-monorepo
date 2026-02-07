@@ -1,0 +1,17 @@
+{
+  "name": "@zipybills/nativewind-config",
+  "version": "1.0.0",
+  "description": "Shared NativeWind/Tailwind CSS configuration for Zipybills monorepo",
+  "main": "tailwind.config.js",
+  "exports": {
+    ".": "./tailwind.config.js"
+  },
+  "files": [
+    "tailwind.config.js"
+  ],
+  "keywords": [
+    "tailwind",
+    "nativewind",
+    "config"
+  ]
+}

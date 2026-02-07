@@ -1,0 +1,55 @@
+{
+  "name": "zipybills-monorepo",
+  "version": "0.0.0",
+  "description": "Monorepo for Zipybills - Cross-platform SaaS billing application",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @zipybills/template-service-interface build && turbo run build",
+    "clean": "find . -name node_modules -type d -prune -exec rm -rf {} +",
+    "combine-coverage": "pnpm --filter @zipybills/test-coverage combine-coverage",
+    "dev": "concurrently --names 'SCAN,MACH,WEB' --prefix-colors 'blue,magenta,green' \"pnpm dev:scanning-service\" \"pnpm dev:machines-service\" \"pnpm dev:barcode-web\"",
+    "start": "pnpm dev",
+    "dev:barcode": "pnpm dev",
+    "dev:barcode-web": "pnpm --filter @zipybills/barcode-scanner web",
+    "dev:barcode-mobile": "pnpm --filter @zipybills/barcode-scanner start",
+    "dev:barcode-ios": "pnpm --filter @zipybills/barcode-scanner ios",
+    "dev:barcode-android": "pnpm --filter @zipybills/barcode-scanner android",
+    "dev:scanning-service": "pnpm --filter @zipybills/barcode-scanning-service-runtime dev",
+    "dev:machines-service": "pnpm --filter @zipybills/barcode-machines-service-runtime dev",
+    "generate-feature": "pnpm --filter @zipybills/template-build generate",
+    "lint": "pnpm run lint:pkg && turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "lint:pkg": "npmPkgJsonLint --configFile npmpackagejsonlint.config.cjs \"**/package.json\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\" --ignore-path .gitignore",
+    "pipeline": "pnpm run format && pnpm run lint:fix && pnpm lint && pnpm build && pnpm test",
+    "test": "turbo run test && pnpm run combine-coverage",
+    "mobile": "pnpm --filter @zipybills/mobile dev",
+    "web": "pnpm --filter @zipybills/web dev"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "catalog:",
+    "concurrently": "^9.2.1",
+    "eslint": "catalog:",
+    "npm-package-json-lint": "^9.0.0",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "turbo": "^2.6.1",
+    "vitest": "catalog:"
+  },
+  "private": true,
+  "packageManager": "pnpm@10.23.0",
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0",
+      "react-native": "0.81.5",
+      "react-native-safe-area-context": "5.6.2"
+    }
+  },
+  "dependencies": {
+    "nativewind": "catalog:",
+    "tailwindcss": "catalog:"
+  }
+}

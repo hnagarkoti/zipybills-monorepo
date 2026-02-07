@@ -1,0 +1,9 @@
+{
+  "extends": "@zipybills/ts-config/react-native",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*", "tailwind.config.js"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "FactoryOS",
+    "slug": "factory-os",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a2e"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zipybills.factoryos"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1a1a2e"
+      },
+      "package": "com.zipybills.factoryos"
+    },
+    "plugins": ["expo-router"],
+    "scheme": "factory-os",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
+  }
+}

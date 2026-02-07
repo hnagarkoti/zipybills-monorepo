@@ -1,0 +1,18 @@
+{
+  "name": "@zipybills/template-build",
+  "version": "0.0.0",
+  "description": "CLI for generating new features from templates",
+  "license": "UNLICENSED",
+  "bin": {
+    "zipybills-template-create": "./bin/template-create.mjs"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Intentional no-op.'",
+    "generate": "pnpm exec ./bin/template-create.mjs",
+    "lint": "echo 'Intentional no-op.'",
+    "lint:fix": "echo 'Intentional no-op.'",
+    "test": "echo 'Intentional no-op.'"
+  },
+  "private": true
+}

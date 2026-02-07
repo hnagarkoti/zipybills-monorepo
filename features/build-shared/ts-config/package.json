@@ -1,0 +1,21 @@
+{
+  "name": "@zipybills/ts-config",
+  "version": "0.0.0",
+  "description": "Shared TypeScript configurations for Zipybills monorepo",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./tsconfig.base.json",
+  "exports": {
+    "./base": "./tsconfig.base.json",
+    "./react": "./tsconfig.react.json",
+    "./react-native": "./tsconfig.react-native.json",
+    "./node": "./tsconfig.node.json"
+  },
+  "scripts": {
+    "build": "echo 'Intentional no-op.'",
+    "lint": "echo 'Intentional no-op.'",
+    "lint:fix": "echo 'Intentional no-op.'",
+    "test": "echo 'Intentional no-op.'"
+  },
+  "private": true
+}

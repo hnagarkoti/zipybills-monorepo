@@ -1,0 +1,301 @@
+import { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+
+interface Machine {
+  machine_id: number;
+  machine_name: string;
+  machine_code: string;
+  sequence_order: number;
+  is_active: boolean;
+  can_generate_barcode: boolean;
+}
+
+export default function ScannerPage() {
+  const [barcode, setBarcode] = useState('');
+  const [machineId, setMachineId] = useState('1');
+  const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [generatedBarcode, setGeneratedBarcode] = useState('');
+  const [machines, setMachines] = useState<Machine[]>([]);
+
+  useEffect(() => {
+    fetchMachines();
+  }, []);
+
+  const fetchMachines = async () => {
+    try {
+      const response = await fetch('http://localhost:3006/api/machines');
+      const data = await response.json();
+      if (data.success && data.machines) {
+        const activeMachines = data.machines
+          .filter((m: Machine) => m.is_active === true)
+          .sort((a: Machine, b: Machine) => a.sequence_order - b.sequence_order);
+        setMachines(activeMachines);
+        if (activeMachines.length > 0) {
+          setMachineId(activeMachines[0].machine_id.toString());
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch machines:', err);
+    }
+  };
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch('http://localhost:3003/api/barcode/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ machineId: 1 }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setGeneratedBarcode(data.barcode);
+        setBarcode(data.barcode);
+        setResult({ message: 'Barcode generated! You can now scan it.' });
+      } else {
+        setError(data.error || 'Failed to generate barcode');
+      }
+    } catch (err) {
+      setError('Failed to connect to server. Run: pnpm dev:scanning-service');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleScan = async () => {
+    if (!barcode.trim()) {
+      setError('Please enter a barcode');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setResult(null);
+
+    try {
+      const response = await fetch('http://localhost:3003/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          barcode: barcode.trim(),
+          machineId: parseInt(machineId),
+          parameters: {
+            temperature: (Math.random() * 10 + 20).toFixed(1),
+            pressure: (Math.random() * 10 + 100).toFixed(1),
+            timestamp: new Date().toISOString(),
+          },
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setResult(data);
+        setBarcode('');
+      } else {
+        setError(data.error || 'Failed to process barcode');
+      }
+    } catch (err) {
+      setError('Failed to connect. Ensure services are running.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>📷 Barcode Scanner</Text>
+        <Text style={styles.subtitle}>Machine {machineId}</Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.label}>Select Machine:</Text>
+        <View style={styles.pickerContainer}>
+          {machines.length === 0 ? (
+            <Text style={styles.pickerText}>Loading machines...</Text>
+          ) : (
+            machines.map((machine) => (
+              <TouchableOpacity
+                key={machine.machine_id}
+                style={[
+                  styles.machineOption,
+                  machineId === machine.machine_id.toString() && styles.machineOptionSelected,
+                ]}
+                onPress={() => setMachineId(machine.machine_id.toString())}
+              >
+                <Text
+                  style={[
+                    styles.machineText,
+                    machineId === machine.machine_id.toString() && styles.machineTextSelected,
+                  ]}
+                >
+                  {machine.machine_name} ({machine.machine_code}) - Seq: {machine.sequence_order}
+                </Text>
+              </TouchableOpacity>
+            ))
+          )}
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>1️⃣ Generate New Barcode</Text>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonGenerate, loading && styles.buttonDisabled]}
+          onPress={handleGenerate}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>{loading ? 'Generating...' : '🎫 Generate Barcode'}</Text>
+        </TouchableOpacity>
+
+        {generatedBarcode && (
+          <View style={styles.barcodeDisplay}>
+            <Text style={styles.barcodeLabel}>PRODUCT BARCODE</Text>
+            <Text style={styles.barcodeValue}>{generatedBarcode}</Text>
+            <Text style={styles.barcodeDate}>Generated: {new Date().toLocaleString()}</Text>
+          </View>
+        )}
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>2️⃣ Scan/Process Barcode</Text>
+        <Text style={styles.label}>Enter Barcode:</Text>
+        <TextInput
+          style={styles.input}
+          value={barcode}
+          onChangeText={setBarcode}
+          placeholder="Enter or scan barcode..."
+          placeholderTextColor="#999"
+        />
+        <TouchableOpacity
+          style={[
+            styles.button,
+            styles.buttonScan,
+            (loading || !barcode.trim()) && styles.buttonDisabled,
+          ]}
+          onPress={handleScan}
+          disabled={loading || !barcode.trim()}
+        >
+          <Text style={styles.buttonText}>{loading ? 'Processing...' : '✅ Process Barcode'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>❌ {error}</Text>
+        </View>
+      )}
+
+      {result && (
+        <View style={styles.successContainer}>
+          <Text style={styles.successTitle}>✅ Success!</Text>
+          <Text style={styles.successText}>{result.message}</Text>
+
+          {result.history && result.history.length > 0 && (
+            <View style={styles.historyContainer}>
+              <Text style={styles.historyTitle}>Processing History:</Text>
+              {result.history.map((item: any, index: number) => (
+                <View key={index} style={styles.historyItem}>
+                  <Text style={styles.historyText}>
+                    <Text style={styles.historyBold}>Machine {item.machine_id}:</Text> {item.notes}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+      )}
+
+      <View style={styles.demoCard}>
+        <Text style={styles.demoTitle}>📋 Test with Demo Data:</Text>
+        <Text style={styles.demoText}>• DEMO_BARCODE_001 - Processed by all 4 machines</Text>
+        <Text style={styles.demoText}>• DEMO_BARCODE_002 - Processed by machines 1,2,3</Text>
+        <Text style={styles.demoText}>• DEMO_BARCODE_005 - Processed by machine 1 only</Text>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
+  header: { padding: 20, backgroundColor: '#f8f9fa' },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 4 },
+  subtitle: { fontSize: 16, color: '#666' },
+  section: { padding: 20 },
+  label: { fontSize: 16, fontWeight: '600', marginBottom: 8 },
+  pickerContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, overflow: 'hidden' },
+  pickerText: { padding: 12, color: '#999' },
+  machineOption: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    backgroundColor: '#fff',
+  },
+  machineOptionSelected: { backgroundColor: '#3b82f6' },
+  machineText: { fontSize: 14, color: '#333' },
+  machineTextSelected: { color: '#fff', fontWeight: '600' },
+  card: { margin: 20, padding: 20, backgroundColor: '#f8f9fa', borderRadius: 8 },
+  cardTitle: { fontSize: 18, fontWeight: '600', marginBottom: 16 },
+  input: {
+    borderWidth: 2,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  button: { padding: 16, borderRadius: 8, alignItems: 'center' },
+  buttonGenerate: { backgroundColor: '#10b981' },
+  buttonScan: { backgroundColor: '#3b82f6' },
+  buttonDisabled: { opacity: 0.6 },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  barcodeDisplay: {
+    marginTop: 16,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#000',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  barcodeLabel: { fontSize: 12, color: '#666', marginBottom: 8 },
+  barcodeValue: { fontSize: 24, fontWeight: 'bold', letterSpacing: 2, marginVertical: 12 },
+  barcodeDate: { fontSize: 12, color: '#999' },
+  errorContainer: {
+    margin: 20,
+    padding: 16,
+    backgroundColor: '#fee2e2',
+    borderWidth: 1,
+    borderColor: '#ef4444',
+    borderRadius: 8,
+  },
+  errorText: { color: '#dc2626', fontSize: 14 },
+  successContainer: {
+    margin: 20,
+    padding: 16,
+    backgroundColor: '#d1fae5',
+    borderWidth: 1,
+    borderColor: '#10b981',
+    borderRadius: 8,
+  },
+  successTitle: { color: '#059669', fontSize: 18, fontWeight: '600', marginBottom: 8 },
+  successText: { color: '#047857', fontSize: 14 },
+  historyContainer: { marginTop: 12 },
+  historyTitle: { fontWeight: '600', marginBottom: 8, color: '#047857' },
+  historyItem: { padding: 12, backgroundColor: '#fff', borderRadius: 4, marginBottom: 4 },
+  historyText: { fontSize: 14, color: '#333' },
+  historyBold: { fontWeight: '600' },
+  demoCard: {
+    margin: 20,
+    padding: 16,
+    backgroundColor: '#eff6ff',
+    borderWidth: 1,
+    borderColor: '#3b82f6',
+    borderRadius: 8,
+  },
+  demoTitle: { color: '#1d4ed8', fontSize: 16, fontWeight: '600', marginBottom: 8 },
+  demoText: { color: '#1e40af', fontSize: 14, marginVertical: 2 },
+});

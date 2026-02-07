@@ -1,0 +1,22 @@
+{
+  "name": "@zipybills/vitest-config",
+  "version": "0.0.0",
+  "description": "Shared Vitest configuration",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./vitest.config.ts",
+  "exports": {
+    ".": "./vitest.config.ts"
+  },
+  "scripts": {
+    "build": "echo 'Intentional no-op.'",
+    "lint": "echo 'Intentional no-op.'",
+    "lint:fix": "echo 'Intentional no-op.'",
+    "test": "echo 'Intentional no-op.'"
+  },
+  "dependencies": {
+    "@vitest/coverage-v8": "catalog:",
+    "vitest": "catalog:"
+  },
+  "private": true
+}

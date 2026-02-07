@@ -1,0 +1,32 @@
+{
+  "name": "@zipybills/ui-styles",
+  "version": "0.0.0",
+  "description": "Styling utilities with NativeWind",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tailwind.config": "./tailwind.config.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "@zipybills/ui-theme": "workspace:*",
+    "nativewind": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "private": true
+}

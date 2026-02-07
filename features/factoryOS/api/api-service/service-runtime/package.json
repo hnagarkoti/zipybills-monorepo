@@ -1,0 +1,34 @@
+{
+  "name": "@zipybills/factory-api-service-runtime",
+  "version": "0.1.0",
+  "description": "FactoryOS Core API Service - Production monitoring backend",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm exec tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,json}\""
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "bcryptjs": "^2.4.3",
+    "cors": "catalog:",
+    "dotenv": "catalog:",
+    "express": "catalog:",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "catalog:",
+    "@types/express": "catalog:",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "catalog:",
+    "@types/pg": "^8.11.10",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}
