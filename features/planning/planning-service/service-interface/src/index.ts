@@ -1,8 +1,14 @@
 /**
  * FactoryOS Planning Service Interface
  *
- * Types and API contract for production plans and operator logs.
+ * Types, API contract, and typed SDK client for production plans and operator logs.
  */
+
+import { BaseApi } from '@zipybills/factory-api-client';
+
+export { Configuration, type ConfigurationParameters } from '@zipybills/factory-api-client';
+
+// ─── Types ───────────────────────────────────
 
 export interface ProductionPlan {
   plan_id: number;
@@ -31,6 +37,12 @@ export interface CreatePlanRequest {
   product_name: string;
   product_code?: string;
   target_quantity: number;
+}
+
+export interface PlanFilters {
+  date?: string;
+  machine_id?: number;
+  status?: string;
 }
 
 export interface ProductionLog {
@@ -62,4 +74,61 @@ export interface CreateProductionLogRequest {
   rejection_reason?: string;
   hour_slot?: string;
   notes?: string;
+}
+
+export interface ProductionLogFilters {
+  plan_id?: number;
+  machine_id?: number;
+  shift_id?: number;
+  date?: string;
+}
+
+// ─── Typed API Client ────────────────────────
+
+export class PlanningApi extends BaseApi {
+  async getPlans(filters?: PlanFilters): Promise<ProductionPlan[]> {
+    const qs = filters ? this.buildQuery(filters) : '';
+    const data = await this.request<{ success: boolean; plans: ProductionPlan[] }>(
+      `/api/plans${qs}`,
+    );
+    return data.plans;
+  }
+
+  async createPlan(req: CreatePlanRequest): Promise<ProductionPlan> {
+    const data = await this.request<{ success: boolean; plan: ProductionPlan }>('/api/plans', {
+      method: 'POST',
+      body: JSON.stringify(req),
+    });
+    return data.plan;
+  }
+
+  async updatePlanStatus(planId: number, status: string): Promise<ProductionPlan> {
+    const data = await this.request<{ success: boolean; plan: ProductionPlan }>(
+      `/api/plans/${planId}/status`,
+      { method: 'PUT', body: JSON.stringify({ status }) },
+    );
+    return data.plan;
+  }
+
+  async deletePlan(planId: number): Promise<void> {
+    await this.request(`/api/plans/${planId}`, { method: 'DELETE' });
+  }
+}
+
+export class ProductionLogsApi extends BaseApi {
+  async getLogs(filters?: ProductionLogFilters): Promise<ProductionLog[]> {
+    const qs = filters ? this.buildQuery(filters) : '';
+    const data = await this.request<{ success: boolean; logs: ProductionLog[] }>(
+      `/api/production-logs${qs}`,
+    );
+    return data.logs;
+  }
+
+  async createLog(req: CreateProductionLogRequest): Promise<ProductionLog> {
+    const data = await this.request<{ success: boolean; log: ProductionLog }>(
+      '/api/production-logs',
+      { method: 'POST', body: JSON.stringify(req) },
+    );
+    return data.log;
+  }
 }

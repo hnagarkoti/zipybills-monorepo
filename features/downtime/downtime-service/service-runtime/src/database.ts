@@ -50,6 +50,44 @@ export async function endDowntime(downtimeId: number, endedAt: string): Promise<
   return result.rows[0] || null;
 }
 
+export async function updateDowntimeLog(
+  downtimeId: number,
+  data: { reason?: string; category?: string; notes?: string; started_at?: string; ended_at?: string },
+): Promise<DowntimeLog | null> {
+  const sets: string[] = [];
+  const params: any[] = [];
+  let idx = 1;
+
+  if (data.reason !== undefined) { sets.push(`reason = $${idx++}`); params.push(data.reason); }
+  if (data.category !== undefined) { sets.push(`category = $${idx++}`); params.push(data.category); }
+  if (data.notes !== undefined) { sets.push(`notes = $${idx++}`); params.push(data.notes); }
+  if (data.started_at !== undefined) { sets.push(`started_at = $${idx++}`); params.push(data.started_at); }
+  if (data.ended_at !== undefined) {
+    sets.push(`ended_at = $${idx++}`); params.push(data.ended_at);
+    // Recalculate duration if both start and end are available
+    const existing = await query<DowntimeLog>('SELECT * FROM downtime_logs WHERE downtime_id = $1', [downtimeId]);
+    if (existing.rows[0]) {
+      const start = new Date(data.started_at || existing.rows[0].started_at).getTime();
+      const end = new Date(data.ended_at).getTime();
+      sets.push(`duration_min = $${idx++}`); params.push(Math.round((end - start) / 60000));
+    }
+  }
+
+  if (sets.length === 0) return null;
+  params.push(downtimeId);
+
+  const result = await query<DowntimeLog>(
+    `UPDATE downtime_logs SET ${sets.join(', ')} WHERE downtime_id = $${idx} RETURNING *`,
+    params,
+  );
+  return result.rows[0] || null;
+}
+
+export async function deleteDowntimeLog(downtimeId: number): Promise<boolean> {
+  const result = await query('DELETE FROM downtime_logs WHERE downtime_id = $1', [downtimeId]);
+  return (result.rowCount ?? 0) > 0;
+}
+
 export async function getDowntimeLogs(filters?: {
   machine_id?: number;
   category?: string;

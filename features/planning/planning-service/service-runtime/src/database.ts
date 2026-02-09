@@ -81,6 +81,39 @@ export async function updatePlanStatus(planId: number, status: string): Promise<
   return result.rows[0] || null;
 }
 
+export async function updatePlan(
+  planId: number,
+  data: { machine_id?: number; shift_id?: number; plan_date?: string; product_name?: string; product_code?: string; target_quantity?: number },
+): Promise<ProductionPlan | null> {
+  const sets: string[] = [];
+  const params: any[] = [];
+  let idx = 1;
+
+  if (data.machine_id !== undefined) { sets.push(`machine_id = $${idx++}`); params.push(data.machine_id); }
+  if (data.shift_id !== undefined) { sets.push(`shift_id = $${idx++}`); params.push(data.shift_id); }
+  if (data.plan_date !== undefined) { sets.push(`plan_date = $${idx++}`); params.push(data.plan_date); }
+  if (data.product_name !== undefined) { sets.push(`product_name = $${idx++}`); params.push(data.product_name); }
+  if (data.product_code !== undefined) { sets.push(`product_code = $${idx++}`); params.push(data.product_code); }
+  if (data.target_quantity !== undefined) { sets.push(`target_quantity = $${idx++}`); params.push(data.target_quantity); }
+
+  if (sets.length === 0) return getPlanById(planId);
+  sets.push(`updated_at = NOW()`);
+  params.push(planId);
+
+  const result = await query<ProductionPlan>(
+    `UPDATE production_plans SET ${sets.join(', ')} WHERE plan_id = $${idx} RETURNING *`,
+    params,
+  );
+  return result.rows[0] || null;
+}
+
+export async function deletePlan(planId: number): Promise<boolean> {
+  // First delete related production logs
+  await query('DELETE FROM production_logs WHERE plan_id = $1', [planId]);
+  const result = await query('DELETE FROM production_plans WHERE plan_id = $1', [planId]);
+  return (result.rowCount ?? 0) > 0;
+}
+
 export async function createProductionLog(data: {
   plan_id?: number;
   machine_id: number;

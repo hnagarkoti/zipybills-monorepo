@@ -1,42 +1,28 @@
+/**
+ * Loading – spinner with optional message
+ */
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View, type ViewProps } from 'react-native';
-
-import { colors, spacing } from '@zipybills/ui-theme';
-
-import { Text } from './Text';
+import { ActivityIndicator, View, Text, type ViewProps } from 'react-native';
+import { cn } from './cn';
 
 export interface LoadingProps extends ViewProps {
   message?: string;
   size?: 'small' | 'large';
+  className?: string;
 }
 
-export const Loading: React.FC<LoadingProps> = ({
-  message,
+export function Loading({
+  message = 'Loading...',
   size = 'large',
-  style,
+  className,
   ...props
-}) => {
+}: LoadingProps) {
   return (
-    <View style={[styles.container, style]} {...props}>
-      <ActivityIndicator size={size} color={colors.primary[600]} />
+    <View className={cn('flex-1 items-center justify-center p-8', className)} {...props}>
+      <ActivityIndicator size={size} color="#10b981" />
       {message && (
-        <Text variant="body" style={styles.message}>
-          {message}
-        </Text>
+        <Text className="text-sm text-gray-400 mt-3">{message}</Text>
       )}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing[4],
-  },
-  message: {
-    marginTop: spacing[4],
-    textAlign: 'center',
-  },
-});
+}

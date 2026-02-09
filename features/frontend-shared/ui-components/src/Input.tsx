@@ -1,67 +1,48 @@
+/**
+ * Input – shadcn-rn pattern with NativeWind className
+ */
 import React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  type TextInputProps as RNTextInputProps,
-} from 'react-native';
+import { TextInput, View, Text, type TextInputProps } from 'react-native';
+import { cn } from './cn';
 
-import { colors, spacing } from '@zipybills/ui-theme';
-
-import { Text } from './Text';
-
-export interface InputProps extends RNTextInputProps {
+export interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   helperText?: string;
+  className?: string;
+  inputClassName?: string;
 }
 
-export const Input: React.FC<InputProps> = ({
+export function Input({
   label,
   error,
   helperText,
-  style,
+  className,
+  inputClassName,
   ...props
-}) => {
+}: InputProps) {
   return (
-    <View style={styles.container}>
-      {label && <Text variant="label" style={styles.label}>{label}</Text>}
+    <View className={cn('mb-3', className)}>
+      {label && (
+        <Text className="text-xs text-gray-500 mb-1 font-medium">
+          {label}
+        </Text>
+      )}
       <TextInput
-        style={[styles.input, error && styles.inputError, style]}
-        placeholderTextColor={colors.gray[400]}
+        className={cn(
+          'border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-900 bg-white',
+          error && 'border-red-500',
+          inputClassName,
+        )}
+        placeholderTextColor="#9ca3af"
         {...props}
       />
-      {error && <Text variant="caption" color={colors.error[500]} style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text variant="caption" style={styles.helper}>{helperText}</Text>}
+      {error && (
+        <Text className="text-xs text-red-500 mt-1">{error}</Text>
+      )}
+      {helperText && !error && (
+        <Text className="text-xs text-gray-400 mt-1">{helperText}</Text>
+      )}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing[4],
-  },
-  label: {
-    marginBottom: spacing[2],
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.gray[300],
-    borderRadius: 8,
-    paddingVertical: spacing[3],
-    paddingHorizontal: spacing[4],
-    fontSize: 16,
-    color: colors.gray[900],
-    backgroundColor: colors.white,
-  },
-  inputError: {
-    borderColor: colors.error[500],
-  },
-  error: {
-    marginTop: spacing[1],
-  },
-  helper: {
-    marginTop: spacing[1],
-    color: colors.gray[600],
-  },
-});
+}

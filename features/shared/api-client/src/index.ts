@@ -2,7 +2,10 @@
  * FactoryOS Shared API Client
  *
  * Centralised HTTP utility used by every feature-frontend package.
- * Manages auth-token state and provides a typed `apiFetch<T>()` helper.
+ * Provides:
+ *  - Configuration class (basePath, auth token)
+ *  - BaseApi class (typed HTTP methods)
+ *  - Legacy apiFetch<T>() for backward compat
  */
 
 import { Platform } from 'react-native';
@@ -28,7 +31,77 @@ export function getAuthToken(): string | null {
   return authToken;
 }
 
-// ─── Typed Fetch ─────────────────────────────
+// ─── Configuration ───────────────────────────
+
+export interface ConfigurationParameters {
+  basePath?: string;
+  /** API version prefix, e.g. "v1" (default), "v2" */
+  apiVersion?: string;
+  getAccessToken?: () => string | null;
+}
+
+export class Configuration {
+  readonly basePath: string;
+  /** API version prefix (e.g. "v1") */
+  readonly apiVersion: string;
+  readonly getAccessToken: () => string | null;
+
+  constructor(params?: ConfigurationParameters) {
+    this.basePath = params?.basePath ?? API_BASE;
+    this.apiVersion = params?.apiVersion ?? 'v1';
+    this.getAccessToken = params?.getAccessToken ?? getAuthToken;
+  }
+}
+
+// ─── Base API Client ─────────────────────────
+
+export class BaseApi {
+  protected readonly config: Configuration;
+
+  constructor(config?: Configuration) {
+    this.config = config ?? new Configuration();
+  }
+
+  protected async request<T>(path: string, options?: RequestInit): Promise<T> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(options?.headers as Record<string, string>),
+    };
+
+    const token = this.config.getAccessToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Inject API version: /api/machines → /api/v1/machines
+    const versionedPath = path.startsWith('/api/')
+      ? path.replace('/api/', `/api/${this.config.apiVersion}/`)
+      : path;
+
+    const res = await fetch(`${this.config.basePath}${versionedPath}`, { ...options, headers });
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error((data as { error?: string }).error ?? `Request failed: ${res.status}`);
+    }
+
+    return data as T;
+  }
+
+  protected buildQuery(params: object): string {
+    const entries = Object.entries(params).filter(
+      (entry): entry is [string, string | number | boolean] => {
+        const v = entry[1];
+        return v != null && ['string', 'number', 'boolean'].includes(typeof v);
+      },
+    );
+    if (entries.length === 0) return '';
+    const qs = new URLSearchParams(entries.map(([k, v]): [string, string] => [k, String(v)]));
+    return `?${qs.toString()}`;
+  }
+}
+
+// ─── Legacy apiFetch (backward compat) ───────
 
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const headers: Record<string, string> = {
@@ -40,12 +113,17 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     headers['Authorization'] = `Bearer ${authToken}`;
   }
 
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  // Inject default v1 version: /api/machines → /api/v1/machines
+  const versionedPath = path.startsWith('/api/')
+    ? path.replace('/api/', '/api/v1/')
+    : path;
+
+  const res = await fetch(`${API_BASE}${versionedPath}`, { ...options, headers });
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.error || `Request failed: ${res.status}`);
+    throw new Error((data as { error?: string }).error ?? `Request failed: ${res.status}`);
   }
 
-  return data;
+  return data as T;
 }

@@ -1,9 +1,14 @@
 /**
  * FactoryOS Auth Service Interface
  *
- * Types and API contract for authentication & user management.
- * Shared between service-runtime (backend) and auth-frontend (UI).
+ * Types, API contract, and typed SDK client for authentication & user management.
  */
+
+import { BaseApi } from '@zipybills/factory-api-client';
+
+export { Configuration, type ConfigurationParameters } from '@zipybills/factory-api-client';
+
+// ─── Types ───────────────────────────────────
 
 export interface User {
   user_id: number;
@@ -40,4 +45,45 @@ export interface UpdateUserRequest {
   full_name?: string;
   role?: string;
   is_active?: boolean;
+}
+
+// ─── Typed API Client ────────────────────────
+
+export class AuthApi extends BaseApi {
+  async login(req: LoginRequest): Promise<LoginResponse> {
+    return this.request<LoginResponse>('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(req),
+    });
+  }
+
+  async me(): Promise<SafeUser> {
+    const data = await this.request<{ success: boolean; user: SafeUser }>('/api/auth/me');
+    return data.user;
+  }
+
+  async getUsers(): Promise<SafeUser[]> {
+    const data = await this.request<{ success: boolean; users: SafeUser[] }>('/api/users');
+    return data.users;
+  }
+
+  async createUser(req: CreateUserRequest): Promise<SafeUser> {
+    const data = await this.request<{ success: boolean; user: SafeUser }>('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(req),
+    });
+    return data.user;
+  }
+
+  async updateUser(userId: number, req: UpdateUserRequest): Promise<SafeUser> {
+    const data = await this.request<{ success: boolean; user: SafeUser }>(`/api/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(req),
+    });
+    return data.user;
+  }
+
+  async deleteUser(userId: number): Promise<void> {
+    await this.request(`/api/users/${userId}`, { method: 'DELETE' });
+  }
 }

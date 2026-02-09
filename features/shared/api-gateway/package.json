@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-feature-registry": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
     "@zipybills/factory-auth-service-runtime": "workspace:*",
     "@zipybills/factory-machines-service-runtime": "workspace:*",
     "@zipybills/factory-shifts-service-runtime": "workspace:*",

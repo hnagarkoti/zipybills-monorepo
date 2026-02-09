@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Factory } from 'lucide-react-native';
 import { login as apiLogin } from '../services/api';
 import { setAuthToken } from '@zipybills/factory-api-client';
+import { Alert } from '@zipybills/ui-components';
 
 interface LoginPageProps {
   onLogin: (user: { user_id: number; username: string; full_name: string; role: string }) => void;
@@ -24,8 +26,9 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       const res = await apiLogin(username, password);
       setAuthToken(res.token);
       onLogin(res.user);
-    } catch (err: any) {
-      setError(err.message || 'Login failed');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Login failed';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -40,7 +43,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         {/* Logo */}
         <View className="items-center mb-8">
           <View className="w-16 h-16 bg-emerald-500 rounded-2xl items-center justify-center mb-4">
-            <Text className="text-3xl">🏭</Text>
+            <Factory size={32} color="#ffffff" />
           </View>
           <Text className="text-2xl font-bold text-white">FactoryOS</Text>
           <Text className="text-sm text-slate-400 mt-1">Production Monitoring System</Text>
@@ -49,8 +52,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         {/* Form */}
         <View className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
           {error && (
-            <View className="bg-red-900/30 border border-red-500/50 rounded-lg p-3 mb-4">
-              <Text className="text-sm text-red-400">{error}</Text>
+            <View className="mb-4">
+              <Alert variant="error" message={error} onDismiss={() => setError(null)} />
             </View>
           )}
 

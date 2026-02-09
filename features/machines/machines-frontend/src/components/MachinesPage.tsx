@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
+import { Factory, FolderOpen, Settings, Plus } from 'lucide-react-native';
 import { fetchMachines, createMachine, updateMachine, deleteMachine, type Machine } from '../services/api';
+import { Badge, Alert, EmptyState, PageHeader } from '@zipybills/ui-components';
 
 export function MachinesPage() {
   const [machines, setMachines] = useState<Machine[]>([]);
@@ -16,7 +18,7 @@ export function MachinesPage() {
       const data = await fetchMachines();
       setMachines(data);
       setError(null);
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to load');
     } finally {
       setLoading(false);
@@ -33,7 +35,7 @@ export function MachinesPage() {
   };
 
   const startEdit = (m: Machine) => {
-    setForm({ machine_code: m.machine_code, machine_name: m.machine_name, department: m.department || '', machine_type: m.machine_type || '' });
+    setForm({ machine_code: m.machine_code, machine_name: m.machine_name, department: m.department ?? '', machine_type: m.machine_type ?? '' });
     setEditingId(m.machine_id);
     setShowForm(true);
   };
@@ -51,8 +53,8 @@ export function MachinesPage() {
       }
       resetForm();
       loadMachines();
-    } catch (err: any) {
-      setError(err.message || 'Failed to save');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to save');
     }
   };
 
@@ -60,8 +62,8 @@ export function MachinesPage() {
     try {
       await deleteMachine(id);
       loadMachines();
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to delete');
     }
   };
 
@@ -71,24 +73,25 @@ export function MachinesPage() {
     loadMachines();
   };
 
-  const statusColor = (s: string) =>
-    s === 'ACTIVE' ? 'bg-green-100 text-green-700' : s === 'MAINTENANCE' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
+  const statusVariant = (s: string) =>
+    s === 'ACTIVE' ? 'success' as const : s === 'MAINTENANCE' ? 'warning' as const : 'error' as const;
 
   return (
     <ScrollView className="flex-1 p-4">
-      <View className="flex-row items-center justify-between mb-4">
-        <View>
-          <Text className="text-xl font-bold text-gray-900">Machines</Text>
-          <Text className="text-sm text-gray-500">{machines.length} machines configured</Text>
-        </View>
-        <Pressable onPress={() => { resetForm(); setShowForm(true); }} className="bg-emerald-500 px-4 py-2.5 rounded-lg">
-          <Text className="text-white font-medium text-sm">+ Add Machine</Text>
-        </Pressable>
-      </View>
+      <PageHeader
+        title="Machines"
+        subtitle={`${machines.length} machines configured`}
+        actions={
+          <Pressable onPress={() => { resetForm(); setShowForm(true); }} className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center">
+            <Plus size={14} color="#fff" />
+            <Text className="text-white font-medium text-sm ml-1">Add Machine</Text>
+          </Pressable>
+        }
+      />
 
       {error && (
-        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <Text className="text-sm text-red-700">{error}</Text>
+        <View className="mb-4">
+          <Alert variant="error" message={error} onDismiss={() => setError(null)} />
         </View>
       )}
 
@@ -125,26 +128,34 @@ export function MachinesPage() {
       {loading ? (
         <Text className="text-center text-gray-400 py-8">Loading machines...</Text>
       ) : machines.length === 0 ? (
-        <View className="items-center py-12">
-          <Text className="text-4xl mb-3">🏭</Text>
-          <Text className="text-lg text-gray-500">No machines configured yet</Text>
-          <Text className="text-sm text-gray-400 mt-1">Add your first machine to get started</Text>
-        </View>
+        <EmptyState
+          icon={<Factory size={40} color="#9ca3af" />}
+          title="No machines configured yet"
+          description="Add your first machine to get started"
+        />
       ) : (
         machines.map((m) => (
           <View key={m.machine_id} className="bg-white rounded-xl border border-gray-100 p-4 mb-3">
             <View className="flex-row items-center justify-between mb-2">
               <View className="flex-row items-center">
                 <Text className="text-lg font-bold text-gray-900 mr-2">{m.machine_name}</Text>
-                <View className={`px-2 py-0.5 rounded-full ${statusColor(m.status)}`}>
-                  <Text className="text-xs font-medium">{m.status}</Text>
-                </View>
+                <Badge variant={statusVariant(m.status)}>{m.status}</Badge>
               </View>
               <Text className="text-sm text-gray-400 font-mono">{m.machine_code}</Text>
             </View>
-            <View className="flex-row">
-              {m.department && <Text className="text-xs text-gray-500 mr-3">📂 {m.department}</Text>}
-              {m.machine_type && <Text className="text-xs text-gray-500">⚙️ {m.machine_type}</Text>}
+            <View className="flex-row items-center">
+              {m.department && (
+                <View className="flex-row items-center mr-3">
+                  <FolderOpen size={12} color="#6b7280" />
+                  <Text className="text-xs text-gray-500 ml-1">{m.department}</Text>
+                </View>
+              )}
+              {m.machine_type && (
+                <View className="flex-row items-center">
+                  <Settings size={12} color="#6b7280" />
+                  <Text className="text-xs text-gray-500 ml-1">{m.machine_type}</Text>
+                </View>
+              )}
             </View>
             <View className="flex-row gap-2 mt-3 pt-3 border-t border-gray-50">
               <Pressable onPress={() => startEdit(m)} className="bg-blue-50 px-3 py-1.5 rounded-lg">

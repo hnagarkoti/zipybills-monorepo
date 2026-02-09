@@ -21,8 +21,14 @@
     "@zipybills/ts-config": "workspace:*",
     "@zipybills/ui-theme": "workspace:*",
     "clsx": "catalog:",
+    "lucide-react-native": "catalog:",
+    "nativewind": "catalog:",
     "react": "catalog:",
-    "react-native": "catalog:"
+    "react-native": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-svg": "catalog:",
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
     "@testing-library/react-native": "catalog:",

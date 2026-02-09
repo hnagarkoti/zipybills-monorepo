@@ -1,25 +1,72 @@
+/**
+ * Card – shadcn-rn pattern with NativeWind className
+ *
+ * Composable: Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+ */
 import React from 'react';
-import { StyleSheet, View, type ViewProps } from 'react-native';
+import { View, Text, type ViewProps } from 'react-native';
+import { cn } from './cn';
 
-import { colors, radius, shadows, spacing } from '@zipybills/ui-theme';
-
+/* ─── Card ──────────────────────────────────── */
 export interface CardProps extends ViewProps {
+  className?: string;
   children: React.ReactNode;
 }
 
-export const Card: React.FC<CardProps> = ({ children, style, ...props }) => {
+export function Card({ className, children, ...props }: CardProps) {
   return (
-    <View style={[styles.card, style]} {...props}>
+    <View className={cn('bg-white rounded-xl border border-gray-100 p-4', className)} {...props}>
       {children}
     </View>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.white,
-    borderRadius: radius.lg,
-    padding: spacing[4],
-    ...shadows.md,
-  },
-});
+/* ─── CardHeader ────────────────────────────── */
+export function CardHeader({ className, children, ...props }: CardProps) {
+  return (
+    <View className={cn('mb-3', className)} {...props}>
+      {children}
+    </View>
+  );
+}
+
+/* ─── CardTitle ─────────────────────────────── */
+export interface CardTitleProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+export function CardTitle({ className, children }: CardTitleProps) {
+  return (
+    <Text className={cn('text-lg font-semibold text-gray-900', className)}>
+      {children}
+    </Text>
+  );
+}
+
+/* ─── CardDescription ───────────────────────── */
+export function CardDescription({ className, children }: CardTitleProps) {
+  return (
+    <Text className={cn('text-sm text-gray-500 mt-0.5', className)}>
+      {children}
+    </Text>
+  );
+}
+
+/* ─── CardContent ───────────────────────────── */
+export function CardContent({ className, children, ...props }: CardProps) {
+  return (
+    <View className={cn('', className)} {...props}>
+      {children}
+    </View>
+  );
+}
+
+/* ─── CardFooter ────────────────────────────── */
+export function CardFooter({ className, children, ...props }: CardProps) {
+  return (
+    <View className={cn('flex-row gap-2 mt-3 pt-3 border-t border-gray-50', className)} {...props}>
+      {children}
+    </View>
+  );
+}

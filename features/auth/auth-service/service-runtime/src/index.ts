@@ -133,6 +133,60 @@ authRouter.put('/users/:id', requireAuth, requireRole('ADMIN'), async (req: Auth
   }
 });
 
+authRouter.delete('/users/:id', requireAuth, requireRole('ADMIN'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = parseInt(String(req.params.id), 10);
+    if (userId === req.user!.user_id) {
+      res.status(400).json({ success: false, error: 'Cannot delete your own account' });
+      return;
+    }
+    const deleted = await db.deleteUser(userId);
+    if (!deleted) {
+      res.status(404).json({ success: false, error: 'User not found' });
+      return;
+    }
+    await logActivity(req.user!.user_id, 'DELETE_USER', 'user', userId, `Deleted user #${userId}`, req.ip);
+    res.json({ success: true, message: 'User deleted' });
+  } catch (err) {
+    console.error('[Users] Delete error:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete user' });
+  }
+});
+
+authRouter.patch('/auth/change-password', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const { current_password, new_password } = req.body;
+    if (!current_password || !new_password) {
+      res.status(400).json({ success: false, error: 'current_password and new_password required' });
+      return;
+    }
+    if (new_password.length < 6) {
+      res.status(400).json({ success: false, error: 'New password must be at least 6 characters' });
+      return;
+    }
+
+    const user = await db.getUserById(req.user!.user_id);
+    if (!user) {
+      res.status(404).json({ success: false, error: 'User not found' });
+      return;
+    }
+
+    const validPassword = await bcrypt.compare(current_password, user.password_hash);
+    if (!validPassword) {
+      res.status(401).json({ success: false, error: 'Current password is incorrect' });
+      return;
+    }
+
+    const newHash = await bcrypt.hash(new_password, 10);
+    await db.updateUserPassword(req.user!.user_id, newHash);
+    await logActivity(req.user!.user_id, 'CHANGE_PASSWORD', 'user', req.user!.user_id, 'Password changed', req.ip);
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (err) {
+    console.error('[Auth] Change password error:', err);
+    res.status(500).json({ success: false, error: 'Failed to change password' });
+  }
+});
+
 // ─── Seed helpers (used by API gateway on startup) ───
 
 export async function seedDefaultAdmin(): Promise<void> {

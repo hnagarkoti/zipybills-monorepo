@@ -47,6 +47,32 @@ downtimeRouter.post('/downtime', requireAuth, async (req: AuthenticatedRequest, 
   }
 });
 
+downtimeRouter.put('/downtime/:id', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const downtimeId = parseInt(String(req.params.id), 10);
+    const log = await db.updateDowntimeLog(downtimeId, req.body);
+    if (!log) { res.status(404).json({ success: false, error: 'Downtime record not found' }); return; }
+    await logActivity(req.user!.user_id, 'UPDATE_DOWNTIME', 'downtime', downtimeId, JSON.stringify(req.body), req.ip);
+    res.json({ success: true, log });
+  } catch (err) {
+    console.error('[Downtime] Update error:', err);
+    res.status(500).json({ success: false, error: 'Failed to update downtime' });
+  }
+});
+
+downtimeRouter.delete('/downtime/:id', requireAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const downtimeId = parseInt(String(req.params.id), 10);
+    const deleted = await db.deleteDowntimeLog(downtimeId);
+    if (!deleted) { res.status(404).json({ success: false, error: 'Downtime record not found' }); return; }
+    await logActivity(req.user!.user_id, 'DELETE_DOWNTIME', 'downtime', downtimeId, `Deleted downtime #${downtimeId}`, req.ip);
+    res.json({ success: true, message: 'Downtime record deleted' });
+  } catch (err) {
+    console.error('[Downtime] Delete error:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete downtime' });
+  }
+});
+
 downtimeRouter.put('/downtime/:id/end', requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const downtimeId = parseInt(String(req.params.id), 10);

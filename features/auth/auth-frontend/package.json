@@ -15,7 +15,10 @@
   "dependencies": {
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-auth-service-interface": "workspace:*",
-    "@zipybills/ts-config": "workspace:*"
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "lucide-react-native": "catalog:",
+    "react-native-svg": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",

@@ -1,8 +1,14 @@
 /**
  * FactoryOS Dashboard Service Interface
  *
- * Types and API contract for dashboard & live stats.
+ * Types, API contract, and typed SDK client for dashboard & live stats.
  */
+
+import { BaseApi } from '@zipybills/factory-api-client';
+
+export { Configuration, type ConfigurationParameters } from '@zipybills/factory-api-client';
+
+// ─── Types ───────────────────────────────────
 
 export interface MachineStatus {
   machine_id: number;
@@ -43,4 +49,15 @@ export interface DashboardStats {
   machineStatus: MachineStatus[];
   recentActivity: ActivityItem[];
   shiftSummary: ShiftSummary[];
+}
+
+// ─── Typed API Client ────────────────────────
+
+export class DashboardApi extends BaseApi {
+  async getDashboard(): Promise<DashboardStats> {
+    const data = await this.request<{ success: boolean; dashboard: DashboardStats }>(
+      '/api/dashboard',
+    );
+    return data.dashboard;
+  }
 }

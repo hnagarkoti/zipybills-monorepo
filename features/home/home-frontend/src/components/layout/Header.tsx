@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { Menu } from 'lucide-react-native';
 
 export interface HeaderProps {
   title?: string;
@@ -21,7 +22,7 @@ export function Header({
           onPress={onMenuPress}
           className="w-10 h-10 rounded-lg items-center justify-center mr-3 bg-gray-100"
         >
-          <Text className="text-lg text-gray-700">☰</Text>
+          <Menu size={20} color="#374151" />
         </Pressable>
       )}
       <Text className="text-lg font-semibold text-gray-900 flex-1">{title}</Text>

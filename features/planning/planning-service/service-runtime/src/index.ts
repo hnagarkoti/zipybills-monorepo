@@ -73,6 +73,32 @@ planningRouter.put('/plans/:id/status', requireAuth, async (req: AuthenticatedRe
   }
 });
 
+planningRouter.put('/plans/:id', requireAuth, requireRole('ADMIN', 'SUPERVISOR'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const planId = parseInt(String(req.params.id), 10);
+    const plan = await db.updatePlan(planId, req.body);
+    if (!plan) { res.status(404).json({ success: false, error: 'Plan not found' }); return; }
+    await logActivity(req.user!.user_id, 'UPDATE_PLAN', 'plan', planId, JSON.stringify(req.body), req.ip);
+    res.json({ success: true, plan });
+  } catch (err) {
+    console.error('[Plans] Update error:', err);
+    res.status(500).json({ success: false, error: 'Failed to update plan' });
+  }
+});
+
+planningRouter.delete('/plans/:id', requireAuth, requireRole('ADMIN'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const planId = parseInt(String(req.params.id), 10);
+    const deleted = await db.deletePlan(planId);
+    if (!deleted) { res.status(404).json({ success: false, error: 'Plan not found' }); return; }
+    await logActivity(req.user!.user_id, 'DELETE_PLAN', 'plan', planId, `Deleted plan #${planId}`, req.ip);
+    res.json({ success: true, message: 'Plan deleted' });
+  } catch (err) {
+    console.error('[Plans] Delete error:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete plan' });
+  }
+});
+
 // ─── Production Logs (Operator Input) ────────
 
 planningRouter.get('/production-logs', async (req, res) => {

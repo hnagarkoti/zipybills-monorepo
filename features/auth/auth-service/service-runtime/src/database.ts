@@ -62,6 +62,11 @@ export async function updateUserPassword(userId: number, passwordHash: string): 
   await query('UPDATE users SET password_hash = $1, updated_at = NOW() WHERE user_id = $2', [passwordHash, userId]);
 }
 
+export async function deleteUser(userId: number): Promise<boolean> {
+  const result = await query('DELETE FROM users WHERE user_id = $1', [userId]);
+  return (result.rowCount ?? 0) > 0;
+}
+
 export async function getUserCount(): Promise<number> {
   const result = await query('SELECT COUNT(*) as count FROM users');
   return parseInt(result.rows[0]!.count, 10);

@@ -20,11 +20,18 @@ export function BottomNav({ items }: BottomNavProps) {
               item.isActive ? 'bg-emerald-500' : 'bg-transparent'
             }`}
           >
-            <Text
-              className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500'}`}
-            >
-              {item.icon || item.label.charAt(0)}
-            </Text>
+            {item.icon ? (
+              React.isValidElement(item.icon)
+                ? React.cloneElement(item.icon as React.ReactElement<{ size?: number; color?: string }>, {
+                    size: 16,
+                    color: item.isActive ? '#ffffff' : '#6b7280',
+                  })
+                : <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500'}`}>{String(item.icon)}</Text>
+            ) : (
+              <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500'}`}>
+                {item.label.charAt(0)}
+              </Text>
+            )}
           </View>
           <Text
             className={`text-xs mt-0.5 ${item.isActive ? 'text-emerald-600 font-medium' : 'text-gray-500'}`}

@@ -19,22 +19,38 @@ A modern, cross-platform SaaS billing application built with React Native, Expo,
 
 ```
 zipybills/
-├── apps/
-│   ├── mobile/          # Expo app (iOS & Android)
-│   └── web/             # Web app (Expo Web + Next.js)
+├── apps/factoryOS/          ← Expo app (Web + iOS + Android)
 ├── features/
-│   ├── build-shared/    # Build tools, linting, configs
-│   ├── frontend-shared/ # UI components, theming, styles
-│   ├── auth-feature/    # Authentication & authorization
-│   ├── analytics-feature/ # Analytics integration
-│   ├── i18n-feature/    # Internationalization
-│   ├── feature-flags/   # Feature flag management
-│   ├── state-feature/   # State management (Redux/Zustand)
-│   └── utils-feature/   # Shared utilities
-├── templates/
-│   └── template-feature/ # Feature template generator
-└── package.json
+│   ├── auth/                ← Login, registration, user management
+│   ├── machines/            ← Machine CRUD
+│   ├── shifts/              ← Shift management
+│   ├── planning/            ← Production planning + operator input
+│   ├── downtime/            ← Downtime logging
+│   ├── dashboard/           ← Live dashboard aggregation
+│   ├── reports/             ← Production/machine/shift/rejection reports
+│   └── shared/              ← Database config, API gateway, auth middleware
+└── scripts/                 ← Smoke test, utilities
 ```
+
+Each feature has 3 independent packages:
+
+Package	                    Purpose
+service-interface	        TypeScript types & interfaces (shared contract)
+service-runtime	            Express router + PostgreSQL database operations
+frontend	                React Native page + API client
+
+
+
+Individual services
+Command	                    What it starts	                        URL
+pnpm dev:factory-api	    Express API Gateway	            http://localhost:4000
+pnpm dev:factory-web	    Expo Web (browser)	            http://localhost:8081
+pnpm dev:factory-mobile	    Metro bundler	                http://localhost:8082
+pnpm dev:factory-ios	    iOS Simulator	                —
+pnpm dev:factory-android	Android Emulator	            —
+
+# Feature Generator
+```pnpm generate-feature -- --name inventory   # scaffold new feature```
 
 ## 🛠️ Tech Stack
 

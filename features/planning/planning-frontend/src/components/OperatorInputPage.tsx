@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
+import { Factory, Clock, AlertTriangle, CheckCircle } from 'lucide-react-native';
 import { fetchPlans, createProductionLog, type ProductionPlan } from '../services/api';
 import { fetchShifts, type Shift } from '@zipybills/factory-shifts-frontend';
+import { Alert } from '@zipybills/ui-components';
 
 const HOUR_SLOTS = Array.from({ length: 24 }, (_, i) => {
   const h = String(i).padStart(2, '0');
@@ -27,7 +29,7 @@ export function OperatorInputPage() {
       setPlans(plansData.filter((p) => p.status === 'IN_PROGRESS' || p.status === 'PLANNED'));
       setShifts(shiftsData);
       setError(null);
-    } catch (err: any) { setError(err.message || 'Failed to load data'); } finally { setLoading(false); }
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to load data'); } finally { setLoading(false); }
   }, [today]);
 
   useEffect(() => { loadData(); }, [loadData]);
@@ -52,15 +54,15 @@ export function OperatorInputPage() {
     try {
       setSubmitting(true); setError(null);
       await createProductionLog({
-        plan_id: selectedPlan.plan_id, hour_slot: parseInt(form.hour_slot, 10),
-        quantity_produced: qty, quantity_ok: ok, quantity_rejected: rej,
+        plan_id: selectedPlan.plan_id, machine_id: selectedPlan.machine_id, shift_id: selectedPlan.shift_id,
+        hour_slot: form.hour_slot, quantity_produced: qty, quantity_ok: ok, quantity_rejected: rej,
         rejection_reason: form.rejection_reason || undefined, notes: form.notes || undefined,
       });
       setSuccess(`Logged ${qty} units for hour ${form.hour_slot}:00`);
       setForm({ hour_slot: '', quantity_produced: '', quantity_ok: '', quantity_rejected: '', rejection_reason: '', notes: '' });
       loadData();
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err: any) { setError(err.message || 'Failed to submit'); } finally { setSubmitting(false); }
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to submit'); } finally { setSubmitting(false); }
   };
 
   const handleQtyChange = (val: string) => {
@@ -88,14 +90,14 @@ export function OperatorInputPage() {
         )}
       </View>
 
-      {success && (<View className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4"><Text className="text-sm text-green-700">✓ {success}</Text></View>)}
-      {error && (<View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4"><Text className="text-sm text-red-700">{error}</Text></View>)}
+      {success && (<View className="mb-4"><Alert variant="success" message={success} /></View>)}
+      {error && (<View className="mb-4"><Alert variant="error" message={error} onDismiss={() => setError(null)} /></View>)}
 
       <Text className="text-sm font-semibold text-gray-700 mb-2">Select Active Plan *</Text>
       {loading ? (<Text className="text-center text-gray-400 py-4">Loading plans...</Text>) : plans.length === 0 ? (
         <View className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 items-center">
-          <Text className="text-3xl mb-2">⚠️</Text>
-          <Text className="text-sm text-amber-700">No active plans for today</Text>
+          <AlertTriangle size={28} color="#d97706" />
+          <Text className="text-sm text-amber-700 mt-2">No active plans for today</Text>
           <Text className="text-xs text-amber-500">Ask a supervisor to create a production plan</Text>
         </View>
       ) : (
@@ -108,10 +110,14 @@ export function OperatorInputPage() {
                 <View className="flex-row items-center justify-between mb-1">
                   <Text className={`font-semibold ${isSelected ? 'text-emerald-700' : 'text-gray-800'}`}>{p.product_name}</Text>
                   <View className={`w-5 h-5 rounded-full border-2 items-center justify-center ${isSelected ? 'border-emerald-500 bg-emerald-500' : 'border-gray-300'}`}>
-                    {isSelected && <Text className="text-white text-xs">✓</Text>}
+                    {isSelected && <CheckCircle size={12} color="#ffffff" />}
                   </View>
                 </View>
-                <Text className="text-xs text-gray-500 mb-1">🏭 {p.machine_name} · ⏰ {p.shift_name}</Text>
+                <View className="flex-row items-center">
+                  <Factory size={11} color="#6b7280" /><Text className="text-xs text-gray-500 ml-1">{p.machine_name}</Text>
+                  <Text className="text-xs text-gray-500 mx-1">·</Text>
+                  <Clock size={11} color="#6b7280" /><Text className="text-xs text-gray-500 ml-1">{p.shift_name}</Text>
+                </View>
                 <View className="flex-row items-center">
                   <Text className="text-xs text-gray-600 mr-2">{p.actual_quantity || 0}/{p.target_quantity}</Text>
                   <View className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><View className="h-full bg-emerald-400 rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} /></View>
@@ -144,7 +150,7 @@ export function OperatorInputPage() {
           {parseInt(form.quantity_rejected, 10) > 0 && (<View className="mb-3"><Text className="text-xs text-gray-500 mb-1">Rejection Reason</Text><TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.rejection_reason} onChangeText={(t) => setForm({ ...form, rejection_reason: t })} placeholder="e.g., Dimension out of tolerance" /></View>)}
           <View className="mb-3"><Text className="text-xs text-gray-500 mb-1">Notes (optional)</Text><TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.notes} onChangeText={(t) => setForm({ ...form, notes: t })} placeholder="Any remarks..." multiline /></View>
           <Pressable onPress={handleSubmit} disabled={submitting} className={`py-3 rounded-lg items-center ${submitting ? 'bg-gray-300' : 'bg-emerald-500'}`}>
-            <Text className="text-white font-semibold">{submitting ? 'Submitting...' : '✓ Submit Entry'}</Text>
+            <Text className="text-white font-semibold">{submitting ? 'Submitting...' : 'Submit Entry'}</Text>
           </Pressable>
         </View>
       )}

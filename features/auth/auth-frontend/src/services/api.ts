@@ -1,39 +1,32 @@
 /**
- * Auth & User API functions
+ * Auth & User API – uses typed SDK from service-interface
  */
 
-import { apiFetch, setAuthToken } from '@zipybills/factory-api-client';
+import {
+  AuthApi,
+  type SafeUser,
+  type LoginResponse,
+  type CreateUserRequest,
+  type UpdateUserRequest,
+} from '@zipybills/factory-auth-service-interface';
+import { setAuthToken } from '@zipybills/factory-api-client';
 
-export interface User {
-  user_id: number;
-  username: string;
-  full_name: string;
-  role: 'ADMIN' | 'SUPERVISOR' | 'OPERATOR';
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+export type User = SafeUser;
+export type AuthResponse = LoginResponse;
+export type { SafeUser, CreateUserRequest, UpdateUserRequest } from '@zipybills/factory-auth-service-interface';
 
-export interface AuthResponse {
-  success: boolean;
-  token: string;
-  user: User;
-}
+export const authApi = new AuthApi();
 
 // ─── Auth ────────────────────────────────────
 
-export async function login(username: string, password: string): Promise<AuthResponse> {
-  const data = await apiFetch<AuthResponse>('/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ username, password }),
-  });
+export async function login(username: string, password: string): Promise<LoginResponse> {
+  const data = await authApi.login({ username, password });
   if (data.token) setAuthToken(data.token);
   return data;
 }
 
-export async function fetchCurrentUser(): Promise<User> {
-  const data = await apiFetch<{ success: boolean; user: User }>('/api/auth/me');
-  return data.user;
+export async function fetchCurrentUser(): Promise<SafeUser> {
+  return authApi.me();
 }
 
 export function logout(): void {
@@ -42,31 +35,17 @@ export function logout(): void {
 
 // ─── Users ───────────────────────────────────
 
-export async function fetchUsers(): Promise<User[]> {
-  const data = await apiFetch<{ success: boolean; users: User[] }>('/api/users');
-  return data.users;
+export async function fetchUsers(): Promise<SafeUser[]> {
+  return authApi.getUsers();
 }
 
-export async function createUser(userData: {
-  username: string;
-  password: string;
-  full_name: string;
-  role: string;
-}): Promise<User> {
-  const data = await apiFetch<{ success: boolean; user: User }>('/api/users', {
-    method: 'POST',
-    body: JSON.stringify(userData),
-  });
-  return data.user;
+export async function createUser(userData: CreateUserRequest): Promise<SafeUser> {
+  return authApi.createUser(userData);
 }
 
 export async function updateUser(
   userId: number,
-  userData: Partial<User & { password?: string }>,
-): Promise<User> {
-  const data = await apiFetch<{ success: boolean; user: User }>(`/api/users/${userId}`, {
-    method: 'PUT',
-    body: JSON.stringify(userData),
-  });
-  return data.user;
+  userData: UpdateUserRequest,
+): Promise<SafeUser> {
+  return authApi.updateUser(userId, userData);
 }

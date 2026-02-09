@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import {
+  LayoutDashboard, ClipboardList, Pencil, Factory,
+  AlertTriangle, Clock, BarChart3, Users, LogOut,
+} from 'lucide-react-native';
 import { AppShell, type NavItem } from './layout';
-import { setAuthToken } from '@zipybills/factory-api-client';
+import { useAuthStore, type AuthUser } from '@zipybills/ui-store';
 import { LoginPage, UsersPage } from '@zipybills/factory-auth-frontend';
 import { DashboardPage } from '@zipybills/factory-dashboard-frontend';
 import { MachinesPage } from '@zipybills/factory-machines-frontend';
@@ -9,6 +13,7 @@ import { ShiftsPage } from '@zipybills/factory-shifts-frontend';
 import { ProductionPlanPage, OperatorInputPage } from '@zipybills/factory-planning-frontend';
 import { DowntimePage } from '@zipybills/factory-downtime-frontend';
 import { ReportsPage } from '@zipybills/factory-reports-frontend';
+import { Avatar } from '@zipybills/ui-components';
 
 type PageId =
   | 'dashboard'
@@ -20,67 +25,53 @@ type PageId =
   | 'reports'
   | 'users';
 
-interface AuthUser {
-  user_id: number;
-  username: string;
-  full_name: string;
-  role: string;
-}
+const ICON_SIZE = 18;
+const ICON_MAP: Record<PageId, React.ReactNode> = {
+  dashboard: <LayoutDashboard size={ICON_SIZE} />,
+  plans: <ClipboardList size={ICON_SIZE} />,
+  operator: <Pencil size={ICON_SIZE} />,
+  machines: <Factory size={ICON_SIZE} />,
+  downtime: <AlertTriangle size={ICON_SIZE} />,
+  shifts: <Clock size={ICON_SIZE} />,
+  reports: <BarChart3 size={ICON_SIZE} />,
+  users: <Users size={ICON_SIZE} />,
+};
 
-const PAGE_DEFS: { id: PageId; label: string; icon: string; roles?: string[] }[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-  { id: 'plans', label: 'Planning', icon: '📋' },
-  { id: 'operator', label: 'Operator Input', icon: '✏️' },
-  { id: 'machines', label: 'Machines', icon: '🏭' },
-  { id: 'downtime', label: 'Downtime', icon: '⚠️' },
-  { id: 'shifts', label: 'Shifts', icon: '⏰', roles: ['ADMIN', 'SUPERVISOR'] },
-  { id: 'reports', label: 'Reports', icon: '📈', roles: ['ADMIN', 'SUPERVISOR'] },
-  { id: 'users', label: 'Users', icon: '👤', roles: ['ADMIN'] },
+const PAGE_DEFS: { id: PageId; label: string; roles?: string[] }[] = [
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'plans', label: 'Planning' },
+  { id: 'operator', label: 'Operator Input' },
+  { id: 'machines', label: 'Machines' },
+  { id: 'downtime', label: 'Downtime' },
+  { id: 'shifts', label: 'Shifts', roles: ['ADMIN', 'SUPERVISOR'] },
+  { id: 'reports', label: 'Reports', roles: ['ADMIN', 'SUPERVISOR'] },
+  { id: 'users', label: 'Users', roles: ['ADMIN'] },
 ];
 
-function renderPage(pageId: PageId): React.ReactNode {
-  switch (pageId) {
-    case 'dashboard':
-      return <DashboardPage />;
-    case 'machines':
-      return <MachinesPage />;
-    case 'plans':
-      return <ProductionPlanPage />;
-    case 'operator':
-      return <OperatorInputPage />;
-    case 'downtime':
-      return <DowntimePage />;
-    case 'shifts':
-      return <ShiftsPage />;
-    case 'reports':
-      return <ReportsPage />;
-    case 'users':
-      return <UsersPage />;
-    default:
-      return <DashboardPage />;
-  }
-}
+const PAGE_COMPONENTS: Record<PageId, React.ComponentType> = {
+  dashboard: DashboardPage,
+  machines: MachinesPage,
+  plans: ProductionPlanPage,
+  operator: OperatorInputPage,
+  downtime: DowntimePage,
+  shifts: ShiftsPage,
+  reports: ReportsPage,
+  users: UsersPage,
+};
 
 export function HomePage() {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const { user, isAuthenticated, login, logout } = useAuthStore();
   const [currentPage, setCurrentPage] = useState<PageId>('dashboard');
 
   const handleLogin = (loggedInUser: AuthUser) => {
-    setUser(loggedInUser);
+    login(loggedInUser, ''); // token already set inside LoginPage
     setCurrentPage('dashboard');
   };
 
-  const handleLogout = () => {
-    setAuthToken('');
-    setUser(null);
-    setCurrentPage('dashboard');
-  };
-
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return <LoginPage onLogin={handleLogin} />;
   }
 
-  // Filter pages by role
   const visiblePages = PAGE_DEFS.filter(
     (p) => !p.roles || p.roles.includes(user.role),
   );
@@ -88,22 +79,24 @@ export function HomePage() {
   const navItems: NavItem[] = visiblePages.map((p) => ({
     id: p.id,
     label: p.label,
-    icon: p.icon,
+    icon: ICON_MAP[p.id],
     isActive: currentPage === p.id,
     onPress: () => setCurrentPage(p.id),
   }));
 
   const activePageDef = PAGE_DEFS.find((p) => p.id === currentPage);
+  const ActivePage = PAGE_COMPONENTS[currentPage] ?? DashboardPage;
 
   return (
     <AppShell
       navItems={navItems}
-      title={activePageDef?.label || 'FactoryOS'}
+      title={activePageDef?.label ?? 'FactoryOS'}
       brandName="FactoryOS"
       brandSubtitle={`${user.full_name} · ${user.role}`}
       sidebarFooter={
-        <Pressable onPress={handleLogout} className="py-2">
-          <Text className="text-xs text-slate-400">🚪 Sign Out</Text>
+        <Pressable onPress={logout} className="flex-row items-center py-2">
+          <LogOut size={14} color="#94a3b8" />
+          <Text className="text-xs text-slate-400 ml-2">Sign Out</Text>
         </Pressable>
       }
       headerRight={
@@ -112,13 +105,14 @@ export function HomePage() {
             <Text className="text-sm font-medium text-gray-700">{user.full_name}</Text>
             <Text className="text-xs text-gray-400">{user.role}</Text>
           </View>
-          <Pressable onPress={handleLogout} className="bg-gray-100 px-3 py-1.5 rounded-lg">
+          <Avatar name={user.full_name} size="sm" />
+          <Pressable onPress={logout} className="bg-gray-100 px-3 py-1.5 rounded-lg ml-2">
             <Text className="text-xs text-gray-600">Sign Out</Text>
           </Pressable>
         </View>
       }
     >
-      {renderPage(currentPage)}
+      <ActivePage />
     </AppShell>
   );
 }

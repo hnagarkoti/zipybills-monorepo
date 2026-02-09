@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
+import { ClipboardList, Factory, Clock, AlertTriangle, Plus } from 'lucide-react-native';
 import { fetchPlans, createPlan, updatePlanStatus, type ProductionPlan } from '../services/api';
 import { fetchMachines, type Machine } from '@zipybills/factory-machines-frontend';
 import { fetchShifts, type Shift } from '@zipybills/factory-shifts-frontend';
+import { Badge, Alert, EmptyState, ProgressBar, PageHeader, StatCard } from '@zipybills/ui-components';
 
 function PlanStatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    PLANNED: 'bg-blue-100 text-blue-700',
-    IN_PROGRESS: 'bg-yellow-100 text-yellow-700',
-    COMPLETED: 'bg-green-100 text-green-700',
-    CANCELLED: 'bg-red-100 text-red-700',
-  };
-  return (
-    <View className={`px-2 py-0.5 rounded-full ${styles[status] || styles.PLANNED}`}>
-      <Text className="text-xs font-medium">{status.replace('_', ' ')}</Text>
-    </View>
-  );
+  const variant = status === 'COMPLETED' ? 'success' as const
+    : status === 'IN_PROGRESS' ? 'warning' as const
+    : status === 'CANCELLED' ? 'error' as const
+    : 'info' as const;
+  return <Badge variant={variant}>{status.replace('_', ' ')}</Badge>;
 }
 
 export function ProductionPlanPage() {
@@ -58,11 +54,11 @@ export function ProductionPlanPage() {
       setShowForm(false);
       setForm({ machine_id: '', shift_id: '', product_name: '', product_code: '', target_quantity: '' });
       loadData();
-    } catch (err: any) { setError(err.message || 'Failed to create plan'); }
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to create plan'); }
   };
 
   const handleStatusChange = async (planId: number, status: string) => {
-    try { await updatePlanStatus(planId, status); loadData(); } catch (err: any) { setError(err.message); }
+    try { await updatePlanStatus(planId, status); loadData(); } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to update'); }
   };
 
   const totalTarget = plans.reduce((s, p) => s + p.target_quantity, 0);
@@ -70,15 +66,16 @@ export function ProductionPlanPage() {
 
   return (
     <ScrollView className="flex-1 p-4">
-      <View className="flex-row items-center justify-between mb-4">
-        <View>
-          <Text className="text-xl font-bold text-gray-900">Production Planning</Text>
-          <Text className="text-sm text-gray-500">{plans.length} plans for {selectedDate}</Text>
-        </View>
-        <Pressable onPress={() => setShowForm(!showForm)} className="bg-emerald-500 px-4 py-2.5 rounded-lg">
-          <Text className="text-white font-medium text-sm">+ New Plan</Text>
-        </Pressable>
-      </View>
+      <PageHeader
+        title="Production Planning"
+        subtitle={`${plans.length} plans for ${selectedDate}`}
+        actions={
+          <Pressable onPress={() => setShowForm(!showForm)} className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center">
+            <Plus size={14} color="#fff" />
+            <Text className="text-white font-medium text-sm ml-1">New Plan</Text>
+          </Pressable>
+        }
+      />
 
       {/* Date Selector */}
       <View className="flex-row mb-4 gap-2">
@@ -99,13 +96,13 @@ export function ProductionPlanPage() {
       {/* Summary */}
       {plans.length > 0 && (
         <View className="flex-row mb-4 gap-2">
-          <View className="flex-1 bg-blue-50 rounded-xl p-3"><Text className="text-xs text-blue-500">Target</Text><Text className="text-xl font-bold text-blue-700">{totalTarget}</Text></View>
-          <View className="flex-1 bg-green-50 rounded-xl p-3"><Text className="text-xs text-green-500">Produced</Text><Text className="text-xl font-bold text-green-700">{totalProduced}</Text></View>
-          <View className="flex-1 bg-purple-50 rounded-xl p-3"><Text className="text-xs text-purple-500">Efficiency</Text><Text className="text-xl font-bold text-purple-700">{totalTarget > 0 ? Math.round((totalProduced / totalTarget) * 100) : 0}%</Text></View>
+          <View className="flex-1"><StatCard label="Target" value={totalTarget} color="blue" /></View>
+          <View className="flex-1"><StatCard label="Produced" value={totalProduced} color="green" /></View>
+          <View className="flex-1"><StatCard label="Efficiency" value={`${totalTarget > 0 ? Math.round((totalProduced / totalTarget) * 100) : 0}%`} color="purple" /></View>
         </View>
       )}
 
-      {error && (<View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4"><Text className="text-sm text-red-700">{error}</Text></View>)}
+      {error && (<View className="mb-4"><Alert variant="error" message={error} onDismiss={() => setError(null)} /></View>)}
 
       {/* Create Plan Form */}
       {showForm && (
@@ -139,7 +136,7 @@ export function ProductionPlanPage() {
 
       {/* Plans List */}
       {loading ? (<Text className="text-center text-gray-400 py-8">Loading plans...</Text>) : plans.length === 0 ? (
-        <View className="items-center py-12"><Text className="text-4xl mb-3">📋</Text><Text className="text-lg text-gray-500">No plans for this date</Text><Text className="text-sm text-gray-400 mt-1">Create a production plan to get started</Text></View>
+        <EmptyState icon={<ClipboardList size={40} color="#9ca3af" />} title="No plans for this date" description="Create a production plan to get started" />
       ) : (
         plans.map((p) => {
           const pct = p.target_quantity > 0 ? Math.round(((Number(p.actual_quantity) || 0) / p.target_quantity) * 100) : 0;
@@ -149,13 +146,13 @@ export function ProductionPlanPage() {
                 <View className="flex-1"><Text className="text-base font-bold text-gray-900">{p.product_name}</Text>{p.product_code && <Text className="text-xs text-gray-400">{p.product_code}</Text>}</View>
                 <PlanStatusBadge status={p.status} />
               </View>
-              <View className="flex-row mb-2"><Text className="text-xs text-gray-500 mr-3">🏭 {p.machine_name}</Text><Text className="text-xs text-gray-500">⏰ {p.shift_name}</Text></View>
+              <View className="flex-row mb-2 items-center"><Factory size={12} color="#6b7280" /><Text className="text-xs text-gray-500 ml-1 mr-3">{p.machine_name}</Text><Clock size={12} color="#6b7280" /><Text className="text-xs text-gray-500 ml-1">{p.shift_name}</Text></View>
               <View className="flex-row items-center mb-2">
                 <Text className="text-sm text-gray-700 mr-2">{p.actual_quantity || 0} / {p.target_quantity}</Text>
                 <View className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><View className={`h-full rounded-full ${pct >= 90 ? 'bg-green-400' : pct >= 50 ? 'bg-yellow-400' : 'bg-blue-400'}`} style={{ width: `${Math.min(pct, 100)}%` }} /></View>
                 <Text className="text-xs text-gray-500 ml-2">{pct}%</Text>
               </View>
-              {(p.actual_rejected ?? 0) > 0 && <Text className="text-xs text-red-500 mb-2">⚠ {p.actual_rejected} rejected</Text>}
+              {(p.actual_rejected ?? 0) > 0 && <View className="flex-row items-center mb-2"><AlertTriangle size={10} color="#ef4444" /><Text className="text-xs text-red-500 ml-1">{p.actual_rejected} rejected</Text></View>}
               {p.status !== 'COMPLETED' && p.status !== 'CANCELLED' && (
                 <View className="flex-row gap-2 pt-2 border-t border-gray-50">
                   {p.status === 'PLANNED' && <Pressable onPress={() => handleStatusChange(p.plan_id, 'IN_PROGRESS')} className="bg-yellow-50 px-3 py-1.5 rounded-lg"><Text className="text-xs text-yellow-600 font-medium">Start</Text></Pressable>}

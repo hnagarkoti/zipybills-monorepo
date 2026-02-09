@@ -1,16 +1,14 @@
+/**
+ * Button – shadcn-rn pattern with NativeWind className
+ *
+ * Variants: primary | secondary | outline | ghost | destructive
+ * Sizes: sm | md | lg
+ */
 import React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type PressableProps,
-} from 'react-native';
+import { ActivityIndicator, Pressable, Text, type PressableProps } from 'react-native';
+import { cn } from './cn';
 
-import { colors, spacing } from '@zipybills/ui-theme';
-
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends Omit<PressableProps, 'children'> {
@@ -19,100 +17,79 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
   loading?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
+  className?: string;
+  textClassName?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+const variantStyles: Record<ButtonVariant, string> = {
+  primary: 'bg-emerald-500 active:bg-emerald-600',
+  secondary: 'bg-slate-700 active:bg-slate-800',
+  outline: 'bg-transparent border border-gray-300 active:bg-gray-50',
+  ghost: 'bg-transparent active:bg-gray-100',
+  destructive: 'bg-red-500 active:bg-red-600',
+};
+
+const variantTextStyles: Record<ButtonVariant, string> = {
+  primary: 'text-white',
+  secondary: 'text-white',
+  outline: 'text-gray-700',
+  ghost: 'text-gray-700',
+  destructive: 'text-white',
+};
+
+const sizeStyles: Record<ButtonSize, string> = {
+  sm: 'px-3 py-1.5 rounded-md',
+  md: 'px-4 py-2.5 rounded-lg',
+  lg: 'px-6 py-3.5 rounded-xl',
+};
+
+const sizeTextStyles: Record<ButtonSize, string> = {
+  sm: 'text-xs',
+  md: 'text-sm',
+  lg: 'text-base',
+};
+
+export function Button({
   variant = 'primary',
   size = 'md',
   loading = false,
   disabled = false,
   children,
-  style,
+  className,
+  textClassName,
   ...props
-}) => {
+}: ButtonProps) {
   const isDisabled = disabled || loading;
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.base,
-        styles[variant],
-        styles[size],
-        isDisabled && styles.disabled,
-        pressed && !isDisabled && styles.pressed,
-        style,
-      ]}
+      className={cn(
+        'flex-row items-center justify-center',
+        variantStyles[variant],
+        sizeStyles[size],
+        isDisabled && 'opacity-50',
+        className,
+      )}
       disabled={isDisabled}
       {...props}
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? colors.white : colors.primary[600]}
+          color={variant === 'outline' || variant === 'ghost' ? '#374151' : '#ffffff'}
+          size="small"
         />
       ) : (
-        <Text style={[styles.text, styles[`${variant}Text`]]}>{children}</Text>
+        <Text
+          className={cn(
+            'font-semibold',
+            variantTextStyles[variant],
+            sizeTextStyles[size],
+            textClassName,
+          )}
+        >
+          {children}
+        </Text>
       )}
     </Pressable>
   );
-};
-
-const styles = StyleSheet.create({
-  base: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    flexDirection: 'row',
-  },
-  // Variants
-  primary: {
-    backgroundColor: colors.primary[600],
-  },
-  secondary: {
-    backgroundColor: colors.secondary[600],
-  },
-  outline: {
-    backgroundColor: colors.transparent,
-    borderWidth: 1,
-    borderColor: colors.primary[600],
-  },
-  ghost: {
-    backgroundColor: colors.transparent,
-  },
-  // Sizes
-  sm: {
-    paddingVertical: spacing[2],
-    paddingHorizontal: spacing[3],
-  },
-  md: {
-    paddingVertical: spacing[3],
-    paddingHorizontal: spacing[4],
-  },
-  lg: {
-    paddingVertical: spacing[4],
-    paddingHorizontal: spacing[6],
-  },
-  // States
-  disabled: {
-    opacity: 0.5,
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-  // Text styles
-  text: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  primaryText: {
-    color: colors.white,
-  },
-  secondaryText: {
-    color: colors.white,
-  },
-  outlineText: {
-    color: colors.primary[600],
-  },
-  ghostText: {
-    color: colors.primary[600],
-  },
-});
+}

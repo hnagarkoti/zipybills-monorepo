@@ -1,0 +1,5 @@
+{
+  "extends": "@zipybills/ts-config/react-native.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

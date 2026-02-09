@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "exports": { ".": "./src/index.ts" },
-  "dependencies": { "@zipybills/ts-config": "workspace:*" },
+  "dependencies": { "@zipybills/factory-api-client": "workspace:*", "@zipybills/ts-config": "workspace:*" },
   "devDependencies": { "typescript": "catalog:" },
   "private": true
 }

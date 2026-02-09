@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
+import { Users, ShieldCheck, ClipboardCheck, Wrench, Plus } from 'lucide-react-native';
 import { fetchUsers, createUser, updateUser, type User } from '../services/api';
+import { Badge, Alert, Avatar, EmptyState, PageHeader } from '@zipybills/ui-components';
 
 const ROLES = ['ADMIN', 'SUPERVISOR', 'OPERATOR'] as const;
-const ROLE_COLORS: Record<string, string> = {
-  ADMIN: 'bg-purple-100 text-purple-700',
-  SUPERVISOR: 'bg-blue-100 text-blue-700',
-  OPERATOR: 'bg-green-100 text-green-700',
+
+const ROLE_ICON: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+  ADMIN: ShieldCheck,
+  SUPERVISOR: ClipboardCheck,
+  OPERATOR: Wrench,
+};
+
+const ROLE_VARIANT: Record<string, 'default' | 'success' | 'warning' | 'error' | 'info'> = {
+  ADMIN: 'info',
+  SUPERVISOR: 'warning',
+  OPERATOR: 'success',
 };
 
 export function UsersPage() {
@@ -16,7 +25,7 @@ export function UsersPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
-    username: '', password: '', full_name: '', role: 'OPERATOR' as string, is_active: true,
+    username: '', password: '', full_name: '', role: 'OPERATOR' as 'ADMIN' | 'SUPERVISOR' | 'OPERATOR', is_active: true,
   });
 
   const loadData = useCallback(async () => {
@@ -24,8 +33,8 @@ export function UsersPage() {
       setLoading(true);
       setUsers(await fetchUsers());
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to load');
     } finally {
       setLoading(false);
     }
@@ -50,7 +59,7 @@ export function UsersPage() {
     if (!editingId && !form.password) { setError('Password required for new user'); return; }
     try {
       if (editingId) {
-        const payload: any = { username: form.username, full_name: form.full_name, role: form.role, is_active: form.is_active };
+        const payload: Record<string, unknown> = { username: form.username, full_name: form.full_name, role: form.role, is_active: form.is_active };
         if (form.password) payload.password = form.password;
         await updateUser(editingId, payload);
       } else {
@@ -58,8 +67,8 @@ export function UsersPage() {
       }
       resetForm();
       loadData();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to save');
     }
   };
 
@@ -67,18 +76,19 @@ export function UsersPage() {
 
   return (
     <ScrollView className="flex-1 p-4">
-      <View className="flex-row items-center justify-between mb-4">
-        <View>
-          <Text className="text-xl font-bold text-gray-900">User Management</Text>
-          <Text className="text-sm text-gray-500">{activeCount} active of {users.length} users</Text>
-        </View>
-        <Pressable
-          onPress={() => { resetForm(); setShowForm(!showForm); }}
-          className="bg-emerald-500 px-4 py-2.5 rounded-lg"
-        >
-          <Text className="text-white font-medium text-sm">+ Add User</Text>
-        </Pressable>
-      </View>
+      <PageHeader
+        title="User Management"
+        subtitle={`${activeCount} active of ${users.length} users`}
+        actions={
+          <Pressable
+            onPress={() => { resetForm(); setShowForm(!showForm); }}
+            className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center"
+          >
+            <Plus size={14} color="#fff" />
+            <Text className="text-white font-medium text-sm ml-1">Add User</Text>
+          </Pressable>
+        }
+      />
 
       {/* Role Summary */}
       <View className="flex-row gap-2 mb-4">
@@ -94,8 +104,8 @@ export function UsersPage() {
       </View>
 
       {error && (
-        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <Text className="text-sm text-red-700">{error}</Text>
+        <View className="mb-4">
+          <Alert variant="error" message={error} onDismiss={() => setError(null)} />
         </View>
       )}
 
@@ -174,17 +184,14 @@ export function UsersPage() {
       {loading ? (
         <Text className="text-center text-gray-400 py-8">Loading users...</Text>
       ) : users.length === 0 ? (
-        <View className="items-center py-12">
-          <Text className="text-4xl mb-3">👤</Text>
-          <Text className="text-lg text-gray-500">No users found</Text>
-        </View>
+        <EmptyState icon={<Users size={40} color="#9ca3af" />} title="No users found" />
       ) : (
         users.map((u) => (
           <View key={u.user_id} className={`bg-white rounded-xl border p-4 mb-2 ${u.is_active ? 'border-gray-100' : 'border-gray-200 opacity-60'}`}>
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center flex-1">
                 <View className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${u.is_active ? 'bg-emerald-100' : 'bg-gray-100'}`}>
-                  <Text className="text-base">{u.role === 'ADMIN' ? '👑' : u.role === 'SUPERVISOR' ? '📋' : '🔧'}</Text>
+                  {(() => { const RoleIcon = ROLE_ICON[u.role] ?? Wrench; return <RoleIcon size={16} color={u.is_active ? '#059669' : '#6b7280'} />; })()}
                 </View>
                 <View className="flex-1">
                   <Text className="font-semibold text-gray-900">{u.full_name}</Text>
@@ -192,9 +199,7 @@ export function UsersPage() {
                 </View>
               </View>
               <View className="flex-row items-center gap-2">
-                <View className={`px-2 py-0.5 rounded-full ${ROLE_COLORS[u.role]}`}>
-                  <Text className="text-xs font-medium">{u.role}</Text>
-                </View>
+                <Badge variant={ROLE_VARIANT[u.role] ?? 'default'}>{u.role}</Badge>
                 <Pressable onPress={() => startEdit(u)} className="bg-gray-100 px-3 py-1.5 rounded-lg">
                   <Text className="text-xs text-gray-600">Edit</Text>
                 </Pressable>

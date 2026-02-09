@@ -8,8 +8,12 @@
   "peerDependencies": { "nativewind": "catalog:", "react": "catalog:", "react-native": "catalog:" },
   "dependencies": {
     "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/factory-downtime-service-interface": "workspace:*",
     "@zipybills/factory-machines-frontend": "workspace:*",
-    "@zipybills/ts-config": "workspace:*"
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "lucide-react-native": "catalog:",
+    "react-native-svg": "catalog:"
   },
   "devDependencies": { "@types/react": "catalog:", "typescript": "catalog:" },
   "private": true
