@@ -141,11 +141,14 @@ export class FeatureRegistry {
   private features: Map<string, FeatureDefinition>;
   private overrides: Map<string, FeatureOverride>;
   private listeners: Set<() => void>;
+  /** Cached snapshot – rebuilt only on mutations so useSyncExternalStore gets a stable reference */
+  private _snapshot: FeatureDefinition[];
 
   constructor(definitions?: FeatureDefinition[]) {
     this.features = new Map();
     this.overrides = new Map();
     this.listeners = new Set();
+    this._snapshot = [];
 
     const defs = definitions ?? FACTORY_FEATURES;
     for (const def of defs) {
@@ -153,6 +156,7 @@ export class FeatureRegistry {
     }
 
     this.applyEnvironmentOverrides();
+    this._snapshot = this.buildSnapshot();
   }
 
   // ─── Query ───────────────────────────────
@@ -276,12 +280,17 @@ export class FeatureRegistry {
   }
 
   getSnapshot(): FeatureDefinition[] {
-    return this.getAllFeatures();
+    return this._snapshot;
   }
 
   // ─── Internal ──────────────────────────────
 
+  private buildSnapshot(): FeatureDefinition[] {
+    return Array.from(this.features.keys()).map((id) => this.getFeature(id)!);
+  }
+
   private notify(): void {
+    this._snapshot = this.buildSnapshot();
     for (const listener of this.listeners) {
       listener();
     }

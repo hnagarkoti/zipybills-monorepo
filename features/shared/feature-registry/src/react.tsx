@@ -8,7 +8,7 @@
  *  - FeatureProvider      → Context provider (optional, uses singleton by default)
  */
 
-import React, { createContext, useContext, useSyncExternalStore, useMemo, type ReactNode } from 'react';
+import React, { createContext, useContext, useCallback, useSyncExternalStore, useMemo, type ReactNode } from 'react';
 import {
   featureRegistry,
   FeatureRegistry,
@@ -62,11 +62,16 @@ interface FeatureStatus {
 export function useFeature(featureId: string): FeatureStatus {
   const registry = useContext(FeatureRegistryContext);
 
-  const features = useSyncExternalStore(
-    (cb) => registry.subscribe(cb),
-    () => registry.getSnapshot(),
-    () => registry.getSnapshot(),
+  const subscribe = useCallback(
+    (cb: () => void) => registry.subscribe(cb),
+    [registry],
   );
+  const getSnapshot = useCallback(
+    () => registry.getSnapshot(),
+    [registry],
+  );
+
+  const features = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   return useMemo(() => {
     const feature = features.find((f) => f.id === featureId);
@@ -90,11 +95,16 @@ export function useFeature(featureId: string): FeatureStatus {
 export function useFeatureFlags(): Record<string, { api: FeatureState; ui: FeatureState; apiVersion: string }> {
   const registry = useContext(FeatureRegistryContext);
 
-  const features = useSyncExternalStore(
-    (cb) => registry.subscribe(cb),
-    () => registry.getSnapshot(),
-    () => registry.getSnapshot(),
+  const subscribe = useCallback(
+    (cb: () => void) => registry.subscribe(cb),
+    [registry],
   );
+  const getSnapshot = useCallback(
+    () => registry.getSnapshot(),
+    [registry],
+  );
+
+  const features = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   return useMemo(() => {
     const map: Record<string, { api: FeatureState; ui: FeatureState; apiVersion: string }> = {};
