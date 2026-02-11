@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Sidebar, type NavItem } from './Sidebar';
 import { Header } from './Header';
 import { BottomNav } from './BottomNav';
+import { Breadcrumb, type BreadcrumbItem } from './Breadcrumb';
 
 const DESKTOP_BREAKPOINT = 1024;
 
@@ -14,7 +15,12 @@ export interface AppShellProps {
   brandName?: string;
   brandSubtitle?: string;
   sidebarFooter?: React.ReactNode;
+  /** Right content for desktop header (user info, sign out, etc.) */
   headerRight?: React.ReactNode;
+  /** Compact right content for mobile header (e.g. just avatar) */
+  mobileHeaderRight?: React.ReactNode;
+  /** Breadcrumb trail for desktop header */
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 export function AppShell({
@@ -25,6 +31,8 @@ export function AppShell({
   brandSubtitle,
   sidebarFooter,
   headerRight,
+  mobileHeaderRight,
+  breadcrumbs,
 }: AppShellProps) {
   const { width } = useWindowDimensions();
   const isDesktop = width >= DESKTOP_BREAKPOINT;
@@ -46,6 +54,7 @@ export function AppShell({
         />
         <View className="flex-1">
           <Header title={title} rightContent={headerRight} />
+          {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumb items={breadcrumbs} />}
           <View className="flex-1 bg-gray-50">{children}</View>
         </View>
       </View>
@@ -76,7 +85,7 @@ export function AppShell({
           title={title}
           showMenuToggle
           onMenuPress={() => setMobileMenuOpen(!mobileMenuOpen)}
-          rightContent={headerRight}
+          rightContent={mobileHeaderRight}
         />
         <View className="flex-1">{children}</View>
 

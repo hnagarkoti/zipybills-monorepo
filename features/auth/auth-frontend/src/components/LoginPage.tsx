@@ -6,7 +6,7 @@ import { setAuthToken } from '@zipybills/factory-api-client';
 import { Alert } from '@zipybills/ui-components';
 
 interface LoginPageProps {
-  onLogin: (user: { user_id: number; username: string; full_name: string; role: string }) => void;
+  onLogin: (user: { user_id: number; username: string; full_name: string; role: string }, token: string) => void;
 }
 
 export function LoginPage({ onLogin }: LoginPageProps) {
@@ -25,7 +25,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       setError(null);
       const res = await apiLogin(username, password);
       setAuthToken(res.token);
-      onLogin(res.user);
+      onLogin(res.user, res.token);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Login failed';
       setError(message);

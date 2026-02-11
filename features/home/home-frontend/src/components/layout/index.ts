@@ -8,3 +8,5 @@ export { BottomNav } from './BottomNav';
 export type { BottomNavProps } from './BottomNav';
 export { ResponsiveGrid } from './ResponsiveGrid';
 export type { ResponsiveGridProps } from './ResponsiveGrid';
+export { Breadcrumb } from './Breadcrumb';
+export type { BreadcrumbItem, BreadcrumbProps } from './Breadcrumb';

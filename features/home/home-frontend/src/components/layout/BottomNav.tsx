@@ -7,9 +7,13 @@ export interface BottomNavProps {
 }
 
 export function BottomNav({ items }: BottomNavProps) {
+  // Flatten: show parent items only (children are accessible from the parent page on mobile)
+  const flatItems = items.filter((item) => !item.children || item.children.length === 0 || true)
+    .map(({ children: _children, ...rest }) => rest);
+
   return (
     <View className="h-16 bg-white border-t border-gray-200 flex-row items-center justify-around px-2">
-      {items.slice(0, 5).map((item) => (
+      {flatItems.slice(0, 5).map((item) => (
         <Pressable
           key={item.id}
           onPress={item.onPress}

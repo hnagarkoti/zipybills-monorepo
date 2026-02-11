@@ -7,8 +7,8 @@ export default function LoginScreen() {
   const { login } = useAuthStore();
   const router = useRouter();
 
-  const handleLogin = (user: AuthUser) => {
-    login(user, ''); // token already set inside LoginPage via setAuthToken
+  const handleLogin = (user: AuthUser, token: string) => {
+    login(user, token);
     router.replace('/dashboard');
   };
 

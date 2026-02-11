@@ -1,10 +1,39 @@
-import React from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, ScrollView, Pressable, Animated } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { AlertTriangle, CheckCircle, ClipboardList } from 'lucide-react-native';
 import { fetchDashboard, type DashboardData, type MachineStatus } from '../services/api';
 import { StatCard, ProgressBar, Alert, Loading } from '@zipybills/ui-components';
 import { queryKeys } from '@zipybills/ui-query';
+
+function PulseDot({ color }: { color: string }) {
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, { toValue: 0.2, duration: 800, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [opacity]);
+
+  return (
+    <View className="mr-2 items-center justify-center" style={{ width: 10, height: 10 }}>
+      {/* Outer glow ring */}
+      <Animated.View
+        style={{ opacity, position: 'absolute', width: 10, height: 10, borderRadius: 5, backgroundColor: color, transform: [{ scale: 1 }] }}
+        className="opacity-30"
+      />
+      {/* Inner solid dot */}
+      <Animated.View
+        style={{ opacity, width: 6, height: 6, borderRadius: 3, backgroundColor: color }}
+      />
+    </View>
+  );
+}
 
 function MachineBar({ machine }: { machine: MachineStatus }) {
   const pct = machine.today_target > 0
@@ -59,7 +88,7 @@ export function DashboardPage() {
     <ScrollView className="flex-1 p-4">
       {/* Live Status Banner */}
       <View className={`rounded-xl p-3 mb-4 flex-row items-center ${d.rejectionRate > 5 ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'}`}>
-        <View className={`w-2.5 h-2.5 rounded-full mr-2 ${d.rejectionRate > 5 ? 'bg-red-400' : 'bg-green-400'}`} />
+        <PulseDot color={d.rejectionRate > 5 ? '#f87171' : '#4ade80'} />
         {d.rejectionRate > 5
           ? <><AlertTriangle size={14} color="#dc2626" /><Text className="text-sm font-medium text-red-700 ml-1">High rejection rate: {d.rejectionRate}%</Text></>
           : <><CheckCircle size={14} color="#16a34a" /><Text className="text-sm font-medium text-green-700 ml-1">Production running normally</Text></>}

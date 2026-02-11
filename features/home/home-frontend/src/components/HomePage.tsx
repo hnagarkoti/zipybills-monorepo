@@ -63,8 +63,8 @@ export function HomePage() {
   const { user, isAuthenticated, login, logout } = useAuthStore();
   const [currentPage, setCurrentPage] = useState<PageId>('dashboard');
 
-  const handleLogin = (loggedInUser: AuthUser) => {
-    login(loggedInUser, ''); // token already set inside LoginPage
+  const handleLogin = (loggedInUser: AuthUser, token: string) => {
+    login(loggedInUser, token);
     setCurrentPage('dashboard');
   };
 
