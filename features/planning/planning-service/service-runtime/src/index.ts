@@ -59,6 +59,95 @@ planningRouter.post('/plans', requireAuth, requireRole('ADMIN', 'SUPERVISOR'), a
   }
 });
 
+// Bulk create plans (for CSV/Excel import)
+planningRouter.post('/plans/bulk', requireAuth, requireRole('ADMIN', 'SUPERVISOR'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const { plans: planRows } = req.body;
+    if (!Array.isArray(planRows) || planRows.length === 0) {
+      res.status(400).json({ success: false, error: 'plans array is required and must not be empty' });
+      return;
+    }
+    if (planRows.length > 500) {
+      res.status(400).json({ success: false, error: 'Maximum 500 plans per batch' });
+      return;
+    }
+    const created: Array<{ plan_id: number; product_name: string; plan_date: string }> = [];
+    const errors: Array<{ row: number; error: string }> = [];
+    for (let i = 0; i < planRows.length; i++) {
+      const row = planRows[i];
+      if (!row.machine_id || !row.shift_id || !row.plan_date || !row.product_name || !row.target_quantity) {
+        errors.push({ row: i + 1, error: 'Missing required fields' });
+        continue;
+      }
+      try {
+        const plan = await db.createProductionPlan({
+          machine_id: parseInt(String(row.machine_id), 10),
+          shift_id: parseInt(String(row.shift_id), 10),
+          plan_date: row.plan_date,
+          product_name: row.product_name,
+          product_code: row.product_code || null,
+          target_quantity: parseInt(String(row.target_quantity), 10),
+          created_by: req.user!.user_id,
+        });
+        created.push({ plan_id: plan.plan_id, product_name: plan.product_name, plan_date: plan.plan_date });
+      } catch (err) {
+        errors.push({ row: i + 1, error: err instanceof Error ? err.message : 'Failed to create' });
+      }
+    }
+    if (created.length > 0) {
+      await logActivity(
+        req.user!.user_id, 'BULK_CREATE_PLANS', 'plan', 0,
+        `Bulk imported ${created.length} plans (${errors.length} errors)`, req.ip,
+      );
+    }
+    res.status(201).json({ success: true, created: created.length, errors, plans: created });
+  } catch (err) {
+    console.error('[Plans] Bulk create error:', err);
+    res.status(500).json({ success: false, error: 'Failed to bulk create plans' });
+  }
+});
+
+// Duplicate plans from one date to another
+planningRouter.post('/plans/duplicate', requireAuth, requireRole('ADMIN', 'SUPERVISOR'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const { source_date, target_date } = req.body;
+    if (!source_date || !target_date) {
+      res.status(400).json({ success: false, error: 'source_date and target_date required' });
+      return;
+    }
+    if (source_date === target_date) {
+      res.status(400).json({ success: false, error: 'Source and target dates must be different' });
+      return;
+    }
+    const sourcePlans = await db.getProductionPlans({ date: source_date });
+    if (sourcePlans.length === 0) {
+      res.status(400).json({ success: false, error: `No plans found for ${source_date}` });
+      return;
+    }
+    const created = [];
+    for (const plan of sourcePlans) {
+      const newPlan = await db.createProductionPlan({
+        machine_id: plan.machine_id,
+        shift_id: plan.shift_id,
+        plan_date: target_date,
+        product_name: plan.product_name,
+        product_code: plan.product_code,
+        target_quantity: plan.target_quantity,
+        created_by: req.user!.user_id,
+      });
+      created.push(newPlan);
+    }
+    await logActivity(
+      req.user!.user_id, 'DUPLICATE_PLANS', 'plan', 0,
+      `Duplicated ${created.length} plans from ${source_date} to ${target_date}`, req.ip,
+    );
+    res.status(201).json({ success: true, created: created.length, target_date, plans: created });
+  } catch (err) {
+    console.error('[Plans] Duplicate error:', err);
+    res.status(500).json({ success: false, error: 'Failed to duplicate plans' });
+  }
+});
+
 planningRouter.put('/plans/:id/status', requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const planId = parseInt(String(req.params.id), 10);

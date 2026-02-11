@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
 import {
   Wrench, Hammer, RefreshCw, Package, Zap, Search, Pin,
-  AlertTriangle, CheckCircle, CircleOff, Plus,
+  AlertTriangle, CheckCircle, CircleOff, Plus, Calendar,
 } from 'lucide-react-native';
 import { fetchDowntimeLogs, createDowntimeLog, endDowntimeLog, type DowntimeLog } from '../services/api';
 import { fetchMachines, type Machine } from '@zipybills/factory-machines-frontend';
-import { Alert, EmptyState, StatCard, PageHeader } from '@zipybills/ui-components';
+import { Alert, EmptyState, StatCard, PageHeader, CalendarStrip } from '@zipybills/ui-components';
 
 const DOWNTIME_CATEGORIES = [
   { value: 'BREAKDOWN', label: 'Breakdown', icon: Wrench, color: 'bg-red-50 border-red-200 text-red-700' },
@@ -36,7 +36,9 @@ export function DowntimePage() {
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0] ?? '');
   const [form, setForm] = useState({ machine_id: '', category: '', reason: '' });
+  const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
 
   const loadData = useCallback(async () => {
     try {
@@ -89,6 +91,29 @@ export function DowntimePage() {
           </Pressable>
         }
       />
+
+      {/* Date Selector */}
+      <View className="mb-4">
+        <CalendarStrip
+          selectedDate={selectedDate}
+          onDateSelect={setSelectedDate}
+          range={7}
+        />
+      </View>
+
+      {/* Category Filter */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-3">
+        <View className="flex-row gap-1.5">
+          <Pressable onPress={() => setCategoryFilter('ALL')} className={`px-3 py-1.5 rounded-full border ${categoryFilter === 'ALL' ? 'bg-gray-800 border-gray-800' : 'bg-white border-gray-200'}`}>
+            <Text className={`text-xs font-medium ${categoryFilter === 'ALL' ? 'text-white' : 'text-gray-600'}`}>All</Text>
+          </Pressable>
+          {DOWNTIME_CATEGORIES.map((cat) => (
+            <Pressable key={cat.value} onPress={() => setCategoryFilter(cat.value)} className={`px-3 py-1.5 rounded-full border ${categoryFilter === cat.value ? 'bg-gray-800 border-gray-800' : 'bg-white border-gray-200'}`}>
+              <Text className={`text-xs font-medium ${categoryFilter === cat.value ? 'text-white' : 'text-gray-600'}`}>{cat.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
 
       <View className="flex-row gap-2 mb-4">
         <View className={`flex-1 rounded-xl p-3 ${activeLogs.length > 0 ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'}`}>
@@ -148,19 +173,27 @@ export function DowntimePage() {
             <CircleOff size={14} color="#dc2626" />
             <Text className="text-sm font-semibold text-red-600 ml-1">Active Downtime</Text>
           </View>
-          {activeLogs.map((log) => (
+          {activeLogs.map((log) => {
+            const elapsedMin = Math.round((Date.now() - new Date(log.started_at).getTime()) / 60000);
+            return (
             <View key={log.downtime_id} className="bg-red-50 border border-red-200 rounded-xl p-4 mb-2">
               <View className="flex-row items-center justify-between mb-2">
                 <Text className="font-semibold text-gray-900">{log.machine_name}</Text>
                 <CategoryBadge category={log.category} />
               </View>
-              <Text className="text-xs text-gray-500 mb-1">Started: {formatTime(log.started_at)}</Text>
+              <View className="flex-row items-center mb-1">
+                <Text className="text-xs text-gray-500">Started: {formatTime(log.started_at)}</Text>
+                <View className="bg-red-100 rounded-md px-2 py-0.5 ml-2">
+                  <Text className="text-xs font-bold text-red-700">⏱ {formatDuration(elapsedMin)} elapsed</Text>
+                </View>
+              </View>
               {log.reason && <Text className="text-sm text-gray-700 mb-2">{log.reason}</Text>}
               <Pressable onPress={() => handleEnd(log.downtime_id)} className="bg-green-500 px-4 py-2 rounded-lg items-center mt-1">
-                <Text className="text-white font-medium text-sm">Mark Resolved</Text>
+                <Text className="text-white font-medium text-sm">✓ Mark Resolved</Text>
               </Pressable>
             </View>
-          ))}
+            );
+          })}
         </View>
       )}
 

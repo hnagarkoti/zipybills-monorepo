@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
-import { BarChart3, Factory, Clock, AlertTriangle, FileText } from 'lucide-react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, ScrollView, Pressable, TextInput, Platform } from 'react-native';
+import { BarChart3, Factory, Clock, AlertTriangle, FileText, Download } from 'lucide-react-native';
 import { fetchProductionReport, fetchMachineWiseReport, fetchShiftWiseReport, fetchRejectionReport } from '../services/api';
 import { StatCard, Alert, EmptyState, ProgressBar, PageHeader } from '@zipybills/ui-components';
 
@@ -46,20 +46,53 @@ export function ReportsPage() {
   const totalOk = data.reduce((s, r) => s + (Number(r.total_ok) || Number(r.quantity_ok) || 0), 0);
   const totalRejected = data.reduce((s, r) => s + (Number(r.total_rejected) || Number(r.quantity_rejected) || 0), 0);
 
+  // Auto-fetch when tab or date range changes
+  useEffect(() => { fetchReport(); }, [fetchReport]);
+
+  const exportCSV = () => {
+    if (data.length === 0 || Platform.OS !== 'web') return;
+    const keys = Object.keys(data[0] ?? {});
+    const csv = [keys.join(','), ...data.map((r) => keys.map((k) => JSON.stringify(r[k] ?? '')).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `report-${tab}-${dateRange.start}-${dateRange.end}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <ScrollView className="flex-1 p-4">
-      <PageHeader title="Reports & Analytics" subtitle="View production insights and trends" />
+      <PageHeader title="Reports & Analytics" subtitle="View production insights and trends" actions={
+        data.length > 0 ? (
+          <Pressable onPress={exportCSV} className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center">
+            <Download size={14} color="#fff" />
+            <Text className="text-white font-medium text-sm ml-1.5">Export CSV</Text>
+          </Pressable>
+        ) : undefined
+      } />
+
+      {/* Quick Date Ranges */}
+      <View className="flex-row gap-2 mb-3">
+        {[{ label: 'Today', days: 0 }, { label: 'Last 7 Days', days: 7 }, { label: 'Last 30 Days', days: 30 }, { label: 'Last 90 Days', days: 90 }].map((r) => {
+          const end = new Date();
+          const start = new Date();
+          start.setDate(start.getDate() - r.days);
+          const isActive = dateRange.start === (start.toISOString().split('T')[0] ?? '') && dateRange.end === (end.toISOString().split('T')[0] ?? '');
+          return (
+            <Pressable key={r.label} onPress={() => { setDateRange({ start: start.toISOString().split('T')[0] ?? '', end: end.toISOString().split('T')[0] ?? '' }); }}
+              className={`px-3 py-1.5 rounded-full border ${isActive ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-gray-200'}`}>
+              <Text className={`text-xs font-medium ${isActive ? 'text-white' : 'text-gray-600'}`}>{r.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
 
       <View className="flex-row gap-2 mb-4 items-center">
         <View className="flex-1"><Text className="text-xs text-gray-500 mb-1">From</Text><TextInput className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white" value={dateRange.start} onChangeText={(t) => setDateRange({ ...dateRange, start: t })} placeholder="YYYY-MM-DD" /></View>
         <View className="flex-1"><Text className="text-xs text-gray-500 mb-1">To</Text><TextInput className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white" value={dateRange.end} onChangeText={(t) => setDateRange({ ...dateRange, end: t })} placeholder="YYYY-MM-DD" /></View>
         <Pressable onPress={fetchReport} className="bg-emerald-500 px-4 py-2.5 rounded-lg mt-4"><Text className="text-white font-medium text-sm">Generate</Text></Pressable>
-      </View>
-
-      <View className="flex-row gap-2 mb-4">
-        {[{ label: 'Today', days: 0 }, { label: '7 Days', days: 7 }, { label: '30 Days', days: 30 }].map((r) => (
-          <Pressable key={r.label} onPress={() => { const end = new Date(); const start = new Date(); start.setDate(start.getDate() - r.days); setDateRange({ start: start.toISOString().split('T')[0] ?? '', end: end.toISOString().split('T')[0] ?? '' }); }} className="bg-gray-100 px-3 py-1.5 rounded-lg"><Text className="text-xs text-gray-600">{r.label}</Text></Pressable>
-        ))}
       </View>
 
       <View className="flex-row bg-gray-100 rounded-xl p-1 mb-4">

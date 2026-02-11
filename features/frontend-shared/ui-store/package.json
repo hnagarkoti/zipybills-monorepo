@@ -14,10 +14,12 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "catalog:",
     "@zipybills/ts-config": "workspace:*",
     "@zipybills/factory-api-client": "workspace:*",
     "zustand": "catalog:",
-    "react": "catalog:"
+    "react": "catalog:",
+    "react-native": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",

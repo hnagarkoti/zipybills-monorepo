@@ -34,3 +34,7 @@ export { PageHeader, type PageHeaderProps } from './PageHeader';
 export { ErrorBoundary, type ErrorBoundaryProps } from './ErrorBoundary';
 export { NotFoundPage, type NotFoundPageProps } from './NotFoundPage';
 export { ServerErrorPage, type ServerErrorPageProps } from './ServerErrorPage';
+
+// ─── Date & Calendar ─────────────────────────
+export { CalendarStrip, type CalendarStripProps } from './CalendarStrip';
+export { MonthCalendar, type MonthCalendarProps } from './MonthCalendar';

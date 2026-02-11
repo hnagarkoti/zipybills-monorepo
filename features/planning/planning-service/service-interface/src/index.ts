@@ -113,6 +113,22 @@ export class PlanningApi extends BaseApi {
   async deletePlan(planId: number): Promise<void> {
     await this.request(`/api/plans/${planId}`, { method: 'DELETE' });
   }
+
+  async bulkCreatePlans(plans: CreatePlanRequest[]): Promise<{ created: number; errors: Array<{ row: number; error: string }> }> {
+    const data = await this.request<{ success: boolean; created: number; errors: Array<{ row: number; error: string }> }>(
+      '/api/plans/bulk',
+      { method: 'POST', body: JSON.stringify({ plans }) },
+    );
+    return { created: data.created, errors: data.errors };
+  }
+
+  async duplicatePlans(sourceDate: string, targetDate: string): Promise<{ created: number; target_date: string }> {
+    const data = await this.request<{ success: boolean; created: number; target_date: string }>(
+      '/api/plans/duplicate',
+      { method: 'POST', body: JSON.stringify({ source_date: sourceDate, target_date: targetDate }) },
+    );
+    return { created: data.created, target_date: data.target_date };
+  }
 }
 
 export class ProductionLogsApi extends BaseApi {
