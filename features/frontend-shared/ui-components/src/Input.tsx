@@ -24,13 +24,13 @@ export function Input({
   return (
     <View className={cn('mb-3', className)}>
       {label && (
-        <Text className="text-xs text-gray-500 mb-1 font-medium">
+        <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">
           {label}
         </Text>
       )}
       <TextInput
         className={cn(
-          'border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-900 bg-white',
+          'border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800',
           error && 'border-red-500',
           inputClassName,
         )}
@@ -41,7 +41,7 @@ export function Input({
         <Text className="text-xs text-red-500 mt-1">{error}</Text>
       )}
       {helperText && !error && (
-        <Text className="text-xs text-gray-400 mt-1">{helperText}</Text>
+        <Text className="text-xs text-gray-400 dark:text-gray-500 mt-1">{helperText}</Text>
       )}
     </View>
   );

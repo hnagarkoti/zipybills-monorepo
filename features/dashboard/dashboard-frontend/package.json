@@ -9,6 +9,7 @@
   "dependencies": {
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-dashboard-service-interface": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ui-query": "workspace:*",
     "@zipybills/ts-config": "workspace:*",

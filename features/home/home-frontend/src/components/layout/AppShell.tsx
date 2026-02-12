@@ -55,15 +55,15 @@ export function AppShell({
         <View className="flex-1">
           <Header title={title} rightContent={headerRight} />
           {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumb items={breadcrumbs} />}
-          <View className="flex-1 bg-gray-50">{children}</View>
+          <View className="flex-1 bg-gray-50 dark:bg-gray-950">{children}</View>
         </View>
       </View>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-      <View className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-white dark:bg-gray-950" edges={['top']}>
+      <View className="flex-1 bg-gray-50 dark:bg-gray-950">
         {mobileMenuOpen && (
           <View className="absolute top-0 left-0 right-0 bottom-0 z-50 flex-row">
             <View
@@ -89,7 +89,7 @@ export function AppShell({
         />
         <View className="flex-1">{children}</View>
 
-        <SafeAreaView edges={['bottom']} className="bg-white">
+        <SafeAreaView edges={['bottom']} className="bg-white dark:bg-gray-900">
           <BottomNav items={navItems} />
         </SafeAreaView>
       </View>

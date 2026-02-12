@@ -133,6 +133,16 @@ const FACTORY_FEATURES: FeatureDefinition[] = [
     availableVersions: ['v1'],
     since: '2025-01-01',
   },
+  {
+    id: 'theme',
+    label: 'Theme Service',
+    description: 'Multi-layer enterprise theming engine with composition, tenant isolation, role-based overrides',
+    api: 'ENABLED',
+    ui: 'ENABLED',
+    apiVersion: 'v1',
+    availableVersions: ['v1'],
+    since: '2026-02-01',
+  },
 ];
 
 // ─── Feature Registry ────────────────────────

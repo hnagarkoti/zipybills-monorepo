@@ -33,6 +33,8 @@ import { planningRouter } from '@zipybills/factory-planning-service-runtime';
 import { downtimeRouter } from '@zipybills/factory-downtime-service-runtime';
 import { dashboardRouter } from '@zipybills/factory-dashboard-service-runtime';
 import { reportsRouter } from '@zipybills/factory-reports-service-runtime';
+import { themeRouter } from '@zipybills/factory-theme-service';
+import { themeRouter } from '@zipybills/factory-theme-service';
 
 // Feature Registry
 import { featureRegistry } from '@zipybills/factory-feature-registry';
@@ -115,6 +117,7 @@ const FEATURE_MOUNTS: FeatureMount[] = [
   { featureId: 'downtime',  router: downtimeRouter,  prefixes: ['/downtime'] },
   { featureId: 'dashboard', router: dashboardRouter, prefixes: ['/dashboard'] },
   { featureId: 'reports',   router: reportsRouter,   prefixes: ['/reports'] },
+  { featureId: 'theme',     router: themeRouter,     prefixes: ['/theme'] },
 ];
 
 /**
@@ -193,6 +196,7 @@ async function startServer(): Promise<void> {
       console.log(`   Downtime:   GET  /api/v1/downtime`);
       console.log(`   Dashboard:  GET  /api/v1/dashboard`);
       console.log(`   Reports:    GET  /api/v1/reports/production`);
+      console.log(`   Theme:      POST /api/v1/theme/resolve`);
       console.log(`   Admin:      GET  /api/v1/admin/features`);
       console.log(`   ─────────────────────────────────────\n`);
     });

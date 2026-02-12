@@ -16,10 +16,10 @@ export interface IconButtonProps extends PressableProps {
 }
 
 const variantStyles: Record<IconButtonVariant, string> = {
-  default: 'bg-gray-100 active:bg-gray-200',
-  primary: 'bg-emerald-50 active:bg-emerald-100',
-  ghost: 'bg-transparent active:bg-gray-100',
-  destructive: 'bg-red-50 active:bg-red-100',
+  default: 'bg-gray-100 active:bg-gray-200 dark:bg-gray-800 dark:active:bg-gray-700',
+  primary: 'bg-emerald-50 active:bg-emerald-100 dark:bg-emerald-900/30 dark:active:bg-emerald-800/40',
+  ghost: 'bg-transparent active:bg-gray-100 dark:active:bg-gray-800',
+  destructive: 'bg-red-50 active:bg-red-100 dark:bg-red-900/30 dark:active:bg-red-800/40',
 };
 
 const sizeStyles: Record<IconButtonSize, string> = {

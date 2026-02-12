@@ -10,5 +10,5 @@ export interface DividerProps {
 }
 
 export function Divider({ className }: DividerProps) {
-  return <View className={cn('h-px bg-gray-200 my-3', className)} />;
+  return <View className={cn('h-px bg-gray-200 dark:bg-gray-700 my-3', className)} />;
 }

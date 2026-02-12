@@ -15,7 +15,7 @@ export interface CardProps extends ViewProps {
 
 export function Card({ className, children, ...props }: CardProps) {
   return (
-    <View className={cn('bg-white rounded-xl border border-gray-100 p-4', className)} {...props}>
+    <View className={cn('bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4', className)} {...props}>
       {children}
     </View>
   );
@@ -38,7 +38,7 @@ export interface CardTitleProps {
 
 export function CardTitle({ className, children }: CardTitleProps) {
   return (
-    <Text className={cn('text-lg font-semibold text-gray-900', className)}>
+    <Text className={cn('text-lg font-semibold text-gray-900 dark:text-gray-100', className)}>
       {children}
     </Text>
   );
@@ -47,7 +47,7 @@ export function CardTitle({ className, children }: CardTitleProps) {
 /* ─── CardDescription ───────────────────────── */
 export function CardDescription({ className, children }: CardTitleProps) {
   return (
-    <Text className={cn('text-sm text-gray-500 mt-0.5', className)}>
+    <Text className={cn('text-sm text-gray-500 dark:text-gray-400 mt-0.5', className)}>
       {children}
     </Text>
   );
@@ -65,7 +65,7 @@ export function CardContent({ className, children, ...props }: CardProps) {
 /* ─── CardFooter ────────────────────────────── */
 export function CardFooter({ className, children, ...props }: CardProps) {
   return (
-    <View className={cn('flex-row gap-2 mt-3 pt-3 border-t border-gray-50', className)} {...props}>
+    <View className={cn('flex-row gap-2 mt-3 pt-3 border-t border-gray-50 dark:border-gray-800', className)} {...props}>
       {children}
     </View>
   );

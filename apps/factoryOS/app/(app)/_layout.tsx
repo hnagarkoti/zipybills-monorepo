@@ -15,12 +15,13 @@ import { View, Text, Pressable } from 'react-native';
 import { Slot, Redirect, usePathname, useRouter } from 'expo-router';
 import {
   LayoutDashboard, ClipboardList, Pencil, Factory,
-  AlertTriangle, Clock, BarChart3, Users, LogOut,
+  AlertTriangle, Clock, BarChart3, Users, LogOut, Palette, Settings,
 } from 'lucide-react-native';
 import { AppShell, type NavItem, type BreadcrumbItem } from '@zipybills/factory-home-frontend';
 import { useAuthStore } from '@zipybills/ui-store';
 import { Avatar, ServerErrorPage } from '@zipybills/ui-components';
 import { useFeatureFlags } from '@zipybills/factory-feature-registry/react';
+import { colors } from '@zipybills/theme-engine';
 
 /* ─── Route definitions ───────────────────────── */
 
@@ -50,6 +51,8 @@ const ROUTES: RouteConfig[] = [
   { href: '/shifts', label: 'Shifts', icon: <Clock size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'shifts' },
   { href: '/reports', label: 'Reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports' },
   { href: '/users', label: 'Users', icon: <Users size={ICON_SIZE} />, roles: ['ADMIN'], featureId: 'auth' },
+  { href: '/settings', label: 'Settings', icon: <Settings size={ICON_SIZE} /> },
+  { href: '/theme-test', label: 'Theme Test', icon: <Palette size={ICON_SIZE} />, roles: ['ADMIN'] },
 ];
 
 /* ─── Expo Router ErrorBoundary ───────────────── */
@@ -59,12 +62,6 @@ export function ErrorBoundary({ error, retry }: { error: Error; retry: () => voi
     <ServerErrorPage
       error={error}
       onRetry={retry}
-      onGoHome={() => {
-        // Force navigation to dashboard on error recovery
-        if (typeof window !== 'undefined') {
-          window.location.href = '/dashboard';
-        }
-      }}
     />
   );
 }
@@ -166,22 +163,22 @@ export default function AppLayout() {
       brandSubtitle={`${user.full_name} · ${user.role}`}
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">
-          <LogOut size={14} color="#94a3b8" />
+          <LogOut size={14} color={colors.gray[400]} />
           <Text className="text-xs text-slate-400 ml-2">Sign Out</Text>
         </Pressable>
       }
       headerRight={
         <View className="flex-row items-center">
           <View className="mr-3 items-end">
-            <Text className="text-sm font-medium text-gray-700">{user.full_name}</Text>
+            <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.full_name}</Text>
             <Text className="text-xs text-gray-400">{user.role}</Text>
           </View>
           <Avatar name={user.full_name} size="sm" />
           <Pressable
             onPress={handleLogout}
-            className="bg-gray-100 px-3 py-1.5 rounded-lg ml-2"
+            className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg ml-2"
           >
-            <Text className="text-xs text-gray-600">Sign Out</Text>
+            <Text className="text-xs text-gray-600 dark:text-gray-400">Sign Out</Text>
           </Pressable>
         </View>
       }

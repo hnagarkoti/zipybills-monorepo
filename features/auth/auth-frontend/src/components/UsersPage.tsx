@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
 import { Users, ShieldCheck, ClipboardCheck, Wrench, Plus } from 'lucide-react-native';
 import { fetchUsers, createUser, updateUser, type User } from '../services/api';
 import { Badge, Alert, Avatar, EmptyState, PageHeader } from '@zipybills/ui-components';
+import { colors, machineStatusColors, useSemanticColors } from '@zipybills/theme-engine';
 
 const ROLES = ['ADMIN', 'SUPERVISOR', 'OPERATOR'] as const;
 
@@ -19,6 +20,7 @@ const ROLE_VARIANT: Record<string, 'default' | 'success' | 'warning' | 'error' |
 };
 
 export function UsersPage() {
+  const sc = useSemanticColors();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -84,7 +86,7 @@ export function UsersPage() {
             onPress={() => { resetForm(); setShowForm(!showForm); }}
             className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center"
           >
-            <Plus size={14} color="#fff" />
+            <Plus size={14} color={colors.white} />
             <Text className="text-white font-medium text-sm ml-1">Add User</Text>
           </Pressable>
         }
@@ -95,9 +97,9 @@ export function UsersPage() {
         {ROLES.map((role) => {
           const count = users.filter((u) => u.role === role && u.is_active).length;
           return (
-            <View key={role} className="flex-1 bg-white rounded-xl border border-gray-100 p-3 items-center">
-              <Text className="text-lg font-bold text-gray-900">{count}</Text>
-              <Text className="text-xs text-gray-500">{role}S</Text>
+            <View key={role} className="flex-1 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 items-center">
+              <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">{count}</Text>
+              <Text className="text-xs text-gray-500 dark:text-gray-400">{role}S</Text>
             </View>
           );
         })}
@@ -111,13 +113,13 @@ export function UsersPage() {
 
       {/* Form */}
       {showForm && (
-        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
-          <Text className="text-lg font-semibold mb-3">{editingId ? 'Edit User' : 'New User'}</Text>
+        <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-4">
+          <Text className="text-lg font-semibold mb-3 dark:text-gray-100">{editingId ? 'Edit User' : 'New User'}</Text>
 
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Username *</Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Username *</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100"
               value={form.username}
               onChangeText={(t) => setForm({ ...form, username: t })}
               placeholder="username"
@@ -126,9 +128,9 @@ export function UsersPage() {
           </View>
 
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">{editingId ? 'New Password (leave blank to keep)' : 'Password *'}</Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{editingId ? 'New Password (leave blank to keep)' : 'Password *'}</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100"
               value={form.password}
               onChangeText={(t) => setForm({ ...form, password: t })}
               placeholder={editingId ? '(unchanged)' : 'password'}
@@ -137,24 +139,24 @@ export function UsersPage() {
           </View>
 
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Full Name *</Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Full Name *</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100"
               value={form.full_name}
               onChangeText={(t) => setForm({ ...form, full_name: t })}
               placeholder="Full Name"
             />
           </View>
 
-          <Text className="text-xs text-gray-500 mb-1">Role *</Text>
+          <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Role *</Text>
           <View className="flex-row gap-2 mb-3">
             {ROLES.map((r) => (
               <Pressable
                 key={r}
                 onPress={() => setForm({ ...form, role: r })}
-                className={`px-4 py-2 rounded-lg border ${form.role === r ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200'}`}
+                className={`px-4 py-2 rounded-lg border ${form.role === r ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}
               >
-                <Text className={`text-sm ${form.role === r ? 'text-emerald-700 font-medium' : 'text-gray-600'}`}>{r}</Text>
+                <Text className={`text-sm ${form.role === r ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{r}</Text>
               </Pressable>
             ))}
           </View>
@@ -163,18 +165,18 @@ export function UsersPage() {
             onPress={() => setForm({ ...form, is_active: !form.is_active })}
             className="flex-row items-center mb-4"
           >
-            <View className={`w-10 h-6 rounded-full justify-center ${form.is_active ? 'bg-emerald-500 items-end' : 'bg-gray-300 items-start'}`}>
-              <View className="w-5 h-5 bg-white rounded-full m-0.5" />
+            <View className={`w-10 h-6 rounded-full justify-center ${form.is_active ? 'bg-emerald-500 items-end' : 'bg-gray-300 dark:bg-gray-600 items-start'}`}>
+              <View className="w-5 h-5 bg-white dark:bg-gray-200 rounded-full m-0.5" />
             </View>
-            <Text className="text-sm text-gray-700 ml-2">{form.is_active ? 'Active' : 'Inactive'}</Text>
+            <Text className="text-sm text-gray-700 dark:text-gray-300 ml-2">{form.is_active ? 'Active' : 'Inactive'}</Text>
           </Pressable>
 
           <View className="flex-row gap-2">
             <Pressable onPress={handleSave} className="bg-emerald-500 px-6 py-2.5 rounded-lg flex-1 items-center">
               <Text className="text-white font-medium">{editingId ? 'Update' : 'Create'}</Text>
             </Pressable>
-            <Pressable onPress={resetForm} className="bg-gray-200 px-6 py-2.5 rounded-lg">
-              <Text className="text-gray-700 font-medium">Cancel</Text>
+            <Pressable onPress={resetForm} className="bg-gray-200 dark:bg-gray-700 px-6 py-2.5 rounded-lg">
+              <Text className="text-gray-700 dark:text-gray-300 font-medium">Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -184,24 +186,24 @@ export function UsersPage() {
       {loading ? (
         <Text className="text-center text-gray-400 py-8">Loading users...</Text>
       ) : users.length === 0 ? (
-        <EmptyState icon={<Users size={40} color="#9ca3af" />} title="No users found" />
+        <EmptyState icon={<Users size={40} color={sc.iconMuted} />} title="No users found" />
       ) : (
         users.map((u) => (
-          <View key={u.user_id} className={`bg-white rounded-xl border p-4 mb-2 ${u.is_active ? 'border-gray-100' : 'border-gray-200 opacity-60'}`}>
+          <View key={u.user_id} className={`bg-white dark:bg-gray-900 rounded-xl border p-4 mb-2 ${u.is_active ? 'border-gray-100 dark:border-gray-800' : 'border-gray-200 dark:border-gray-700 opacity-60'}`}>
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center flex-1">
-                <View className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${u.is_active ? 'bg-emerald-100' : 'bg-gray-100'}`}>
-                  {(() => { const RoleIcon = ROLE_ICON[u.role] ?? Wrench; return <RoleIcon size={16} color={u.is_active ? '#059669' : '#6b7280'} />; })()}
+                <View className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${u.is_active ? 'bg-emerald-100 dark:bg-emerald-900/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
+                  {(() => { const RoleIcon = ROLE_ICON[u.role] ?? Wrench; return <RoleIcon size={16} color={u.is_active ? colors.emerald[600] : sc.iconDefault} />; })()}
                 </View>
                 <View className="flex-1">
-                  <Text className="font-semibold text-gray-900">{u.full_name}</Text>
+                  <Text className="font-semibold text-gray-900 dark:text-gray-100">{u.full_name}</Text>
                   <Text className="text-xs text-gray-400">@{u.username}</Text>
                 </View>
               </View>
               <View className="flex-row items-center gap-2">
                 <Badge variant={ROLE_VARIANT[u.role] ?? 'default'}>{u.role}</Badge>
-                <Pressable onPress={() => startEdit(u)} className="bg-gray-100 px-3 py-1.5 rounded-lg">
-                  <Text className="text-xs text-gray-600">Edit</Text>
+                <Pressable onPress={() => startEdit(u)} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
+                  <Text className="text-xs text-gray-600 dark:text-gray-400">Edit</Text>
                 </Pressable>
               </View>
             </View>

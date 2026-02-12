@@ -11,6 +11,7 @@
     "@zipybills/factory-planning-service-interface": "workspace:*",
     "@zipybills/factory-machines-frontend": "workspace:*",
     "@zipybills/factory-shifts-frontend": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "lucide-react-native": "catalog:",

@@ -36,6 +36,11 @@
       "api": "ENABLED",
       "ui": "ENABLED",
       "apiVersion": "v1"
+    },
+    "theme": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
     }
   }
 }

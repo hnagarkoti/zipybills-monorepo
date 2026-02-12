@@ -11,6 +11,7 @@ import {
   View, Text, Pressable, ScrollView, useWindowDimensions,
 } from 'react-native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { useSemanticColors } from '@zipybills/theme-engine';
 
 export interface CalendarStripProps {
   /** Currently selected date in YYYY-MM-DD format */
@@ -42,6 +43,7 @@ export function CalendarStrip({
   range = 3,
   datesWithData,
 }: CalendarStripProps) {
+  const sc = useSemanticColors();
   const today = toDateStr(new Date());
   const { width: screenWidth } = useWindowDimensions();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -106,8 +108,8 @@ export function CalendarStrip({
             : isToday
               ? 'bg-emerald-50 border border-emerald-200'
               : isWeekend
-                ? 'bg-gray-50 border border-gray-100'
-                : 'bg-white border border-gray-100'
+                ? 'bg-gray-50 border border-gray-100 dark:bg-gray-800 dark:border-gray-700'
+                : 'bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-700'
         }`}
       >
         <Text
@@ -142,12 +144,12 @@ export function CalendarStrip({
       {/* Header: nav arrows + month label + Today button */}
       <View className="flex-row items-center justify-between mb-2 px-1">
         <View className="flex-row items-center">
-          <Pressable onPress={goBack} className="w-7 h-7 rounded-lg bg-gray-100 items-center justify-center mr-2">
-            <ChevronLeft size={16} color="#6b7280" />
+          <Pressable onPress={goBack} className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-800 items-center justify-center mr-2">
+            <ChevronLeft size={16} color={sc.iconDefault} />
           </Pressable>
-          <Text className="text-sm font-semibold text-gray-700">{monthLabel}</Text>
-          <Pressable onPress={goForward} className="w-7 h-7 rounded-lg bg-gray-100 items-center justify-center ml-2">
-            <ChevronRight size={16} color="#6b7280" />
+          <Text className="text-sm font-semibold text-gray-700 dark:text-gray-300">{monthLabel}</Text>
+          <Pressable onPress={goForward} className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-800 items-center justify-center ml-2">
+            <ChevronRight size={16} color={sc.iconDefault} />
           </Pressable>
         </View>
         {selectedDate !== today && (

@@ -26,11 +26,11 @@ export function EmptyState({
   return (
     <View className={cn('items-center py-12 px-6', className)}>
       {icon && <View className="mb-4">{icon}</View>}
-      <Text className="text-lg font-semibold text-gray-500 text-center">
+      <Text className="text-lg font-semibold text-gray-500 dark:text-gray-400 text-center">
         {title}
       </Text>
       {description && (
-        <Text className="text-sm text-gray-400 mt-1 text-center max-w-xs">
+        <Text className="text-sm text-gray-400 dark:text-gray-500 mt-1 text-center max-w-xs">
           {description}
         </Text>
       )}

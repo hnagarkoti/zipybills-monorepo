@@ -21,6 +21,8 @@
     "@zipybills/factory-downtime-service-runtime": "workspace:*",
     "@zipybills/factory-dashboard-service-runtime": "workspace:*",
     "@zipybills/factory-reports-service-runtime": "workspace:*",
+    "@zipybills/factory-theme-service": "workspace:*",
+    "@zipybills/factory-theme-service": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "cors": "catalog:",
     "dotenv": "catalog:",

@@ -10,6 +10,7 @@
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-downtime-service-interface": "workspace:*",
     "@zipybills/factory-machines-frontend": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "lucide-react-native": "catalog:",

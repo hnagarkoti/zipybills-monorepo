@@ -9,6 +9,7 @@
   "dependencies": {
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-reports-service-interface": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "lucide-react-native": "catalog:",

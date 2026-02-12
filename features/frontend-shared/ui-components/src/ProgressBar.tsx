@@ -40,14 +40,14 @@ export function ProgressBar({
 
   return (
     <View className={cn('w-full', className)}>
-      <View className={cn('bg-gray-100 rounded-full overflow-hidden', heightStyles[height])}>
+      <View className={cn('bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden', heightStyles[height])}>
         <View
           className={cn('h-full rounded-full', colorStyles[color])}
           style={{ width: `${clamped}%` }}
         />
       </View>
       {showLabel && (
-        <Text className="text-xs text-gray-500 mt-1 text-right">{clamped}%</Text>
+        <Text className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right">{clamped}%</Text>
       )}
     </View>
   );

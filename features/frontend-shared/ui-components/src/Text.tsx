@@ -13,12 +13,12 @@ export interface TextProps extends RNTextProps {
 }
 
 const variantStyles: Record<TextVariant, string> = {
-  h1: 'text-3xl font-bold text-gray-900',
-  h2: 'text-2xl font-bold text-gray-900',
-  h3: 'text-xl font-semibold text-gray-900',
-  body: 'text-base text-gray-700',
-  caption: 'text-sm text-gray-500',
-  label: 'text-xs text-gray-500 font-medium',
+  h1: 'text-3xl font-bold text-gray-900 dark:text-gray-100',
+  h2: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
+  h3: 'text-xl font-semibold text-gray-900 dark:text-gray-100',
+  body: 'text-base text-gray-700 dark:text-gray-300',
+  caption: 'text-sm text-gray-500 dark:text-gray-400',
+  label: 'text-xs text-gray-500 dark:text-gray-400 font-medium',
 };
 
 export function Typography({ variant = 'body', className, ...props }: TextProps) {

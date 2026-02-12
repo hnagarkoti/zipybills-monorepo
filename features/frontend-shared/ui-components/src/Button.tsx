@@ -23,17 +23,17 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-emerald-500 active:bg-emerald-600',
-  secondary: 'bg-slate-700 active:bg-slate-800',
-  outline: 'bg-transparent border border-gray-300 active:bg-gray-50',
-  ghost: 'bg-transparent active:bg-gray-100',
+  secondary: 'bg-slate-700 active:bg-slate-800 dark:bg-slate-600 dark:active:bg-slate-700',
+  outline: 'bg-transparent border border-gray-300 active:bg-gray-50 dark:border-gray-600 dark:active:bg-gray-800',
+  ghost: 'bg-transparent active:bg-gray-100 dark:active:bg-gray-800',
   destructive: 'bg-red-500 active:bg-red-600',
 };
 
 const variantTextStyles: Record<ButtonVariant, string> = {
   primary: 'text-white',
   secondary: 'text-white',
-  outline: 'text-gray-700',
-  ghost: 'text-gray-700',
+  outline: 'text-gray-700 dark:text-gray-300',
+  ghost: 'text-gray-700 dark:text-gray-300',
   destructive: 'text-white',
 };
 

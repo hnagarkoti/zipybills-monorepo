@@ -195,9 +195,15 @@ importers:
       '@zipybills/factory-reports-frontend':
         specifier: workspace:*
         version: link:../../features/reports/reports-frontend
+      '@zipybills/factory-settings-frontend':
+        specifier: workspace:*
+        version: link:../../features/settings/settings-frontend
       '@zipybills/factory-shifts-frontend':
         specifier: workspace:*
         version: link:../../features/shifts/shifts-frontend
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../features/frontend-shared/theme-engine
       '@zipybills/ui-components':
         specifier: workspace:*
         version: link:../../features/frontend-shared/ui-components
@@ -274,6 +280,9 @@ importers:
       '@zipybills/factory-auth-service-interface':
         specifier: workspace:*
         version: link:../auth-service/service-interface
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -453,6 +462,9 @@ importers:
       '@zipybills/factory-dashboard-service-interface':
         specifier: workspace:*
         version: link:../dashboard-service/service-interface
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -534,6 +546,9 @@ importers:
       '@zipybills/factory-machines-frontend':
         specifier: workspace:*
         version: link:../../machines/machines-frontend
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -607,8 +622,45 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  features/frontend-shared/theme-engine:
+    dependencies:
+      '@zipybills/factory-theme-service':
+        specifier: workspace:*
+        version: link:../../shared/theme-service
+      '@zipybills/ts-config':
+        specifier: workspace:*
+        version: link:../../build-shared/ts-config
+      '@zipybills/ui-store':
+        specifier: workspace:*
+        version: link:../ui-store
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-native:
+        specifier: 0.81.5
+        version: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
+      zustand:
+        specifier: 'catalog:'
+        version: 5.0.11(@types/react@19.1.17)(react@19.1.0)(use-sync-external-store@1.6.0(react@19.1.0))
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.9
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.1.17
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.0.15(@types/node@22.19.9)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+
   features/frontend-shared/ui-components:
     dependencies:
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -770,6 +822,9 @@ importers:
       '@zipybills/factory-shifts-frontend':
         specifier: workspace:*
         version: link:../../shifts/shifts-frontend
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -841,6 +896,9 @@ importers:
       '@zipybills/factory-machines-service-interface':
         specifier: workspace:*
         version: link:../machines-service/service-interface
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -928,6 +986,9 @@ importers:
       '@zipybills/factory-shifts-frontend':
         specifier: workspace:*
         version: link:../../shifts/shifts-frontend
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -1009,6 +1070,9 @@ importers:
       '@zipybills/factory-reports-service-interface':
         specifier: workspace:*
         version: link:../reports-service/service-interface
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -1076,6 +1140,46 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  features/settings/settings-frontend:
+    dependencies:
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
+      '@zipybills/ts-config':
+        specifier: workspace:*
+        version: link:../../build-shared/ts-config
+      '@zipybills/ui-components':
+        specifier: workspace:*
+        version: link:../../frontend-shared/ui-components
+      '@zipybills/ui-store':
+        specifier: workspace:*
+        version: link:../../frontend-shared/ui-store
+      lucide-react-native:
+        specifier: 'catalog:'
+        version: 0.475.0(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      nativewind:
+        specifier: 'catalog:'
+        version: 4.2.1(react-native-reanimated@4.2.1(react-native-worklets@0.7.2(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.8.2))
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-native:
+        specifier: 0.81.5
+        version: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
+      react-native-svg:
+        specifier: 'catalog:'
+        version: 15.12.1(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+    devDependencies:
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.1.17
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.0.15(@types/node@25.2.1)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+
   features/shared/activity-log:
     dependencies:
       '@zipybills/factory-database-config':
@@ -1140,6 +1244,9 @@ importers:
       '@zipybills/factory-shifts-service-runtime':
         specifier: workspace:*
         version: link:../../shifts/shifts-service/service-runtime
+      '@zipybills/factory-theme-service':
+        specifier: workspace:*
+        version: link:../theme-service
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config
@@ -1238,6 +1345,34 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  features/shared/theme-service:
+    dependencies:
+      '@zipybills/factory-auth-middleware':
+        specifier: workspace:*
+        version: link:../auth-middleware
+      '@zipybills/factory-database-config':
+        specifier: workspace:*
+        version: link:../database-config
+      '@zipybills/ts-config':
+        specifier: workspace:*
+        version: link:../../build-shared/ts-config
+      express:
+        specifier: 'catalog:'
+        version: 4.22.1
+    devDependencies:
+      '@types/express':
+        specifier: 'catalog:'
+        version: 5.0.6
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.9
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.0.15(@types/node@22.19.9)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+
   features/shifts/shifts-frontend:
     dependencies:
       '@zipybills/factory-api-client':
@@ -1246,6 +1381,9 @@ importers:
       '@zipybills/factory-shifts-service-interface':
         specifier: workspace:*
         version: link:../shifts-service/service-interface
+      '@zipybills/theme-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/theme-engine
       '@zipybills/ts-config':
         specifier: workspace:*
         version: link:../../build-shared/ts-config

@@ -24,6 +24,7 @@
     "@zipybills/factory-planning-frontend": "workspace:*",
     "@zipybills/factory-downtime-frontend": "workspace:*",
     "@zipybills/factory-reports-frontend": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ui-store": "workspace:*",
     "@zipybills/ts-config": "workspace:*",

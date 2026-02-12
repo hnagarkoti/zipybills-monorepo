@@ -3,10 +3,12 @@ import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
 import { Factory, FolderOpen, Settings, Plus, Search, X, Eye } from 'lucide-react-native';
 import { fetchMachines, createMachine, updateMachine, deleteMachine, type Machine } from '../services/api';
 import { Badge, Alert, EmptyState, PageHeader } from '@zipybills/ui-components';
+import { colors, machineStatusColors, useSemanticColors } from '@zipybills/theme-engine';
 import { useRouter } from 'expo-router';
 
 export function MachinesPage() {
   const router = useRouter();
+  const sc = useSemanticColors();
   const [machines, setMachines] = useState<Machine[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -108,7 +110,7 @@ export function MachinesPage() {
         subtitle={`${machines.length} machines configured`}
         actions={
           <Pressable onPress={() => { resetForm(); setShowForm(true); }} className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center">
-            <Plus size={14} color="#fff" />
+            <Plus size={14} color={colors.white} />
             <Text className="text-white font-medium text-sm ml-1">Add Machine</Text>
           </Pressable>
         }
@@ -117,19 +119,19 @@ export function MachinesPage() {
       {/* Status Summary Cards */}
       {machines.length > 0 && (
         <View className="flex-row gap-2 mb-4">
-          <Pressable onPress={() => setStatusFilter('ALL')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ALL' ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-gray-100'}`}>
-            <Text className="text-xs text-gray-500">Total</Text>
-            <Text className="text-2xl font-bold text-gray-900">{machines.length}</Text>
+          <Pressable onPress={() => setStatusFilter('ALL')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ALL' ? 'bg-emerald-50 border-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+            <Text className="text-xs text-gray-500 dark:text-gray-400">Total</Text>
+            <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">{machines.length}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('ACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ACTIVE' ? 'bg-green-50 border-green-300' : 'bg-white border-gray-100'}`}>
+          <Pressable onPress={() => setStatusFilter('ACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ACTIVE' ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
             <Text className="text-xs text-green-600">Active</Text>
             <Text className="text-2xl font-bold text-green-700">{counts.active}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('MAINTENANCE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'MAINTENANCE' ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-gray-100'}`}>
+          <Pressable onPress={() => setStatusFilter('MAINTENANCE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'MAINTENANCE' ? 'bg-yellow-50 border-yellow-300 dark:bg-yellow-900/20 dark:border-yellow-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
             <Text className="text-xs text-yellow-600">Maintenance</Text>
             <Text className="text-2xl font-bold text-yellow-700">{counts.maintenance}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('INACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'INACTIVE' ? 'bg-red-50 border-red-300' : 'bg-white border-gray-100'}`}>
+          <Pressable onPress={() => setStatusFilter('INACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'INACTIVE' ? 'bg-red-50 border-red-300 dark:bg-red-900/20 dark:border-red-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
             <Text className="text-xs text-red-600">Inactive</Text>
             <Text className="text-2xl font-bold text-red-700">{counts.inactive}</Text>
           </Pressable>
@@ -138,8 +140,8 @@ export function MachinesPage() {
 
       {/* Search Bar */}
       {machines.length > 0 && (
-        <View className="flex-row items-center bg-white border border-gray-200 rounded-lg px-3 py-2 mb-4">
-          <Search size={14} color="#9ca3af" />
+        <View className="flex-row items-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 mb-4">
+          <Search size={14} color={sc.iconMuted} />
           <TextInput
             className="flex-1 text-sm ml-2"
             value={search}
@@ -148,7 +150,7 @@ export function MachinesPage() {
           />
           {search.length > 0 && (
             <Pressable onPress={() => setSearch('')}>
-              <X size={14} color="#9ca3af" />
+              <X size={14} color={sc.iconMuted} />
             </Pressable>
           )}
         </View>
@@ -162,30 +164,30 @@ export function MachinesPage() {
       )}
 
       {showForm && (
-        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
-          <Text className="text-lg font-semibold mb-3">{editingId ? 'Edit Machine' : 'Add New Machine'}</Text>
+        <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-4">
+          <Text className="text-lg font-semibold mb-3 dark:text-gray-100">{editingId ? 'Edit Machine' : 'Add New Machine'}</Text>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Machine Code *</Text>
-            <TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.machine_code} onChangeText={(t) => setForm({ ...form, machine_code: t })} placeholder="e.g., CNC-001" editable={!editingId} />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine Code *</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.machine_code} onChangeText={(t) => setForm({ ...form, machine_code: t })} placeholder="e.g., CNC-001" editable={!editingId} />
           </View>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Machine Name *</Text>
-            <TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.machine_name} onChangeText={(t) => setForm({ ...form, machine_name: t })} placeholder="e.g., CNC Lathe #1" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine Name *</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.machine_name} onChangeText={(t) => setForm({ ...form, machine_name: t })} placeholder="e.g., CNC Lathe #1" />
           </View>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Department</Text>
-            <TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.department} onChangeText={(t) => setForm({ ...form, department: t })} placeholder="e.g., Assembly" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Department</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.department} onChangeText={(t) => setForm({ ...form, department: t })} placeholder="e.g., Assembly" />
           </View>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 mb-1">Machine Type</Text>
-            <TextInput className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm" value={form.machine_type} onChangeText={(t) => setForm({ ...form, machine_type: t })} placeholder="e.g., CNC, Press, Drill" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine Type</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.machine_type} onChangeText={(t) => setForm({ ...form, machine_type: t })} placeholder="e.g., CNC, Press, Drill" />
           </View>
           <View className="flex-row gap-2">
             <Pressable onPress={handleSave} className="bg-emerald-500 px-6 py-2.5 rounded-lg flex-1 items-center">
               <Text className="text-white font-medium">{editingId ? 'Update' : 'Create'}</Text>
             </Pressable>
-            <Pressable onPress={resetForm} className="bg-gray-200 px-6 py-2.5 rounded-lg">
-              <Text className="text-gray-700 font-medium">Cancel</Text>
+            <Pressable onPress={resetForm} className="bg-gray-200 dark:bg-gray-700 px-6 py-2.5 rounded-lg">
+              <Text className="text-gray-700 dark:text-gray-300 font-medium">Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -197,13 +199,13 @@ export function MachinesPage() {
         </View>
       ) : machines.length === 0 ? (
         <EmptyState
-          icon={<Factory size={40} color="#9ca3af" />}
+          icon={<Factory size={40} color={sc.iconMuted} />}
           title="No machines configured yet"
           description="Add your first machine to get started"
         />
       ) : filteredMachines.length === 0 ? (
         <EmptyState
-          icon={<Search size={40} color="#9ca3af" />}
+          icon={<Search size={40} color={sc.iconMuted} />}
           title="No machines match"
           description="Try a different search or filter"
         />
@@ -213,14 +215,14 @@ export function MachinesPage() {
           {filteredMachines.map((m) => {
             const borderColor = m.status === 'ACTIVE' ? 'border-l-green-400' : m.status === 'MAINTENANCE' ? 'border-l-yellow-400' : 'border-l-red-400';
             return (
-              <View key={m.machine_id} className={`bg-white rounded-xl border border-gray-100 border-l-4 ${borderColor} p-4 mb-3 shadow-sm`}>
+              <View key={m.machine_id} className={`bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 border-l-4 ${borderColor} p-4 mb-3 shadow-sm`}>
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-row items-center flex-1">
-                    <View className="bg-gray-50 rounded-lg p-2 mr-3">
-                      <Factory size={18} color="#6b7280" />
+                    <View className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 mr-3">
+                      <Factory size={18} color={sc.iconDefault} />
                     </View>
                     <View className="flex-1">
-                      <Text className="text-base font-bold text-gray-900">{m.machine_name}</Text>
+                      <Text className="text-base font-bold text-gray-900 dark:text-gray-100">{m.machine_name}</Text>
                       <Text className="text-xs text-gray-400 font-mono">{m.machine_code}</Text>
                     </View>
                   </View>
@@ -228,21 +230,21 @@ export function MachinesPage() {
                 </View>
                 <View className="flex-row items-center mb-3">
                   {m.department && (
-                    <View className="flex-row items-center bg-gray-50 rounded-md px-2 py-1 mr-2">
-                      <FolderOpen size={11} color="#6b7280" />
-                      <Text className="text-xs text-gray-600 ml-1">{m.department}</Text>
+                    <View className="flex-row items-center bg-gray-50 dark:bg-gray-800 rounded-md px-2 py-1 mr-2">
+                      <FolderOpen size={11} color={sc.iconDefault} />
+                      <Text className="text-xs text-gray-600 dark:text-gray-400 ml-1">{m.department}</Text>
                     </View>
                   )}
                   {m.machine_type && (
-                    <View className="flex-row items-center bg-gray-50 rounded-md px-2 py-1">
-                      <Settings size={11} color="#6b7280" />
-                      <Text className="text-xs text-gray-600 ml-1">{m.machine_type}</Text>
+                    <View className="flex-row items-center bg-gray-50 dark:bg-gray-800 rounded-md px-2 py-1">
+                      <Settings size={11} color={sc.iconDefault} />
+                      <Text className="text-xs text-gray-600 dark:text-gray-400 ml-1">{m.machine_type}</Text>
                     </View>
                   )}
                 </View>
-                <View className="flex-row gap-2 pt-2 border-t border-gray-50">
+                <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-800">
                   <Pressable onPress={() => router.push(`/machines/${m.machine_id}`)} className="bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg flex-row items-center">
-                    <Eye size={11} color="#059669" />
+                    <Eye size={11} color={machineStatusColors.ACTIVE.icon} />
                     <Text className="text-xs text-emerald-700 font-medium ml-1">View</Text>
                   </Pressable>
                   <Pressable onPress={() => startEdit(m)} className="bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-lg">
@@ -256,8 +258,8 @@ export function MachinesPage() {
                       <Pressable onPress={() => handleDelete(m.machine_id)} className="bg-red-500 px-3 py-1.5 rounded-lg">
                         <Text className="text-xs text-white font-medium">Confirm</Text>
                       </Pressable>
-                      <Pressable onPress={() => setDeleteConfirm(null)} className="bg-gray-200 px-3 py-1.5 rounded-lg">
-                        <Text className="text-xs text-gray-600 font-medium">Cancel</Text>
+                      <Pressable onPress={() => setDeleteConfirm(null)} className="bg-gray-200 dark:bg-gray-700 px-3 py-1.5 rounded-lg">
+                        <Text className="text-xs text-gray-600 dark:text-gray-400 font-medium">Cancel</Text>
                       </Pressable>
                     </View>
                   ) : (

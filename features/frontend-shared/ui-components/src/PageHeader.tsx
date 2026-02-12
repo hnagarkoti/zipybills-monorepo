@@ -16,9 +16,9 @@ export function PageHeader({ title, subtitle, actions, className }: PageHeaderPr
   return (
     <View className={cn('flex-row items-center justify-between mb-4', className)}>
       <View>
-        <Text className="text-xl font-bold text-gray-900">{title}</Text>
+        <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">{title}</Text>
         {subtitle && (
-          <Text className="text-sm text-gray-500">{subtitle}</Text>
+          <Text className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</Text>
         )}
       </View>
       {actions && <View className="flex-row items-center gap-2">{actions}</View>}

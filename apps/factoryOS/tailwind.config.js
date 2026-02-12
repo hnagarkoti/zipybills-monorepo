@@ -17,6 +17,7 @@ module.exports = {
     '../../features/reports/reports-frontend/src/**/*.{js,jsx,ts,tsx}',
     '../../features/shifts/shifts-frontend/src/**/*.{js,jsx,ts,tsx}',
     '../../features/frontend-shared/ui-components/src/**/*.{js,jsx,ts,tsx}',
+    '../../features/settings/settings-frontend/src/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
 };

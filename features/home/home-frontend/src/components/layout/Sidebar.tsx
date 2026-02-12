@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Factory, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight } from 'lucide-react-native';
+import { colors } from '@zipybills/theme-engine';
 
 export interface NavItem {
   id: string;
@@ -100,8 +101,8 @@ function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
         <NavItemRow item={item} collapsed={collapsed} />
         {!collapsed && (
           expanded
-            ? <ChevronDown size={14} color="#94a3b8" />
-            : <ChevronRight size={14} color="#94a3b8" />
+            ? <ChevronDown size={14} color={colors.gray[400]} />
+            : <ChevronRight size={14} color={colors.gray[400]} />
         )}
       </Pressable>
 
@@ -131,13 +132,13 @@ export function Sidebar({
 }: SidebarProps) {
   return (
     <View
-      className={`bg-slate-900 h-full ${collapsed ? 'w-16' : 'w-64'}`}
+      className={`bg-slate-900 dark:bg-gray-950 h-full ${collapsed ? 'w-16' : 'w-64'}`}
     >
       {/* Brand */}
-      <View className="px-4 py-5 border-b border-slate-700">
+      <View className="px-4 py-5 border-b border-slate-700 dark:border-gray-800">
         <View className="flex-row items-center">
           <View className="w-9 h-9 bg-emerald-500/20 rounded-lg items-center justify-center">
-            <Factory size={20} color="#34d399" />
+            <Factory size={20} color={colors.emerald[400]} />
           </View>
           {!collapsed && (
             <Text className="text-lg font-bold text-emerald-400 ml-2.5">{title}</Text>
@@ -159,16 +160,16 @@ export function Sidebar({
       {onToggleCollapse && (
         <Pressable
           onPress={onToggleCollapse}
-          className="mx-2 mb-2 px-3 py-2.5 rounded-lg items-center bg-slate-800 flex-row justify-center"
+          className="mx-2 mb-2 px-3 py-2.5 rounded-lg items-center bg-slate-800 dark:bg-gray-900 flex-row justify-center"
         >
           {collapsed
-            ? <PanelLeftOpen size={16} color="#94a3b8" />
-            : <><PanelLeftClose size={16} color="#94a3b8" /><Text className="text-xs text-slate-400 font-medium ml-2">Collapse</Text></>}
+            ? <PanelLeftOpen size={16} color={colors.gray[400]} />
+            : <><PanelLeftClose size={16} color={colors.gray[400]} /><Text className="text-xs text-slate-400 font-medium ml-2">Collapse</Text></>}
         </Pressable>
       )}
 
       {footer && (
-        <View className="px-4 py-3 border-t border-slate-700">{footer}</View>
+        <View className="px-4 py-3 border-t border-slate-700 dark:border-gray-800">{footer}</View>
       )}
     </View>
   );

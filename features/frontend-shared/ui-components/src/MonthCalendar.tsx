@@ -8,6 +8,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { useSemanticColors } from '@zipybills/theme-engine';
 
 export interface MonthCalendarProps {
   /** Currently selected date in YYYY-MM-DD format */
@@ -36,6 +37,7 @@ export function MonthCalendar({
   onDateSelect,
   datesWithData,
 }: MonthCalendarProps) {
+  const sc = useSemanticColors();
   const selectedD = new Date(selectedDate + 'T00:00:00');
   const [viewYear, setViewYear] = useState(selectedD.getFullYear());
   const [viewMonth, setViewMonth] = useState(selectedD.getMonth());
@@ -95,19 +97,19 @@ export function MonthCalendar({
   };
 
   return (
-    <View className="bg-white rounded-xl border border-gray-200 p-4">
+    <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
       {/* Header with month/year and navigation */}
       <View className="flex-row items-center justify-between mb-3">
-        <Pressable onPress={goToPrevMonth} className="w-8 h-8 rounded-lg bg-gray-100 items-center justify-center">
-          <ChevronLeft size={16} color="#374151" />
+        <Pressable onPress={goToPrevMonth} className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 items-center justify-center">
+          <ChevronLeft size={16} color={sc.textPrimary} />
         </Pressable>
         <Pressable onPress={goToToday}>
-          <Text className="text-base font-bold text-gray-900">
+          <Text className="text-base font-bold text-gray-900 dark:text-gray-100">
             {MONTH_NAMES[viewMonth]} {viewYear}
           </Text>
         </Pressable>
-        <Pressable onPress={goToNextMonth} className="w-8 h-8 rounded-lg bg-gray-100 items-center justify-center">
-          <ChevronRight size={16} color="#374151" />
+        <Pressable onPress={goToNextMonth} className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 items-center justify-center">
+          <ChevronRight size={16} color={sc.textPrimary} />
         </Pressable>
       </View>
 
@@ -115,7 +117,7 @@ export function MonthCalendar({
       <View className="flex-row mb-1">
         {DAY_HEADERS.map((day) => (
           <View key={day} className="flex-1 items-center py-1">
-            <Text className="text-xs font-medium text-gray-400">{day}</Text>
+            <Text className="text-xs font-medium text-gray-400 dark:text-gray-500">{day}</Text>
           </View>
         ))}
       </View>

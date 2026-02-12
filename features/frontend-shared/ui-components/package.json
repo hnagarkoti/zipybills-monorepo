@@ -18,6 +18,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "@zipybills/ui-theme": "workspace:*",
     "clsx": "catalog:",

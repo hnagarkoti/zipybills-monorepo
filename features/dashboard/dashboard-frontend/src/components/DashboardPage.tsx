@@ -5,6 +5,7 @@ import { AlertTriangle, CheckCircle, ClipboardList } from 'lucide-react-native';
 import { fetchDashboard, type DashboardData, type MachineStatus } from '../services/api';
 import { StatCard, ProgressBar, Alert, Loading } from '@zipybills/ui-components';
 import { queryKeys } from '@zipybills/ui-query';
+import { colors, statusColors, useSemanticColors } from '@zipybills/theme-engine';
 
 function PulseDot({ color }: { color: string }) {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -41,26 +42,27 @@ function MachineBar({ machine }: { machine: MachineStatus }) {
     : 0;
 
   return (
-    <View className="bg-white rounded-lg p-3 border border-gray-100 mb-2">
+    <View className="bg-white dark:bg-gray-900 rounded-lg p-3 border border-gray-100 dark:border-gray-800 mb-2">
       <View className="flex-row items-center justify-between mb-2">
         <View className="flex-row items-center">
           <View className={`w-2 h-2 rounded-full mr-2 ${machine.status === 'ACTIVE' ? 'bg-green-400' : machine.status === 'MAINTENANCE' ? 'bg-yellow-400' : 'bg-red-400'}`} />
-          <Text className="text-sm font-semibold text-gray-800">{machine.machine_name}</Text>
-          <Text className="text-xs text-gray-400 ml-2">{machine.machine_code}</Text>
+          <Text className="text-sm font-semibold text-gray-800 dark:text-gray-200">{machine.machine_name}</Text>
+          <Text className="text-xs text-gray-400 dark:text-gray-500 ml-2">{machine.machine_code}</Text>
         </View>
-        <Text className="text-xs font-bold text-gray-600">{machine.today_produced}/{machine.today_target}</Text>
+        <Text className="text-xs font-bold text-gray-600 dark:text-gray-400">{machine.today_produced}/{machine.today_target}</Text>
       </View>
       <ProgressBar
         value={pct}
         color={pct >= 90 ? 'green' : pct >= 50 ? 'yellow' : 'red'}
         height="sm"
       />
-      <Text className="text-xs text-gray-400 mt-1 text-right">{pct}% of target</Text>
+      <Text className="text-xs text-gray-400 dark:text-gray-500 mt-1 text-right">{pct}% of target</Text>
     </View>
   );
 }
 
 export function DashboardPage() {
+  const sc = useSemanticColors();
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.dashboard.summary(),
     queryFn: fetchDashboard,
@@ -87,12 +89,12 @@ export function DashboardPage() {
   return (
     <ScrollView className="flex-1 p-4">
       {/* Live Status Banner */}
-      <View className={`rounded-xl p-3 mb-4 flex-row items-center ${d.rejectionRate > 5 ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'}`}>
-        <PulseDot color={d.rejectionRate > 5 ? '#f87171' : '#4ade80'} />
+      <View className={`rounded-xl p-3 mb-4 flex-row items-center ${d.rejectionRate > 5 ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}>
+        <PulseDot color={d.rejectionRate > 5 ? colors.red[400] : '#4ade80'} />
         {d.rejectionRate > 5
-          ? <><AlertTriangle size={14} color="#dc2626" /><Text className="text-sm font-medium text-red-700 ml-1">High rejection rate: {d.rejectionRate}%</Text></>
-          : <><CheckCircle size={14} color="#16a34a" /><Text className="text-sm font-medium text-green-700 ml-1">Production running normally</Text></>}
-        <Text className="text-xs text-gray-400 ml-auto">Live</Text>
+          ? <><AlertTriangle size={14} color={statusColors.error} /><Text className="text-sm font-medium text-red-700 ml-1">High rejection rate: {d.rejectionRate}%</Text></>
+          : <><CheckCircle size={14} color={statusColors.success} /><Text className="text-sm font-medium text-green-700 ml-1">Production running normally</Text></>}
+        <Text className="text-xs text-gray-400 dark:text-gray-500 ml-auto">Live</Text>
       </View>
 
       {/* Key Metrics */}
@@ -113,35 +115,35 @@ export function DashboardPage() {
 
       {/* Efficiency Bar */}
       {d.todayTarget > 0 && (
-        <View className="mt-4 bg-white rounded-xl border border-gray-100 p-4">
+        <View className="mt-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4">
           <View className="flex-row items-center justify-between mb-2">
-            <Text className="text-sm font-semibold text-gray-900">Production Efficiency</Text>
+            <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">Production Efficiency</Text>
             <Text className="text-sm font-bold text-emerald-600">{d.efficiency}%</Text>
           </View>
           <ProgressBar value={Math.min(d.efficiency, 100)} color="green" height="lg" />
           <View className="flex-row justify-between mt-2">
-            <Text className="text-xs text-gray-400">OK: {d.todayOk}</Text>
-            <Text className="text-xs text-gray-400">Target: {d.todayTarget}</Text>
+            <Text className="text-xs text-gray-400 dark:text-gray-500">OK: {d.todayOk}</Text>
+            <Text className="text-xs text-gray-400 dark:text-gray-500">Target: {d.todayTarget}</Text>
           </View>
         </View>
       )}
 
       {/* Shift Summary */}
       {d.shiftSummary.length > 0 && (
-        <View className="mt-4 bg-white rounded-xl border border-gray-100 p-4">
-          <Text className="text-sm font-semibold text-gray-900 mb-3">Shift Performance</Text>
+        <View className="mt-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4">
+          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Shift Performance</Text>
           {d.shiftSummary.map((shift, i) => {
             const shiftPct = shift.target > 0 ? Math.round((shift.produced / shift.target) * 100) : 0;
             return (
               <View key={i} className="mb-3">
                 <View className="flex-row justify-between mb-1">
-                  <Text className="text-sm text-gray-700 font-medium">{shift.shift_name}</Text>
-                  <Text className="text-xs text-gray-500">{shift.produced}/{shift.target} ({shiftPct}%)</Text>
+                  <Text className="text-sm text-gray-700 dark:text-gray-300 font-medium">{shift.shift_name}</Text>
+                  <Text className="text-xs text-gray-500 dark:text-gray-400">{shift.produced}/{shift.target} ({shiftPct}%)</Text>
                 </View>
                 <ProgressBar value={Math.min(shiftPct, 100)} color="emerald" height="sm" />
                 {shift.rejected > 0 && (
                   <View className="flex-row items-center mt-0.5">
-                    <AlertTriangle size={10} color="#f87171" />
+                    <AlertTriangle size={10} color={colors.red[400]} />
                     <Text className="text-xs text-red-400 ml-1">{shift.rejected} rejected</Text>
                   </View>
                 )}
@@ -154,7 +156,7 @@ export function DashboardPage() {
       {/* Machine Utilization */}
       {d.machineStatus.length > 0 && (
         <View className="mt-4">
-          <Text className="text-sm font-semibold text-gray-900 mb-3">Machine Utilization</Text>
+          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Machine Utilization</Text>
           {d.machineStatus.map((m) => (
             <MachineBar key={m.machine_id} machine={m} />
           ))}
@@ -163,18 +165,18 @@ export function DashboardPage() {
 
       {/* Recent Activity */}
       {d.recentActivity.length > 0 && (
-        <View className="mt-4 bg-white rounded-xl border border-gray-100 p-4 mb-8">
-          <Text className="text-sm font-semibold text-gray-900 mb-3">Recent Activity</Text>
+        <View className="mt-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 mb-8">
+          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Recent Activity</Text>
           {d.recentActivity.slice(0, 10).map((a) => (
-            <View key={a.activity_id} className="flex-row items-start py-2 border-b border-gray-50">
-              <View className="w-6 h-6 rounded-full bg-emerald-100 items-center justify-center mr-3 mt-0.5">
-                <ClipboardList size={12} color="#059669" />
+            <View key={a.activity_id} className="flex-row items-start py-2 border-b border-gray-50 dark:border-gray-800">
+              <View className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/30 items-center justify-center mr-3 mt-0.5">
+                <ClipboardList size={12} color={colors.emerald[600]} />
               </View>
               <View className="flex-1">
-                <Text className="text-sm text-gray-800">{a.action.replace(/_/g, ' ')}</Text>
-                {a.details && <Text className="text-xs text-gray-400 mt-0.5">{a.details}</Text>}
+                <Text className="text-sm text-gray-800 dark:text-gray-200">{a.action.replace(/_/g, ' ')}</Text>
+                {a.details && <Text className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{a.details}</Text>}
               </View>
-              <Text className="text-xs text-gray-300 ml-2">{a.full_name}</Text>
+              <Text className="text-xs text-gray-300 dark:text-gray-600 ml-2">{a.full_name}</Text>
             </View>
           ))}
         </View>

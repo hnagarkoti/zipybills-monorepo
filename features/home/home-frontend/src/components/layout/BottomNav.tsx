@@ -12,7 +12,7 @@ export function BottomNav({ items }: BottomNavProps) {
     .map(({ children: _children, ...rest }) => rest);
 
   return (
-    <View className="h-16 bg-white border-t border-gray-200 flex-row items-center justify-around px-2">
+    <View className="h-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex-row items-center justify-around px-2">
       {flatItems.slice(0, 5).map((item) => (
         <Pressable
           key={item.id}
@@ -30,15 +30,15 @@ export function BottomNav({ items }: BottomNavProps) {
                     size: 16,
                     color: item.isActive ? '#ffffff' : '#6b7280',
                   })
-                : <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500'}`}>{String(item.icon)}</Text>
+                : <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>{String(item.icon)}</Text>
             ) : (
-              <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500'}`}>
+              <Text className={`text-xs font-bold ${item.isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
                 {item.label.charAt(0)}
               </Text>
             )}
           </View>
           <Text
-            className={`text-xs mt-0.5 ${item.isActive ? 'text-emerald-600 font-medium' : 'text-gray-500'}`}
+            className={`text-xs mt-0.5 ${item.isActive ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-gray-500 dark:text-gray-400'}`}
           >
             {item.label}
           </Text>

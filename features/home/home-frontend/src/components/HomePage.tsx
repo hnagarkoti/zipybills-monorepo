@@ -6,6 +6,7 @@ import {
 } from 'lucide-react-native';
 import { AppShell, type NavItem } from './layout';
 import { useAuthStore, type AuthUser } from '@zipybills/ui-store';
+import { colors } from '@zipybills/theme-engine';
 import { LoginPage, UsersPage } from '@zipybills/factory-auth-frontend';
 import { DashboardPage } from '@zipybills/factory-dashboard-frontend';
 import { MachinesPage } from '@zipybills/factory-machines-frontend';
@@ -95,19 +96,19 @@ export function HomePage() {
       brandSubtitle={`${user.full_name} · ${user.role}`}
       sidebarFooter={
         <Pressable onPress={logout} className="flex-row items-center py-2">
-          <LogOut size={14} color="#94a3b8" />
+          <LogOut size={14} color={colors.gray[400]} />
           <Text className="text-xs text-slate-400 ml-2">Sign Out</Text>
         </Pressable>
       }
       headerRight={
         <View className="flex-row items-center">
           <View className="mr-3 items-end">
-            <Text className="text-sm font-medium text-gray-700">{user.full_name}</Text>
-            <Text className="text-xs text-gray-400">{user.role}</Text>
+            <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.full_name}</Text>
+            <Text className="text-xs text-gray-400 dark:text-gray-500">{user.role}</Text>
           </View>
           <Avatar name={user.full_name} size="sm" />
-          <Pressable onPress={logout} className="bg-gray-100 px-3 py-1.5 rounded-lg ml-2">
-            <Text className="text-xs text-gray-600">Sign Out</Text>
+          <Pressable onPress={logout} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg ml-2">
+            <Text className="text-xs text-gray-600 dark:text-gray-400">Sign Out</Text>
           </Pressable>
         </View>
       }

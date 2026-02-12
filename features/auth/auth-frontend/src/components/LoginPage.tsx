@@ -4,6 +4,7 @@ import { Factory } from 'lucide-react-native';
 import { login as apiLogin } from '../services/api';
 import { setAuthToken } from '@zipybills/factory-api-client';
 import { Alert } from '@zipybills/ui-components';
+import { colors } from '@zipybills/theme-engine';
 
 interface LoginPageProps {
   onLogin: (user: { user_id: number; username: string; full_name: string; role: string }, token: string) => void;
@@ -43,7 +44,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         {/* Logo */}
         <View className="items-center mb-8">
           <View className="w-16 h-16 bg-emerald-500 rounded-2xl items-center justify-center mb-4">
-            <Factory size={32} color="#ffffff" />
+            <Factory size={32} color={colors.white} />
           </View>
           <Text className="text-2xl font-bold text-white">FactoryOS</Text>
           <Text className="text-sm text-slate-400 mt-1">Production Monitoring System</Text>
