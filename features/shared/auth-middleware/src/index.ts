@@ -10,7 +10,21 @@
 import jwt from 'jsonwebtoken';
 import type { Request, Response, NextFunction } from 'express';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'factory-os-dev-secret-change-in-production';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// B8: JWT_SECRET MUST be set in production — no silent fallback
+const JWT_SECRET = (() => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (NODE_ENV === 'production') {
+      console.error('[AUTH] FATAL: JWT_SECRET environment variable is not set. Refusing to start.');
+      process.exit(1);
+    }
+    console.warn('[AUTH] ⚠️  JWT_SECRET not set — using dev-only fallback. NEVER use in production.');
+    return 'factory-os-dev-secret-DO-NOT-USE-IN-PRODUCTION';
+  }
+  return secret;
+})();
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 export interface JwtPayload {
@@ -18,6 +32,16 @@ export interface JwtPayload {
   username: string;
   role: 'ADMIN' | 'SUPERVISOR' | 'OPERATOR';
   full_name: string;
+  /** SaaS mode: tenant the user belongs to */
+  tenant_id?: number;
+  /** SaaS mode: platform-level admin flag */
+  is_platform_admin?: boolean;
+  /** Access scope: PLATFORM for super admin, TENANT for tenant users */
+  scope?: 'PLATFORM' | 'TENANT';
+  /** Fine-grained permissions from RBAC system */
+  permissions?: string[];
+  /** Tenant plan (for frontend plan awareness) */
+  plan?: string;
 }
 
 export interface AuthenticatedRequest extends Request {
@@ -74,6 +98,12 @@ export function requireRole(...roles: string[]) {
       return;
     }
 
+    // Platform admins bypass role checks
+    if (req.user.is_platform_admin || req.user.scope === 'PLATFORM') {
+      next();
+      return;
+    }
+
     if (!roles.includes(req.user.role)) {
       res.status(403).json({ success: false, error: 'Insufficient permissions' });
       return;
@@ -81,4 +111,39 @@ export function requireRole(...roles: string[]) {
 
     next();
   };
+}
+
+/**
+ * Middleware that restricts access to platform-scope admins only.
+ * Use for routes that must NEVER be accessible by tenant users.
+ * Platform admins CANNOT modify production data through tenant routes.
+ */
+export function requirePlatformScope(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+  if (!req.user) {
+    res.status(401).json({ success: false, error: 'Authentication required' });
+    return;
+  }
+  if (req.user.scope !== 'PLATFORM' && !req.user.is_platform_admin) {
+    res.status(403).json({ success: false, error: 'Platform access only' });
+    return;
+  }
+  next();
+}
+
+/**
+ * Middleware that restricts access to tenant-scope users only.
+ * Prevents platform admins from directly modifying tenant production data.
+ * Platform admins must use impersonation to act within a tenant.
+ */
+export function requireTenantScope(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+  if (!req.user) {
+    res.status(401).json({ success: false, error: 'Authentication required' });
+    return;
+  }
+  // Platform admins should use impersonation, not direct access
+  if (req.user.scope === 'PLATFORM' || (req.user.is_platform_admin && !(req.user as any).is_impersonation)) {
+    res.status(403).json({ success: false, error: 'Platform admins must use impersonation to modify tenant data. Use the impersonation tool from the Platform Admin panel.' });
+    return;
+  }
+  next();
 }

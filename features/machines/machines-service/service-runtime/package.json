@@ -10,6 +10,7 @@
     "@zipybills/factory-auth-middleware": "workspace:*",
     "@zipybills/factory-database-config": "workspace:*",
     "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/factory-multi-tenancy": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "express": "catalog:"
   },

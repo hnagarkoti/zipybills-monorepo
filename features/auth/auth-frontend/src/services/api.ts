@@ -49,3 +49,7 @@ export async function updateUser(
 ): Promise<SafeUser> {
   return authApi.updateUser(userId, userData);
 }
+
+export async function deleteUser(userId: number): Promise<void> {
+  return authApi.deleteUser(userId);
+}

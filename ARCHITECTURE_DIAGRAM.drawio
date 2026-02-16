@@ -1,0 +1,430 @@
+<mxfile host="app.diagrams.net" modified="2026-02-14T12:00:00.000Z" agent="Manual" etag="factoryos-arch" version="24.0.0" type="device">
+  <diagram id="factoryos-architecture" name="FactoryOS Architecture">
+    <mxGraphModel dx="2800" dy="2200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="4000" pageHeight="3000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- TITLE -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="title1" value="&lt;b&gt;FactoryOS — System Architecture&lt;/b&gt;&lt;br&gt;Multi-Tenant SaaS Manufacturing Operations Platform" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="600" y="20" width="520" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- CLIENTS LAYER -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="clients-group" value="&lt;b&gt;Clients&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;align=center;fontSize=13;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="240" y="100" width="1240" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="web-app" value="&lt;b&gt;Web App&lt;a/b&gt;&lt;br&gt;Expo Router (Web)&lt;br&gt;&lt;i&gt;:8081&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="140" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ios-app" value="&lt;b&gt;iOS App&lt;/b&gt;&lt;br&gt;React Native (Expo)&lt;br&gt;&lt;i&gt;iOS Simulator / Device&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="140" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="android-app" value="&lt;b&gt;Android App&lt;/b&gt;&lt;br&gt;React Native (Expo)&lt;br&gt;&lt;i&gt;(Future)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="140" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="marketing-site" value="&lt;b&gt;Marketing Site&lt;/b&gt;&lt;br&gt;Next.js&lt;br&gt;&lt;i&gt;:3000&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="140" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="curl-cli" value="&lt;b&gt;CLI / cURL&lt;/b&gt;&lt;br&gt;API Testing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="140" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- API GATEWAY LAYER -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="gateway-group" value="&lt;b&gt;API Gateway&lt;/b&gt;  (Express.js, Port 4000)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;align=center;fontSize=13;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="140" y="310" width="1440" height="260" as="geometry" />
+        </mxCell>
+
+        <!-- Middleware Chain -->
+        <mxCell id="mw-group" value="&lt;b&gt;Middleware Chain&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;align=center;fontSize=11;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="340" width="1400" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-cors" value="CORS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="170" y="358" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-rate" value="Rate Limiter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="240" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-json" value="JSON Parse" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="330" y="358" width="75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-version" value="API Version" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="415" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-metrics" value="Metrics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="505" y="358" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-auth" value="requireAuth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="575" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-tenant" value="requireTenant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="665" y="358" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-readonly" value="FREE Read-Only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="765" y="358" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-feature" value="Feature Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="870" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-planfeat" value="Plan Feature" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="960" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-role" value="requireRole" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="358" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mw-handler" value="→ Route Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="358" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Feature Routes Row 1 -->
+        <mxCell id="route-auth" value="&lt;b&gt;Auth&lt;/b&gt;&lt;br&gt;/auth, /users&lt;br&gt;Login, JWT, RBAC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="420" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-saas" value="&lt;b&gt;SaaS Auth&lt;/b&gt;&lt;br&gt;/saas/*&lt;br&gt;Signup, Plans" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-machines" value="&lt;b&gt;Machines&lt;/b&gt;&lt;br&gt;/machines&lt;br&gt;CRUD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="420" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-shifts" value="&lt;b&gt;Shifts&lt;/b&gt;&lt;br&gt;/shifts&lt;br&gt;CRUD + Bulk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="420" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-plans" value="&lt;b&gt;Planning&lt;/b&gt;&lt;br&gt;/plans&lt;br&gt;CRUD + Bulk + Dup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="420" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-prodlogs" value="&lt;b&gt;Prod Logs&lt;/b&gt;&lt;br&gt;/production-logs&lt;br&gt;Operator Input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-downtime" value="&lt;b&gt;Downtime&lt;/b&gt;&lt;br&gt;/downtime&lt;br&gt;STARTER+" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="420" width="110" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Feature Routes Row 2 -->
+        <mxCell id="route-dashboard" value="&lt;b&gt;Dashboard&lt;/b&gt;&lt;br&gt;/dashboard&lt;br&gt;KPIs &amp; Stats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="495" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-reports" value="&lt;b&gt;Reports&lt;/b&gt;&lt;br&gt;/reports&lt;br&gt;STARTER+" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="495" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-export" value="&lt;b&gt;Export&lt;/b&gt;&lt;br&gt;/export&lt;br&gt;PRO+ CSV/JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#b85450;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="495" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-audit" value="&lt;b&gt;Audit&lt;/b&gt;&lt;br&gt;/audit&lt;br&gt;PRO+ Logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#b85450;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="495" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-backup" value="&lt;b&gt;Backup&lt;/b&gt;&lt;br&gt;/backups&lt;br&gt;ENTERPRISE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#b85450;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="495" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-tbackup" value="&lt;b&gt;Tenant Backup&lt;/b&gt;&lt;br&gt;/tenant-backups&lt;br&gt;Export + GDrive" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="495" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-billing" value="&lt;b&gt;Billing&lt;/b&gt;&lt;br&gt;/billing&lt;br&gt;Plans + Invoices" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="495" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-tenants" value="&lt;b&gt;Tenant Mgmt&lt;/b&gt;&lt;br&gt;/tenants&lt;br&gt;CRUD + Usage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="495" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-superadmin" value="&lt;b&gt;Super Admin&lt;/b&gt;&lt;br&gt;/super-admin&lt;br&gt;Platform Ops" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d0de;strokeColor=#996185;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-sync" value="&lt;b&gt;Offline Sync&lt;/b&gt;&lt;br&gt;/sync&lt;br&gt;Push/Pull" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="495" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="route-admin" value="&lt;b&gt;Admin Panel&lt;/b&gt;&lt;br&gt;/admin&lt;br&gt;ENT Config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#b85450;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="420" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="route-saas-dash" value="&lt;b&gt;SaaS Dash&lt;/b&gt;&lt;br&gt;/saas-dashboard&lt;br&gt;Platform Stats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d0de;strokeColor=#996185;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="495" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Route Legend -->
+        <mxCell id="legend-title" value="&lt;b&gt;Route Color Key:&lt;/b&gt;" style="text;html=1;align=left;fontSize=9;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="420" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- SHARED SERVICES LAYER -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="shared-group" value="&lt;b&gt;Shared Services &amp; Libraries&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;align=center;fontSize=13;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="240" y="640" width="1240" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc-multitenancy" value="&lt;b&gt;Multi-Tenancy&lt;/b&gt;&lt;br&gt;Tenant isolation&lt;br&gt;Plan limits&lt;br&gt;Read-only gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="670" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-dbconfig" value="&lt;b&gt;Database Config&lt;/b&gt;&lt;br&gt;Connection Pool&lt;br&gt;pg query()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="670" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-authmw" value="&lt;b&gt;Auth Middleware&lt;/b&gt;&lt;br&gt;JWT verify&lt;br&gt;requireRole" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="670" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-activitylog" value="&lt;b&gt;Activity Log&lt;/b&gt;&lt;br&gt;logActivity()&lt;br&gt;Audit trail" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="670" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-featureflags" value="&lt;b&gt;Feature Flags&lt;/b&gt;&lt;br&gt;DB-driven toggles&lt;br&gt;Runtime config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="670" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-apiclient" value="&lt;b&gt;API Client&lt;/b&gt;&lt;br&gt;apiFetch()&lt;br&gt;BaseApi class" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="670" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-featurereg" value="&lt;b&gt;Feature Registry&lt;/b&gt;&lt;br&gt;Plan capabilities&lt;br&gt;Feature→Plan map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="670" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-logger" value="&lt;b&gt;Logger&lt;/b&gt;&lt;br&gt;Structured logs&lt;br&gt;Levels + Audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="670" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- FRONTEND SHARED LAYER -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="frontend-group" value="&lt;b&gt;Frontend Shared Libraries&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;align=center;fontSize=13;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="240" y="830" width="1240" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fe-uicomponents" value="&lt;b&gt;UI Components&lt;/b&gt;&lt;br&gt;PageHeader, Toast&lt;br&gt;Modals, Forms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="260" y="860" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-uistore" value="&lt;b&gt;UI Store&lt;/b&gt;&lt;br&gt;Zustand&lt;br&gt;useAuthStore" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="860" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-uiquery" value="&lt;b&gt;UI Query&lt;/b&gt;&lt;br&gt;React Query&lt;br&gt;Data Fetching" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="530" y="860" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-uitheme" value="&lt;b&gt;UI Theme&lt;/b&gt;&lt;br&gt;Theme Engine&lt;br&gt;Dark/Light/Custom" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="860" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-uistyles" value="&lt;b&gt;UI Styles&lt;/b&gt;&lt;br&gt;NativeWind&lt;br&gt;Tailwind CSS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="860" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fe-themeservice" value="&lt;b&gt;Theme Service&lt;/b&gt;&lt;br&gt;Server-side theme&lt;br&gt;Tenant branding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="860" width="130" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- DATABASE LAYER -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="db-group" value="&lt;b&gt;PostgreSQL Database&lt;/b&gt;  (factory_os, Port 5432)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;verticalAlign=top;align=center;fontSize=13;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1000" width="1440" height="230" as="geometry" />
+        </mxCell>
+
+        <!-- Core Tables -->
+        <mxCell id="db-core-label" value="&lt;b&gt;Core Tables (All Plans)&lt;/b&gt;" style="text;html=1;align=left;fontSize=10;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1030" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="db-users" value="users" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1055" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-machines" value="machines" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1055" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-shifts" value="shifts" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1055" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-prodplans" value="production&lt;br&gt;_plans" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="1055" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-prodlogs" value="production&lt;br&gt;_logs" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="1055" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-downtime" value="downtime&lt;br&gt;_logs" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1055" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-actlog" value="activity&lt;br&gt;_log" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1055" width="80" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Multi-Tenant Tables -->
+        <mxCell id="db-mt-label" value="&lt;b&gt;Multi-Tenancy Tables&lt;/b&gt;" style="text;html=1;align=left;fontSize=10;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1110" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="db-tenants" value="tenants" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1135" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-tenantusers" value="tenant&lt;br&gt;_users" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1135" width="80" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Billing Tables -->
+        <mxCell id="db-bill-label" value="&lt;b&gt;Billing Tables&lt;/b&gt;" style="text;html=1;align=left;fontSize=10;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1110" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="db-subscriptions" value="subscriptions" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1135" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-subplans" value="subscription&lt;br&gt;_plans" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="470" y="1135" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-invoices" value="invoices" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="570" y="1135" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-usage" value="usage&lt;br&gt;_snapshots" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1135" width="90" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Enterprise Tables -->
+        <mxCell id="db-ent-label" value="&lt;b&gt;Enterprise Tables&lt;/b&gt;" style="text;html=1;align=left;fontSize=10;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1110" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="db-tbackups" value="tenant&lt;br&gt;_backups" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1135" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-gdrive" value="tenant_gdrive&lt;br&gt;_tokens" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1135" width="100" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-backuphist" value="backup&lt;br&gt;_history" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1135" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-featureflags" value="feature&lt;br&gt;_flags" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="1135" width="80" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-implog" value="impersonation&lt;br&gt;_log" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="1135" width="100" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="db-announce" value="platform&lt;br&gt;_announce" style="shape=cylinder3;whiteSpace=wrap;html=1;size=8;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="1135" width="100" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Tenant isolation note -->
+        <mxCell id="db-note" value="&lt;i&gt;All core tables have tenant_id column for row-level isolation + deleted_at for soft delete&lt;/i&gt;" style="text;html=1;align=center;fontSize=9;verticalAlign=middle;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1195" width="500" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- EXTERNAL SERVICES -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="ext-group" value="&lt;b&gt;External Services&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;align=center;fontSize=13;arcSize=6;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="310" width="200" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ext-google" value="&lt;b&gt;Google OAuth&lt;/b&gt;&lt;br&gt;Drive API&lt;br&gt;&lt;i&gt;Backup storage&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#666666;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="350" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-cloud" value="&lt;b&gt;Cloud Storage&lt;/b&gt;&lt;br&gt;S3 / GCS / Azure&lt;br&gt;&lt;i&gt;Encrypted backups&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#666666;fontSize=10;shadow=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="420" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-email" value="&lt;b&gt;Email Service&lt;/b&gt;&lt;br&gt;&lt;i&gt;(Future)&lt;/i&gt;&lt;br&gt;Notifications" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;fontSize=10;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="490" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-payment" value="&lt;b&gt;Payment Gateway&lt;/b&gt;&lt;br&gt;&lt;i&gt;(Future)&lt;/i&gt;&lt;br&gt;Stripe / Razorpay" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;fontSize=10;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="560" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ext-prometheus" value="&lt;b&gt;Prometheus&lt;/b&gt;&lt;br&gt;Metrics&lt;br&gt;&lt;i&gt;/api/metrics&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#666666;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="640" width="160" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- USER ROLES SIDEBAR -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="roles-group" value="&lt;b&gt;User Roles&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;align=center;fontSize=13;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="100" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="role-platform" value="🔑 &lt;b&gt;Platform Admin&lt;/b&gt;&lt;br&gt;Manages all tenants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d0de;strokeColor=#996185;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="130" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="role-admin" value="👤 &lt;b&gt;ADMIN&lt;/b&gt; — Full tenant access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="170" width="160" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="role-super" value="👷 &lt;b&gt;SUPERVISOR&lt;/b&gt; — Plans, Reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="200" width="160" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="role-operator" value="🔧 &lt;b&gt;OPERATOR&lt;/b&gt; — Log production" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="230" width="160" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- PLAN TIERS SIDEBAR -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="plans-group" value="&lt;b&gt;Subscription Plans&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;align=center;fontSize=12;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="770" width="200" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="plan-free" value="&lt;b&gt;FREE&lt;/b&gt; — 3 users, 2 machines&lt;br&gt;Core features only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="800" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="plan-starter" value="&lt;b&gt;STARTER&lt;/b&gt; — 10 users, 10 machines&lt;br&gt;+ Downtime, Reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="840" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="plan-pro" value="&lt;b&gt;PROFESSIONAL&lt;/b&gt; — 50/30&lt;br&gt;+ Export, Audit, Theme" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="880" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="plan-ent" value="&lt;b&gt;ENTERPRISE&lt;/b&gt; — Unlimited&lt;br&gt;+ Backup, Admin, Permissions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="920" width="180" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- ARROWS / CONNECTIONS -->
+        <!-- ═══════════════════════════════════════════════ -->
+
+        <!-- Clients → Gateway -->
+        <mxCell id="arrow-web-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.25;entryY=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="1" source="web-app" target="gateway-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-ios-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.4;entryY=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="1" source="ios-app" target="gateway-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-cli-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.75;entryY=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="1" source="curl-cli" target="gateway-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Gateway → Shared Services -->
+        <mxCell id="arrow-gw-shared" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#9673a6;strokeWidth=2;" edge="1" parent="1" source="gateway-group" target="shared-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Shared Services → Database -->
+        <mxCell id="arrow-shared-db" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#b85450;strokeWidth=2;" edge="1" parent="1" source="shared-group" target="db-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="950" />
+              <mxPoint x="860" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Frontend Shared (used by clients) -->
+        <mxCell id="arrow-web-feshared" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0;exitY=1;entryX=0.5;entryY=0;strokeColor=#d6b656;strokeWidth=1;dashed=1;" edge="1" parent="1" source="clients-group" target="frontend-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="280" />
+              <mxPoint x="180" y="810" />
+              <mxPoint x="860" y="810" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Gateway → External Services -->
+        <mxCell id="arrow-gw-ext" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#666666;strokeWidth=1;dashed=1;" edge="1" parent="1" source="gateway-group" target="ext-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- MONOREPO STRUCTURE NOTE -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <mxCell id="monorepo-note" value="&lt;b&gt;Monorepo Structure&lt;/b&gt; (pnpm workspaces + Turbo)&lt;br&gt;&lt;br&gt;📁 apps/ → factoryOS (Expo), marketing-site (Next.js)&lt;br&gt;📁 features/ → Feature-based microservices (*-frontend + *-service)&lt;br&gt;📁 features/shared/ → Shared libraries (api-gateway, multi-tenancy, backup-system, etc.)&lt;br&gt;📁 features/frontend-shared/ → UI components, store, theme, styles&lt;br&gt;📁 features/build-shared/ → ESLint, Prettier, TS configs&lt;br&gt;📁 tools/ → NativeWind config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1260" width="600" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- REQUEST FLOW NOTE -->
+        <mxCell id="flow-note" value="&lt;b&gt;Request Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;Client → CORS → Rate Limiter → JSON Parse → API Version&lt;br&gt;→ Metrics → requireAuth (JWT) → requireTenant (SaaS)&lt;br&gt;→ enforceFreePlanReadOnly → requirePlanFeature&lt;br&gt;→ requireRole → &lt;b&gt;Route Handler&lt;/b&gt; → PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1260" width="400" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- TENANT ISOLATION NOTE -->
+        <mxCell id="isolation-note" value="&lt;b&gt;Data Isolation&lt;/b&gt;&lt;br&gt;&lt;br&gt;Every request includes &lt;code&gt;tenant_id&lt;/code&gt; from JWT.&lt;br&gt;All DB queries filter by &lt;code&gt;WHERE tenant_id = $1&lt;/code&gt;.&lt;br&gt;Tenant A can NEVER see Tenant B data." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1260" width="300" height="100" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

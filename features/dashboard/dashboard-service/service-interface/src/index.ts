@@ -34,6 +34,32 @@ export interface ActivityItem {
   full_name: string;
 }
 
+export interface PeriodStats {
+  produced: number;
+  target: number;
+  rejected: number;
+  downtime_min: number;
+  plans: number;
+  efficiency: number;
+  rejection_rate: number;
+}
+
+export interface TopRejectionReason {
+  reason: string;
+  count: number;
+  total_rejected: number;
+  percentage: number;
+}
+
+export interface ShiftHistoryDay {
+  date: string;
+  shift_name: string;
+  produced: number;
+  target: number;
+  rejected: number;
+  efficiency: number;
+}
+
 export interface DashboardStats {
   totalMachines: number;
   activeMachines: number;
@@ -49,6 +75,16 @@ export interface DashboardStats {
   machineStatus: MachineStatus[];
   recentActivity: ActivityItem[];
   shiftSummary: ShiftSummary[];
+  /** Last 7 days aggregate (excluding today) */
+  lastWeek: PeriodStats;
+  /** Last 30 days aggregate (excluding today) */
+  lastMonth: PeriodStats;
+  /** Yesterday's stats for day-over-day comparison */
+  yesterday: PeriodStats;
+  /** Top 5 rejection reasons (last 30 days) */
+  topRejectionReasons: TopRejectionReason[];
+  /** Shift performance for last 7 days (daily breakdown by shift) */
+  shiftHistory: ShiftHistoryDay[];
 }
 
 // ─── Typed API Client ────────────────────────

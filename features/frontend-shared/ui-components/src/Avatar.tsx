@@ -34,12 +34,12 @@ export function Avatar({ name, size = 'md', className }: AvatarProps) {
   return (
     <View
       className={cn(
-        'rounded-full bg-emerald-100 dark:bg-emerald-900/30 items-center justify-center',
+        'rounded-full bg-blue-100 dark:bg-blue-900/30 items-center justify-center',
         s.container,
         className,
       )}
     >
-      <Text className={cn('font-semibold text-emerald-700 dark:text-emerald-400', s.text)}>
+      <Text className={cn('font-semibold text-blue-700 dark:text-blue-400', s.text)}>
         {getInitials(name)}
       </Text>
     </View>

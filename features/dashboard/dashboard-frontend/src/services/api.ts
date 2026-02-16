@@ -13,6 +13,9 @@ export type {
   ShiftSummary,
   ActivityItem,
   DashboardStats,
+  PeriodStats,
+  TopRejectionReason,
+  ShiftHistoryDay,
 } from '@zipybills/factory-dashboard-service-interface';
 
 export const dashboardApi = new DashboardApi();

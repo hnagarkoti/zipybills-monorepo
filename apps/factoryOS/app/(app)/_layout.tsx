@@ -15,7 +15,8 @@ import { View, Text, Pressable } from 'react-native';
 import { Slot, Redirect, usePathname, useRouter } from 'expo-router';
 import {
   LayoutDashboard, ClipboardList, Pencil, Factory,
-  AlertTriangle, Clock, BarChart3, Users, LogOut, Palette, Settings,
+  AlertTriangle, Clock, BarChart3, Users, LogOut, Settings,
+  ShieldCheck, Palette, Shield, HardDrive,
 } from 'lucide-react-native';
 import { AppShell, type NavItem, type BreadcrumbItem } from '@zipybills/factory-home-frontend';
 import { useAuthStore } from '@zipybills/ui-store';
@@ -34,6 +35,8 @@ interface RouteConfig {
   roles?: string[];
   /** Feature ID for feature-flag gating. If set, route is hidden when feature UI is disabled. */
   featureId?: string;
+  /** Minimum plan required to access this feature (H3: plan UI gating) */
+  minPlan?: string;
   /** Nested child routes – rendered as dropdown in sidebar */
   children?: RouteConfig[];
 }
@@ -47,12 +50,19 @@ const ROUTES: RouteConfig[] = [
     ],
   },
   { href: '/machines', label: 'Machines', icon: <Factory size={ICON_SIZE} />, featureId: 'machines' },
-  { href: '/downtime', label: 'Downtime', icon: <AlertTriangle size={ICON_SIZE} />, featureId: 'downtime' },
+  { href: '/downtime', label: 'Downtime', icon: <AlertTriangle size={ICON_SIZE} />, featureId: 'downtime', minPlan: 'STARTER' },
   { href: '/shifts', label: 'Shifts', icon: <Clock size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'shifts' },
-  { href: '/reports', label: 'Reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports' },
+  { href: '/reports', label: 'Reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports', minPlan: 'STARTER' },
   { href: '/users', label: 'Users', icon: <Users size={ICON_SIZE} />, roles: ['ADMIN'], featureId: 'auth' },
-  { href: '/settings', label: 'Settings', icon: <Settings size={ICON_SIZE} /> },
-  { href: '/theme-test', label: 'Theme Test', icon: <Palette size={ICON_SIZE} />, roles: ['ADMIN'] },
+  {
+    href: '/settings', label: 'Settings', icon: <Settings size={ICON_SIZE} />,
+    children: [
+      { href: '/settings/appearance', label: 'Appearance', icon: <Palette size={ICON_SIZE} /> },
+      { href: '/settings/compliance', label: 'Compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'] },
+      { href: '/settings/backup', label: 'Backup & Data', icon: <HardDrive size={ICON_SIZE} />, roles: ['ADMIN'] },
+    ],
+  },
+  { href: '/admin', label: 'Admin', icon: <ShieldCheck size={ICON_SIZE} />, roles: ['ADMIN'] },
 ];
 
 /* ─── Expo Router ErrorBoundary ───────────────── */
@@ -81,10 +91,24 @@ export default function AppLayout() {
     return <Redirect href="/login" />;
   }
 
-  /** Check if a route passes role + feature-flag filters */
+  /* Platform admins should not access tenant routes */
+  if (user.is_platform_admin) {
+    return <Redirect href="/platform" />;
+  }
+
+  /* H3: Plan hierarchy for feature gating */
+  const PLAN_ORDER = ['FREE', 'STARTER', 'PROFESSIONAL', 'ENTERPRISE'];
+  const userPlanIndex = user.plan ? PLAN_ORDER.indexOf(user.plan) : -1;
+
+  /** Check if a route passes role + feature-flag + plan filters */
   const isRouteVisible = (r: RouteConfig): boolean => {
     if (r.roles && !r.roles.includes(user.role)) return false;
     if (r.featureId && flags[r.featureId]?.ui === 'DISABLED') return false;
+    // H3: Plan-based visibility — hide features above user's plan tier
+    if (r.minPlan && user.plan) {
+      const requiredIndex = PLAN_ORDER.indexOf(r.minPlan);
+      if (userPlanIndex >= 0 && userPlanIndex < requiredIndex) return false;
+    }
     return true;
   };
 
@@ -160,7 +184,11 @@ export default function AppLayout() {
       title={activeRoute?.label ?? 'FactoryOS'}
       breadcrumbs={breadcrumbs}
       brandName="FactoryOS"
-      brandSubtitle={`${user.full_name} · ${user.role}`}
+      brandSubtitle={
+        user.tenant_name
+          ? `${user.tenant_name} · ${user.full_name} · ${user.role}${user.plan ? ` (${user.plan})` : ''}`
+          : `${user.full_name} · ${user.role}`
+      }
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">
           <LogOut size={14} color={colors.gray[400]} />

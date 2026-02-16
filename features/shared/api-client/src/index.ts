@@ -31,6 +31,19 @@ export function getAuthToken(): string | null {
   return authToken;
 }
 
+// ─── Compliance Reason ───────────────────────
+
+let pendingComplianceReason: string | null = null;
+
+/** Called by the ComplianceProvider before a guarded mutation */
+export function setComplianceReason(reason: string | null): void {
+  pendingComplianceReason = reason;
+}
+
+export function getComplianceReason(): string | null {
+  return pendingComplianceReason;
+}
+
 // ─── Configuration ───────────────────────────
 
 export interface ConfigurationParameters {
@@ -73,6 +86,12 @@ export class BaseApi {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    // Attach compliance reason if present (set by ComplianceProvider)
+    const reason = getComplianceReason();
+    if (reason) {
+      headers['x-compliance-reason'] = reason;
+    }
+
     // Inject API version: /api/machines → /api/v1/machines
     const versionedPath = path.startsWith('/api/')
       ? path.replace('/api/', `/api/${this.config.apiVersion}/`)
@@ -111,6 +130,12 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
 
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
+  }
+
+  // Attach compliance reason if present
+  const reason = getComplianceReason();
+  if (reason) {
+    headers['x-compliance-reason'] = reason;
   }
 
   // Inject default v1 version: /api/machines → /api/v1/machines

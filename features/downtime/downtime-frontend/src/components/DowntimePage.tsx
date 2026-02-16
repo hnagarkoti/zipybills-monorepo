@@ -8,6 +8,7 @@ import { fetchDowntimeLogs, createDowntimeLog, endDowntimeLog, type DowntimeLog 
 import { fetchMachines, type Machine } from '@zipybills/factory-machines-frontend';
 import { Alert, EmptyState, StatCard, PageHeader, CalendarStrip } from '@zipybills/ui-components';
 import { colors, statusColors, downtimeCategoryColors, useSemanticColors } from '@zipybills/theme-engine';
+import { useCompliance } from '@zipybills/ui-store';
 
 const DOWNTIME_CATEGORIES = [
   { value: 'BREAKDOWN', label: 'Breakdown', icon: Wrench, color: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' },
@@ -33,6 +34,7 @@ function CategoryBadge({ category }: { category: string }) {
 
 export function DowntimePage() {
   const sc = useSemanticColors();
+  const { guardedMutate, guard } = useCompliance();
   const [machines, setMachines] = useState<Machine[]>([]);
   const [logs, setLogs] = useState<DowntimeLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,18 +62,22 @@ export function DowntimePage() {
 
   const handleCreate = async () => {
     if (!form.machine_id || !form.category) { setError('Machine and category required'); return; }
-    try {
-      await createDowntimeLog({ machine_id: parseInt(form.machine_id, 10), category: form.category, reason: form.reason || '', started_at: new Date().toISOString() });
-      setForm({ machine_id: '', category: '', reason: '' });
-      setShowForm(false);
-      setSuccess('Downtime event logged');
-      loadData();
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to create'); }
+    await guardedMutate('create', async () => {
+      try {
+        await createDowntimeLog({ machine_id: parseInt(form.machine_id, 10), category: form.category, reason: form.reason || '', started_at: new Date().toISOString() });
+        setForm({ machine_id: '', category: '', reason: '' });
+        setShowForm(false);
+        setSuccess('Downtime event logged');
+        loadData();
+        setTimeout(() => setSuccess(null), 3000);
+      } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to create'); }
+    });
   };
 
   const handleEnd = async (id: number) => {
-    try { await endDowntimeLog(id); setSuccess('Downtime resolved'); loadData(); setTimeout(() => setSuccess(null), 3000); } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to resolve'); }
+    await guardedMutate('edit', async () => {
+      try { await endDowntimeLog(id); setSuccess('Downtime resolved'); loadData(); setTimeout(() => setSuccess(null), 3000); } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Failed to resolve'); }
+    });
   };
 
   const formatDuration = (mins: number | null | undefined) => {

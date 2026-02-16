@@ -28,3 +28,7 @@ export async function updateShift(shiftId: number, shiftData: UpdateShiftRequest
 export async function deleteShift(shiftId: number): Promise<void> {
   return shiftsApi.deleteShift(shiftId);
 }
+
+export async function bulkCreateShifts(count: 2 | 3): Promise<Shift[]> {
+  return shiftsApi.bulkCreateShifts(count);
+}

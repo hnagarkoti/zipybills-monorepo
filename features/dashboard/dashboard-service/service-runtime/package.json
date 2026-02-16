@@ -7,6 +7,7 @@
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
     "@zipybills/factory-dashboard-service-interface": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
     "@zipybills/factory-database-config": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "express": "catalog:"

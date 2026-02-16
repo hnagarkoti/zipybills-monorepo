@@ -13,6 +13,7 @@
     "@zipybills/factory-shifts-frontend": "workspace:*",
     "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ui-store": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "lucide-react-native": "catalog:",
     "react-native-svg": "catalog:"

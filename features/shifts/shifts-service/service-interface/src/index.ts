@@ -59,4 +59,12 @@ export class ShiftsApi extends BaseApi {
   async deleteShift(shiftId: number): Promise<void> {
     await this.request(`/api/shifts/${shiftId}`, { method: 'DELETE' });
   }
+
+  async bulkCreateShifts(count: 2 | 3): Promise<Shift[]> {
+    const data = await this.request<{ success: boolean; shifts: Shift[] }>('/api/shifts/bulk-create', {
+      method: 'POST',
+      body: JSON.stringify({ count }),
+    });
+    return data.shifts;
+  }
 }

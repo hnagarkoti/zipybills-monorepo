@@ -31,7 +31,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   success: boolean;
   token: string;
-  user: SafeUser;
+  user: SafeUser & { tenant_id?: number; plan?: string; is_platform_admin?: boolean; permissions?: string[] };
 }
 
 export interface CreateUserRequest {

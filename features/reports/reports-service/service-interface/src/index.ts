@@ -24,17 +24,17 @@ export interface ProductionReportRow {
   shift_name: string;
   product_name: string;
   target_quantity: number;
-  actual_produced: number;
-  actual_ok: number;
-  actual_rejected: number;
+  total_produced: number;
+  total_ok: number;
+  total_rejected: number;
 }
 
 export interface MachineWiseReportRow {
   machine_id: number;
   machine_name: string;
   machine_code: string;
-  total_plans: number;
-  total_target: number;
+  plan_count: number;
+  target_quantity: number;
   total_produced: number;
   total_ok: number;
   total_rejected: number;
@@ -44,19 +44,22 @@ export interface MachineWiseReportRow {
 export interface ShiftWiseReportRow {
   shift_id: number;
   shift_name: string;
-  total_plans: number;
-  total_target: number;
+  plan_count: number;
+  target_quantity: number;
   total_produced: number;
   total_ok: number;
   total_rejected: number;
 }
 
 export interface RejectionReportRow {
-  rejection_reason: string;
+  plan_date: string;
+  product_name: string;
   machine_name: string;
   shift_name: string;
-  total_rejected: number;
-  occurrences: number;
+  quantity_produced: number;
+  quantity_ok: number;
+  quantity_rejected: number;
+  rejection_reason: string;
 }
 
 // ─── Typed API Client ────────────────────────

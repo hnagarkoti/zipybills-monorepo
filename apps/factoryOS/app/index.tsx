@@ -5,15 +5,20 @@ import { useAuthStore } from '@zipybills/ui-store';
 /**
  * Root index – auth-based redirect
  *
- * If authenticated → /dashboard
- * If not → /login
+ * Platform admins → /platform
+ * Tenant users   → /dashboard
+ * Not logged in  → /login
  */
 export default function Index() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { isAuthenticated, user } = useAuthStore();
 
-  if (isAuthenticated) {
-    return <Redirect href="/dashboard" />;
+  if (!isAuthenticated) {
+    return <Redirect href="/login" />;
   }
 
-  return <Redirect href="/login" />;
+  if (user?.is_platform_admin) {
+    return <Redirect href="/platform" />;
+  }
+
+  return <Redirect href="/dashboard" />;
 }

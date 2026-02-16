@@ -81,17 +81,10 @@ export function ThemeProvider({
   }, []);
 
   // ─── Sync system color scheme changes ───────
-  useEffect(() => {
-    if (!autoDetectColorScheme) return;
-    // Only auto-switch if user hasn't explicitly chosen high-contrast
-    if (context.baseTheme === 'high-contrast') return;
-
-    const preferred: BaseThemeId = systemColorScheme === 'dark' ? 'dark' : 'light';
-    if (preferred !== context.baseTheme) {
-      updateContext({ baseTheme: preferred });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [systemColorScheme, autoDetectColorScheme]);
+  // Only auto-detect on first mount when no explicit user choice is stored.
+  // After that, respect the user's manual theme selection and don't override.
+  // Users can toggle theme via Settings; system dark mode only applies at
+  // initial launch when no preference has been persisted yet.
 
   // ─── Apply CSS variables on web ─────────────
   useEffect(() => {
@@ -117,8 +110,12 @@ export function ThemeProvider({
 /**
  * Compliance Watermark Overlay
  * Shows a subtle diagonal watermark for audit/validation/traceability modes.
+ * Skips rendering for standard mode (no watermark needed).
  */
 function ComplianceWatermark({ mode }: { mode: string }) {
+  // Standard mode = no watermark
+  if (!mode || mode === 'standard') return null;
+
   const label = mode.replace(/-/g, ' ').toUpperCase();
 
   return (

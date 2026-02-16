@@ -13,6 +13,7 @@ import {
   CalendarStrip, MonthCalendar,
 } from '@zipybills/ui-components';
 import { colors, statusColors, useSemanticColors } from '@zipybills/theme-engine';
+import { useCompliance } from '@zipybills/ui-store';
 import { downloadCSVTemplate, parseCSV, readFileAsText } from '../utils/csv-helpers';
 
 /* ─── Helpers ─────────────────────────────────── */
@@ -31,11 +32,18 @@ type CalendarView = 'strip' | 'month';
 
 export function ProductionPlanPage() {
   const sc = useSemanticColors();
+  const { guardedMutate, guard } = useCompliance();
   const [plans, setPlans] = useState<ProductionPlan[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0] ?? '');
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -74,27 +82,34 @@ export function ProductionPlanPage() {
 
   /* ─── Single Create ─────────────────────────── */
   const handleCreate = async () => {
-    if (!form.machine_id || !form.shift_id || !form.product_name || !form.target_quantity) {
-      setError('All fields required');
+    const missing: string[] = [];
+    if (!form.machine_id) missing.push('Machine');
+    if (!form.shift_id) missing.push('Shift');
+    if (!form.product_name) missing.push('Product Name');
+    if (!form.target_quantity) missing.push('Target Quantity');
+    if (missing.length > 0) {
+      setError(`Required fields missing: ${missing.join(', ')}`);
       return;
     }
-    try {
-      await createPlan({
-        machine_id: parseInt(form.machine_id, 10),
-        shift_id: parseInt(form.shift_id, 10),
-        plan_date: selectedDate,
-        product_name: form.product_name,
-        product_code: form.product_code,
-        target_quantity: parseInt(form.target_quantity, 10),
-      });
-      setShowForm(false);
-      setForm({ machine_id: '', shift_id: '', product_name: '', product_code: '', target_quantity: '' });
-      setSuccess('Plan created successfully');
-      loadData();
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create plan');
-    }
+    await guardedMutate('create', async () => {
+      try {
+        await createPlan({
+          machine_id: parseInt(form.machine_id, 10),
+          shift_id: parseInt(form.shift_id, 10),
+          plan_date: selectedDate,
+          product_name: form.product_name,
+          product_code: form.product_code,
+          target_quantity: parseInt(form.target_quantity, 10),
+        });
+        setShowForm(false);
+        setForm({ machine_id: '', shift_id: '', product_name: '', product_code: '', target_quantity: '' });
+        setSuccess('Plan created successfully');
+        loadData();
+        setTimeout(() => setSuccess(null), 3000);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to create plan');
+      }
+    });
   };
 
   /* ─── CSV File Upload ───────────────────────── */
@@ -117,34 +132,38 @@ export function ProductionPlanPage() {
 
   const handleBulkImport = async () => {
     if (!importData || importData.length === 0) return;
-    try {
-      setImporting(true);
-      const result = await bulkCreatePlans(importData);
-      setSuccess(`Successfully imported ${result.created} plans${result.errors.length > 0 ? ` (${result.errors.length} failed)` : ''}`);
-      if (result.errors.length > 0) {
-        setImportErrors(result.errors.map((e) => `Row ${e.row}: ${e.error}`));
-      } else {
-        setShowImport(false);
-        setImportData(null);
-        setImportErrors([]);
+    await guardedMutate('create', async () => {
+      try {
+        setImporting(true);
+        const result = await bulkCreatePlans(importData);
+        setSuccess(`Successfully imported ${result.created} plans${result.errors.length > 0 ? ` (${result.errors.length} failed)` : ''}`);
+        if (result.errors.length > 0) {
+          setImportErrors(result.errors.map((e) => `Row ${e.row}: ${e.error}`));
+        } else {
+          setShowImport(false);
+          setImportData(null);
+          setImportErrors([]);
+        }
+        loadData();
+        setTimeout(() => setSuccess(null), 5000);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Bulk import failed');
+      } finally {
+        setImporting(false);
       }
-      loadData();
-      setTimeout(() => setSuccess(null), 5000);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Bulk import failed');
-    } finally {
-      setImporting(false);
-    }
+    });
   };
 
   /* ─── Status Change ─────────────────────────── */
   const handleStatusChange = async (planId: number, status: string) => {
-    try {
-      await updatePlanStatus(planId, status);
-      loadData();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to update');
-    }
+    await guardedMutate('edit', async () => {
+      try {
+        await updatePlanStatus(planId, status);
+        loadData();
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to update');
+      }
+    });
   };
 
   /* ─── Duplicate Plans ───────────────────────── */
@@ -153,15 +172,17 @@ export function ProductionPlanPage() {
       setError('Please enter a target date');
       return;
     }
-    try {
-      const result = await duplicatePlans(selectedDate, duplicateTarget);
-      setSuccess(`Duplicated ${result.created} plans to ${result.target_date}`);
-      setShowDuplicate(false);
-      setDuplicateTarget('');
-      setTimeout(() => setSuccess(null), 4000);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to duplicate plans');
-    }
+    await guardedMutate('create', async () => {
+      try {
+        const result = await duplicatePlans(selectedDate, duplicateTarget);
+        setSuccess(`Duplicated ${result.created} plans to ${result.target_date}`);
+        setShowDuplicate(false);
+        setDuplicateTarget('');
+        setTimeout(() => setSuccess(null), 4000);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to duplicate plans');
+      }
+    });
   };
 
   /* ─── Computed ──────────────────────────────── */
@@ -202,8 +223,15 @@ export function ProductionPlanPage() {
               </Pressable>
             )}
             <Pressable
-              onPress={() => { setShowForm(!showForm); setShowImport(false); setShowDuplicate(false); }}
-              className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center"
+              onPress={() => {
+                if (!loading && (machines.length === 0 || shifts.length === 0)) {
+                  const needs = [machines.length === 0 && 'Machines', shifts.length === 0 && 'Shifts'].filter(Boolean).join(' & ');
+                  setError(`Please set up ${needs} first before creating production plans.`);
+                  return;
+                }
+                setShowForm(!showForm); setShowImport(false); setShowDuplicate(false);
+              }}
+              className={`px-4 py-2.5 rounded-lg flex-row items-center ${!loading && (machines.length === 0 || shifts.length === 0) ? 'bg-gray-400 dark:bg-gray-600' : 'bg-emerald-500'}`}
             >
               <Plus size={14} color={colors.white} />
               <Text className="text-white font-medium text-sm ml-1">New Plan</Text>
@@ -265,6 +293,65 @@ export function ProductionPlanPage() {
       {success && (<View className="mb-4"><Alert variant="success" message={success} onDismiss={() => setSuccess(null)} /></View>)}
       {error && (<View className="mb-4"><Alert variant="error" message={error} onDismiss={() => setError(null)} /></View>)}
 
+      {/* ─── Setup Prerequisites Guide ────────────── */}
+      {!loading && (machines.length === 0 || shifts.length === 0) && (
+        <View className="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5 mb-4">
+          <View className="items-center mb-4">
+            <View className="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/40 items-center justify-center mb-3">
+              <ClipboardList size={28} color={colors.blue[500]} />
+            </View>
+            <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">Setup Required</Text>
+            <Text className="text-sm text-gray-500 dark:text-gray-400 text-center">
+              Before creating production plans, set up machines and shifts for your factory.
+            </Text>
+          </View>
+
+          <View className="gap-3">
+            {/* Machines status */}
+            <View className={`flex-row items-center p-3 rounded-lg border ${machines.length > 0 ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
+              <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${machines.length > 0 ? 'bg-green-100 dark:bg-green-900/40' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                {machines.length > 0 ? (
+                  <Text className="text-green-600 font-bold text-sm">{"\u2713"}</Text>
+                ) : (
+                  <Factory size={16} color={sc.iconMuted} />
+                )}
+              </View>
+              <View className="flex-1">
+                <Text className={`text-sm font-medium ${machines.length > 0 ? 'text-green-700 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'}`}>
+                  {machines.length > 0 ? `${machines.length} Machine${machines.length !== 1 ? 's' : ''} ready` : 'Add Machines'}
+                </Text>
+                {machines.length === 0 && (
+                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Navigate to Machines page to add your factory machines</Text>
+                )}
+              </View>
+            </View>
+
+            {/* Shifts status */}
+            <View className={`flex-row items-center p-3 rounded-lg border ${shifts.length > 0 ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
+              <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${shifts.length > 0 ? 'bg-green-100 dark:bg-green-900/40' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                {shifts.length > 0 ? (
+                  <Text className="text-green-600 font-bold text-sm">{"\u2713"}</Text>
+                ) : (
+                  <Clock size={16} color={sc.iconMuted} />
+                )}
+              </View>
+              <View className="flex-1">
+                <Text className={`text-sm font-medium ${shifts.length > 0 ? 'text-green-700 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'}`}>
+                  {shifts.length > 0 ? `${shifts.length} Shift${shifts.length !== 1 ? 's' : ''} ready` : 'Set Up Shifts'}
+                </Text>
+                {shifts.length === 0 && (
+                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Navigate to Shifts page to configure your shift schedule</Text>
+                )}
+              </View>
+            </View>
+          </View>
+
+          <Text className="text-xs text-blue-600 dark:text-blue-400 text-center mt-4 font-medium">
+            Complete the steps above, then come back to create production plans.
+          </Text>
+        </View>
+      )}
+
       {/* ─── Duplicate Panel ──────────────────────── */}
       {showDuplicate && (
         <View className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-4 mb-4">
@@ -283,9 +370,9 @@ export function ProductionPlanPage() {
           <View className="flex-row gap-2 mb-3">
             {/* Quick target buttons */}
             {[1, 7].map((offset) => {
-              const d = new Date(selectedDate);
+              const d = new Date(selectedDate + 'T00:00:00');
               d.setDate(d.getDate() + offset);
-              const ds = d.toISOString().split('T')[0] ?? '';
+              const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
               return (
                 <Pressable key={offset} onPress={() => setDuplicateTarget(ds)} className={`flex-1 py-2 rounded-lg border items-center ${duplicateTarget === ds ? 'bg-purple-100 dark:bg-purple-800/30 border-purple-400' : 'bg-white dark:bg-gray-800 border-purple-200 dark:border-purple-700'}`}>
                   <Text className="text-xs font-medium text-purple-700">{offset === 1 ? 'Next Day' : 'Next Week'}</Text>
@@ -431,21 +518,35 @@ export function ProductionPlanPage() {
             </Pressable>
           </View>
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine *</Text>
-          <View className="flex-row flex-wrap gap-2 mb-3">
-            {machines.map((m) => (
-              <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
-                <Text className={`text-sm ${form.machine_id === String(m.machine_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{m.machine_name}</Text>
-              </Pressable>
-            ))}
-          </View>
+          {machines.length === 0 ? (
+            <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+              <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No machines available</Text>
+              <Text className="text-xs text-amber-600 dark:text-amber-500 mt-0.5">Go to the Machines page to add machines first.</Text>
+            </View>
+          ) : (
+            <View className="flex-row flex-wrap gap-2 mb-3">
+              {machines.map((m) => (
+                <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                  <Text className={`text-sm ${form.machine_id === String(m.machine_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{m.machine_name}</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Shift *</Text>
-          <View className="flex-row flex-wrap gap-2 mb-3">
-            {shifts.map((s) => (
-              <Pressable key={s.shift_id} onPress={() => setForm({ ...form, shift_id: String(s.shift_id) })} className={`px-3 py-2 rounded-lg border ${form.shift_id === String(s.shift_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
-                <Text className={`text-sm ${form.shift_id === String(s.shift_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{s.shift_name} ({s.start_time}–{s.end_time})</Text>
-              </Pressable>
-            ))}
-          </View>
+          {shifts.length === 0 ? (
+            <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+              <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No shifts available</Text>
+              <Text className="text-xs text-amber-600 dark:text-amber-500 mt-0.5">Go to the Shifts page to set up shifts first.</Text>
+            </View>
+          ) : (
+            <View className="flex-row flex-wrap gap-2 mb-3">
+              {shifts.map((s) => (
+                <Pressable key={s.shift_id} onPress={() => setForm({ ...form, shift_id: String(s.shift_id) })} className={`px-3 py-2 rounded-lg border ${form.shift_id === String(s.shift_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                  <Text className={`text-sm ${form.shift_id === String(s.shift_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{s.shift_name} ({s.start_time}–{s.end_time})</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
           <View className="mb-3">
             <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Product Name *</Text>
             <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.product_name} onChangeText={(t) => setForm({ ...form, product_name: t })} placeholder="e.g., Gear Shaft A-200" />
@@ -459,7 +560,7 @@ export function ProductionPlanPage() {
             <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.target_quantity} onChangeText={(t) => setForm({ ...form, target_quantity: t })} placeholder="e.g., 500" keyboardType="numeric" />
           </View>
           <View className="flex-row gap-2">
-            <Pressable onPress={handleCreate} className="bg-emerald-500 px-6 py-2.5 rounded-lg flex-1 items-center">
+            <Pressable onPress={handleCreate} disabled={machines.length === 0 || shifts.length === 0} className={`px-6 py-2.5 rounded-lg flex-1 items-center ${machines.length === 0 || shifts.length === 0 ? 'bg-gray-300 dark:bg-gray-700' : 'bg-emerald-500'}`}>
               <Text className="text-white font-medium">Create Plan</Text>
             </Pressable>
             <Pressable onPress={() => setShowForm(false)} className="bg-gray-200 dark:bg-gray-700 px-6 py-2.5 rounded-lg">

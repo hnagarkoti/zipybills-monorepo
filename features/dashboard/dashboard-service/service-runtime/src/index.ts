@@ -1,18 +1,20 @@
 /**
  * FactoryOS Dashboard Service Runtime
  *
- * Express router for dashboard live stats.
+ * Express router for dashboard live stats — fully tenant-scoped.
  * Routes: /api/dashboard
  */
 
 import { Router } from 'express';
+import { requireAuth, type AuthenticatedRequest } from '@zipybills/factory-auth-middleware';
 import * as db from './database.js';
 
 export const dashboardRouter = Router();
 
-dashboardRouter.get('/dashboard', async (_req, res) => {
+dashboardRouter.get('/dashboard', requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
-    const stats = await db.getDashboardStats();
+    const tenantId = (req.user as any)?.tenant_id ?? null;
+    const stats = await db.getDashboardStats(tenantId);
     res.json({ success: true, dashboard: stats });
   } catch (err) {
     console.error('[Dashboard] Error:', err);

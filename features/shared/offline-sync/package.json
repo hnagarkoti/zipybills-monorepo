@@ -1,0 +1,30 @@
+{
+  "name": "@zipybills/factory-offline-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "express": "^4.21.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.17",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.8.3"
+  }
+}

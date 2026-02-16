@@ -76,6 +76,7 @@ const sharedModules = [
   'react-native-css-interop',
   'nativewind',
   'react-native-safe-area-context',
+  'zustand',
 ];
 
 const sharedModulePaths = {};

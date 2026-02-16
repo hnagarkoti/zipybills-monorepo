@@ -8,15 +8,12 @@
  *   User preference → Role policy → Tenant/Factory default → System default
  */
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, Pressable, Switch, Platform } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import {
-  Sun, Moon, Monitor, Palette, SlidersHorizontal, ZoomIn, ZoomOut,
+  Sun, Moon, Monitor, Palette, Check,
 } from 'lucide-react-native';
 import {
   useTheme,
-  useThemeColors,
-  useThemeTypography,
-  useThemeBehavior,
   useThemeBranding,
   useIsDark,
   useAppliedLayers,
@@ -30,6 +27,10 @@ interface ThemeOption {
   label: string;
   description: string;
   icon: React.ReactNode;
+  /** Preview colors for the card */
+  previewBg: string;
+  previewFg: string;
+  previewAccent: string;
   /** Maps to BaseThemeId (null = use system/tenant default) */
   baseTheme: BaseThemeId | null;
 }
@@ -41,25 +42,15 @@ interface AppearanceSettingsProps {
   tenantDefaultLabel?: string;
 }
 
-// ─── Constants ────────────────────────────────
-
-const ICON_SIZE = 20;
-const ICON_COLOR_ACTIVE = '#FFFFFF';
-const ICON_COLOR_INACTIVE = '#6B7280';
-
 // ─── Component ────────────────────────────────
 
 export function AppearanceSettings({
   allowUserOverride = true,
   tenantDefaultLabel = 'Tenant Default',
 }: AppearanceSettingsProps) {
-  const {
-    tokens, context, setBaseTheme, setUserPreferences, isDark,
-  } = useTheme();
-  const colors = useThemeColors();
-  const typography = useThemeTypography();
-  const behavior = useThemeBehavior();
+  const { context, setBaseTheme } = useTheme();
   const branding = useThemeBranding();
+  const isDark = useIsDark();
   const appliedLayers = useAppliedLayers();
 
   // Current selection — derive from context
@@ -70,86 +61,83 @@ export function AppearanceSettings({
     return 'default';
   }, [context.baseTheme]);
 
-  const themeOptions: ThemeOption[] = useMemo(() => [
-    {
-      id: 'default',
-      label: tenantDefaultLabel,
-      description: 'Use the theme set by your organization',
-      icon: <Palette size={ICON_SIZE} />,
-      baseTheme: null,
+  const themeOptions: ThemeOption[] = useMemo(
+    () => [
+      {
+        id: 'light',
+        label: 'Light',
+        description: 'Clean and bright for daytime use',
+        icon: <Sun size={22} />,
+        previewBg: '#FFFFFF',
+        previewFg: '#1F2937',
+        previewAccent: '#3B82F6',
+        baseTheme: 'light',
+      },
+      {
+        id: 'dark',
+        label: 'Dark',
+        description: 'Easier on the eyes in low-light',
+        icon: <Moon size={22} />,
+        previewBg: '#111827',
+        previewFg: '#F9FAFB',
+        previewAccent: '#60A5FA',
+        baseTheme: 'dark',
+      },
+      {
+        id: 'system',
+        label: 'System',
+        description: 'Automatically matches your device',
+        icon: <Monitor size={22} />,
+        previewBg: 'linear', // sentinel — will render gradient
+        previewFg: '#6B7280',
+        previewAccent: '#8B5CF6',
+        baseTheme: null,
+      },
+      {
+        id: 'default',
+        label: tenantDefaultLabel,
+        description: 'Theme set by your organization',
+        icon: <Palette size={22} />,
+        previewBg: '#F0FDF4',
+        previewFg: '#166534',
+        previewAccent: '#22C55E',
+        baseTheme: null,
+      },
+    ],
+    [tenantDefaultLabel],
+  );
+
+  const handleSelect = useCallback(
+    (option: ThemeOption) => {
+      if (!allowUserOverride) return;
+      if (option.id === 'system' || option.id === 'default') {
+        setBaseTheme('light'); // Will be overridden by auto-detect in ThemeProvider
+      } else if (option.baseTheme) {
+        setBaseTheme(option.baseTheme);
+      }
     },
-    {
-      id: 'light',
-      label: 'Light',
-      description: 'Standard light appearance',
-      icon: <Sun size={ICON_SIZE} />,
-      baseTheme: 'light',
-    },
-    {
-      id: 'dark',
-      label: 'Dark',
-      description: 'Reduced eye strain in low-light',
-      icon: <Moon size={ICON_SIZE} />,
-      baseTheme: 'dark',
-    },
-    {
-      id: 'system',
-      label: 'System',
-      description: 'Follows your device setting',
-      icon: <Monitor size={ICON_SIZE} />,
-      baseTheme: null, // ThemeProvider auto-detects
-    },
-  ], [tenantDefaultLabel]);
-
-  const handleSelect = useCallback((option: ThemeOption) => {
-    if (!allowUserOverride) return;
-
-    if (option.id === 'system' || option.id === 'default') {
-      // Reset to auto-detect / tenant default
-      setBaseTheme('light'); // Will be overridden by auto-detect in ThemeProvider
-    } else if (option.baseTheme) {
-      setBaseTheme(option.baseTheme);
-    }
-  }, [allowUserOverride, setBaseTheme]);
-
-  // ─── Font Scale ─────────────────────────────
-  const fontScale = typography.fontScale ?? 1;
-
-  const adjustFontScale = useCallback((delta: number) => {
-    const newScale = Math.max(0.8, Math.min(1.5, fontScale + delta));
-    setUserPreferences({
-      typography: { fontScale: Math.round(newScale * 100) / 100 },
-    });
-  }, [fontScale, setUserPreferences]);
-
-  // ─── High Contrast Toggle ──────────────────
-  const toggleHighContrast = useCallback(() => {
-    if (behavior.highContrast) {
-      setBaseTheme('light');
-    } else {
-      setBaseTheme('high-contrast' as BaseThemeId);
-    }
-  }, [behavior.highContrast, setBaseTheme]);
-
-  // ─── Reduced Motion Toggle ─────────────────
-  const toggleReducedMotion = useCallback(() => {
-    setUserPreferences({
-      behavior: { reducedMotion: !behavior.reducedMotion },
-    });
-  }, [behavior.reducedMotion, setUserPreferences]);
+    [allowUserOverride, setBaseTheme],
+  );
 
   return (
     <View className="flex-1">
-      {/* ─── Section: Theme ─────────────────────── */}
-      <Text className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
-        Appearance
-      </Text>
-      <Text className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Choose how FactoryOS looks. {!allowUserOverride && 'Theme selection is locked by your organization.'}
+      {/* ─── Header ───────────────────────────── */}
+      <View className="mb-6">
+        <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          Appearance
+        </Text>
+        <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Choose how FactoryOS looks on your device.
+          {!allowUserOverride && ' Theme selection is locked by your organization.'}
+        </Text>
+      </View>
+
+      {/* ─── Theme Cards ─────────────────────── */}
+      <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+        Theme
       </Text>
 
-      {/* Theme Picker Grid */}
-      <View className="flex-row flex-wrap gap-3 mb-6">
+      <View className="flex-row flex-wrap gap-3 mb-8">
         {themeOptions.map((option) => {
           const isActive = option.id === currentSelection;
           return (
@@ -158,140 +146,110 @@ export function AppearanceSettings({
               onPress={() => handleSelect(option)}
               disabled={!allowUserOverride}
               className={`
-                flex-1 min-w-[140px] p-4 rounded-xl border-2
+                flex-1 min-w-[150px] rounded-2xl border-2 overflow-hidden
                 ${isActive
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900'
-                  : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                  ? 'border-blue-500 dark:border-blue-400'
+                  : 'border-gray-200 dark:border-gray-700'
                 }
-                ${!allowUserOverride ? 'opacity-50' : ''}
+                ${!allowUserOverride ? 'opacity-50' : 'active:scale-[0.98]'}
               `}
             >
-              {/* Icon */}
+              {/* Preview Strip */}
               <View
-                className={`
-                  w-10 h-10 rounded-lg items-center justify-center mb-3
-                  ${isActive ? 'bg-primary-500' : 'bg-gray-100 dark:bg-gray-700'}
-                `}
+                className="h-20 items-center justify-center"
+                style={{
+                  backgroundColor:
+                    option.previewBg === 'linear'
+                      ? undefined
+                      : option.previewBg,
+                }}
               >
-                {React.cloneElement(option.icon as React.ReactElement, {
-                  color: isActive ? ICON_COLOR_ACTIVE : ICON_COLOR_INACTIVE,
-                })}
+                {option.previewBg === 'linear' ? (
+                  /* Split half-and-half for "System" */
+                  <View className="flex-row flex-1 w-full">
+                    <View className="flex-1 bg-white items-center justify-center">
+                      <Sun size={18} color="#F59E0B" />
+                    </View>
+                    <View className="flex-1 bg-gray-900 items-center justify-center">
+                      <Moon size={18} color="#60A5FA" />
+                    </View>
+                  </View>
+                ) : (
+                  <View className="flex-row items-center gap-2">
+                    {/* Fake UI dots */}
+                    <View
+                      className="w-8 h-2 rounded-full"
+                      style={{ backgroundColor: option.previewAccent }}
+                    />
+                    <View
+                      className="w-5 h-2 rounded-full opacity-40"
+                      style={{ backgroundColor: option.previewFg }}
+                    />
+                    <View
+                      className="w-6 h-2 rounded-full opacity-20"
+                      style={{ backgroundColor: option.previewFg }}
+                    />
+                  </View>
+                )}
               </View>
-              {/* Label */}
-              <Text
-                className={`
-                  text-sm font-semibold mb-1
-                  ${isActive ? 'text-primary-700 dark:text-primary-300' : 'text-gray-900 dark:text-gray-100'}
-                `}
-              >
-                {option.label}
-              </Text>
-              <Text className="text-xs text-gray-500 dark:text-gray-400">
-                {option.description}
-              </Text>
-              {/* Active indicator */}
-              {isActive && (
-                <View className="absolute top-2 right-2 w-3 h-3 rounded-full bg-primary-500" />
-              )}
+
+              {/* Info */}
+              <View className="bg-white dark:bg-gray-800 px-4 py-3">
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center gap-2">
+                    {React.cloneElement(option.icon as React.ReactElement, {
+                      color: isActive ? '#3B82F6' : '#6B7280',
+                    })}
+                    <Text
+                      className={`text-sm font-semibold ${
+                        isActive
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : 'text-gray-900 dark:text-gray-100'
+                      }`}
+                    >
+                      {option.label}
+                    </Text>
+                  </View>
+                  {isActive && (
+                    <View className="w-5 h-5 rounded-full bg-blue-500 items-center justify-center">
+                      <Check size={12} color="#fff" />
+                    </View>
+                  )}
+                </View>
+                <Text className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {option.description}
+                </Text>
+              </View>
             </Pressable>
           );
         })}
       </View>
 
-      {/* ─── Section: Accessibility ─────────────── */}
-      <Text className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-        Accessibility
-      </Text>
-
-      {/* Font Scale */}
-      <View className="flex-row items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 mb-3">
-        <View className="flex-1 mr-4">
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            Font Size
-          </Text>
-          <Text className="text-xs text-gray-500 dark:text-gray-400">
-            Scale: {Math.round(fontScale * 100)}%
-          </Text>
-        </View>
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => adjustFontScale(-0.1)}
-            disabled={fontScale <= 0.8}
-            className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 items-center justify-center"
-          >
-            <ZoomOut size={16} color={ICON_COLOR_INACTIVE} />
-          </Pressable>
-          <Text className="text-sm font-mono text-gray-700 dark:text-gray-300 w-12 text-center">
-            {Math.round(fontScale * 100)}%
-          </Text>
-          <Pressable
-            onPress={() => adjustFontScale(0.1)}
-            disabled={fontScale >= 1.5}
-            className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 items-center justify-center"
-          >
-            <ZoomIn size={16} color={ICON_COLOR_INACTIVE} />
-          </Pressable>
-        </View>
-      </View>
-
-      {/* High Contrast */}
-      <View className="flex-row items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 mb-3">
-        <View className="flex-1 mr-4">
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            High Contrast
-          </Text>
-          <Text className="text-xs text-gray-500 dark:text-gray-400">
-            Increases contrast for better readability
-          </Text>
-        </View>
-        <Switch
-          value={behavior.highContrast}
-          onValueChange={toggleHighContrast}
+      {/* ─── Current Status ──────────────────── */}
+      <View className="bg-gray-50 dark:bg-gray-800/60 rounded-xl px-4 py-3 flex-row items-center gap-3 mb-6">
+        <View
+          className={`w-3 h-3 rounded-full ${
+            isDark ? 'bg-indigo-400' : 'bg-amber-400'
+          }`}
         />
-      </View>
-
-      {/* Reduced Motion */}
-      <View className="flex-row items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 mb-3">
-        <View className="flex-1 mr-4">
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            Reduce Motion
-          </Text>
-          <Text className="text-xs text-gray-500 dark:text-gray-400">
-            Minimize animations throughout the interface
-          </Text>
-        </View>
-        <Switch
-          value={behavior.reducedMotion}
-          onValueChange={toggleReducedMotion}
-        />
-      </View>
-
-      {/* ─── Section: Active Theme Info ─────────── */}
-      <Text className="text-base font-semibold text-gray-900 dark:text-gray-100 mt-4 mb-3">
-        Active Theme Layers
-      </Text>
-      <View className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-        {appliedLayers.length > 0 ? (
-          appliedLayers.map((layer, i) => (
-            <View key={layer} className="flex-row items-center mb-1">
-              <View className="w-2 h-2 rounded-full bg-primary-500 mr-2" />
-              <Text className="text-xs text-gray-600 dark:text-gray-400 font-mono">
-                {i + 1}. {layer}
-              </Text>
-            </View>
-          ))
-        ) : (
-          <Text className="text-xs text-gray-400">System default</Text>
-        )}
+        <Text className="text-sm text-gray-600 dark:text-gray-400">
+          Currently using{' '}
+          <Text className="font-semibold text-gray-900 dark:text-gray-100">
+            {isDark ? 'Dark' : 'Light'}
+          </Text>{' '}
+          mode
+          {appliedLayers.length > 1 &&
+            ` with ${appliedLayers.length} theme layers`}
+        </Text>
       </View>
 
       {/* Branding Info */}
       {branding.name && branding.name !== 'FactoryOS' && (
-        <View className="mt-3 bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+        <View className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">
             Organization Branding
           </Text>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
             {branding.name}
           </Text>
           {branding.poweredBy && (

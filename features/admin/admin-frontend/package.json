@@ -1,0 +1,32 @@
+{
+  "name": "@zipybills/factory-admin-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Admin Panel Frontend – License, Permissions, Audit, Backups, System Status",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ui-query": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "lucide-react-native": "catalog:"
+  },
+  "devDependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "@types/react": "catalog:",
+    "react": "catalog:",
+    "react-native": "catalog:",
+    "nativewind": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "nativewind": "*"
+  },
+  "private": true
+}

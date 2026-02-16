@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { SearchX, ArrowLeft, Home } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { colors, useSemanticColors } from '@zipybills/theme-engine';
 
 export interface NotFoundPageProps {
@@ -59,12 +60,16 @@ export function NotFoundPage({ onGoHome, onGoBack }: NotFoundPageProps) {
           </Pressable>
         )}
         {onGoHome && (
-          <Pressable
-            onPress={onGoHome}
-            className="bg-emerald-500 px-5 py-3 rounded-xl flex-row items-center"
-          >
-            <Home size={16} color={colors.white} />
-            <Text className="text-sm font-medium text-white ml-2">Dashboard</Text>
+          <Pressable onPress={onGoHome}>
+            <LinearGradient
+              colors={['#2563eb', '#9333ea']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{ paddingHorizontal: 20, paddingVertical: 12, borderRadius: 12, flexDirection: 'row', alignItems: 'center' }}
+            >
+              <Home size={16} color={colors.white} />
+              <Text className="text-sm font-medium text-white ml-2">Dashboard</Text>
+            </LinearGradient>
           </Pressable>
         )}
       </View>

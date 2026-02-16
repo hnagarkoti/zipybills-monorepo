@@ -20,7 +20,7 @@ export function Loading({
 }: LoadingProps) {
   return (
     <View className={cn('flex-1 items-center justify-center p-8', className)} {...props}>
-      <ActivityIndicator size={size} color={colors.emerald[500]} />
+      <ActivityIndicator size={size} color={'#2563eb'} />
       {message && (
         <Text className="text-sm text-gray-400 dark:text-gray-500 mt-3">{message}</Text>
       )}

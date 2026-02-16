@@ -123,6 +123,39 @@ export async function initializeDatabase(): Promise<void> {
   await query(`CREATE INDEX IF NOT EXISTS idx_downtime_logs_started ON downtime_logs(started_at);`);
   await query(`CREATE INDEX IF NOT EXISTS idx_activity_log_created ON activity_log(created_at);`);
   await query(`CREATE INDEX IF NOT EXISTS idx_activity_log_user ON activity_log(user_id);`);
+  await query(`CREATE INDEX IF NOT EXISTS idx_activity_log_action ON activity_log(action);`);
+  await query(`CREATE INDEX IF NOT EXISTS idx_activity_log_entity ON activity_log(entity_type, entity_id);`);
+
+  // Feature flags table (used by admin panel)
+  await query(`
+    CREATE TABLE IF NOT EXISTS feature_flags (
+      feature_id   VARCHAR(50) PRIMARY KEY,
+      name         VARCHAR(100) NOT NULL,
+      description  TEXT,
+      enabled      BOOLEAN DEFAULT true,
+      created_at   TIMESTAMPTZ DEFAULT NOW(),
+      updated_at   TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  // Compliance settings per tenant
+  await query(`
+    CREATE TABLE IF NOT EXISTS tenant_compliance_settings (
+      tenant_id           INT PRIMARY KEY,
+      compliance_mode     VARCHAR(30) NOT NULL DEFAULT 'standard'
+                          CHECK (compliance_mode IN ('standard', 'audit-mode', 'validation-mode', 'traceability-mode')),
+      can_create          BOOLEAN NOT NULL DEFAULT true,
+      can_edit            BOOLEAN NOT NULL DEFAULT true,
+      can_delete          BOOLEAN NOT NULL DEFAULT true,
+      can_export          BOOLEAN NOT NULL DEFAULT true,
+      can_modify_config   BOOLEAN NOT NULL DEFAULT true,
+      requires_confirmation BOOLEAN NOT NULL DEFAULT false,
+      requires_reason     BOOLEAN NOT NULL DEFAULT false,
+      activated_by        INT,
+      activated_at        TIMESTAMPTZ DEFAULT NOW(),
+      updated_at          TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
 
   console.log('[FactoryOS DB] ✅ Schema initialized');
 }

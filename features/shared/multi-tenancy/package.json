@@ -1,0 +1,26 @@
+{
+  "name": "@zipybills/factory-multi-tenancy",
+  "version": "0.1.0",
+  "description": "FactoryOS Multi-Tenancy – tenant management, provisioning, data isolation for SaaS mode",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./middleware": "./src/middleware.ts",
+    "./router": "./src/router.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "express": "catalog:",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}
