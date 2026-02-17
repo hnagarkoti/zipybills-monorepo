@@ -18,11 +18,18 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "@zipybills/ui-theme": "workspace:*",
     "clsx": "catalog:",
+    "lucide-react-native": "catalog:",
+    "nativewind": "catalog:",
     "react": "catalog:",
-    "react-native": "catalog:"
+    "react-native": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-svg": "catalog:",
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
     "@testing-library/react-native": "catalog:",
@@ -31,6 +38,7 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "expo-linear-gradient": ">=13.0.0",
     "react": "^19.0.0",
     "react-native": "^0.76.0"
   },

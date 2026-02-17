@@ -1,0 +1,109 @@
+/**
+ * FactoryOS Backup Service Interface
+ *
+ * Types, API contract, and typed SDK client for tenant backup & data management.
+ */
+
+import { BaseApi, API_BASE } from '@zipybills/factory-api-client';
+
+export { Configuration, type ConfigurationParameters } from '@zipybills/factory-api-client';
+
+// ─── Types ───────────────────────────────────
+
+export interface BackupItem {
+  id: string;
+  type: string;
+  storageType: string;
+  filename: string;
+  sizeHuman: string;
+  status: string;
+  recordCounts: Record<string, number>;
+  createdBy: string;
+  createdAt: string;
+  expiresAt?: string;
+  gdriveFileId?: string;
+}
+
+export interface BackupCapabilities {
+  plan: string;
+  capabilities: {
+    dataExport: { available: boolean; description: string };
+    cloudBackup: { available: boolean; description: string; requiresPlan?: string };
+    googleDrive: { available: boolean; connected: boolean; email: string | null; folderId: string | null; description: string };
+  };
+}
+
+export interface ExportResult {
+  success: boolean;
+  backup: BackupItem;
+  error?: string;
+}
+
+export interface CloudBackupResult {
+  success: boolean;
+  backup: BackupItem;
+  error?: string;
+}
+
+export interface GDriveBackupResult {
+  success: boolean;
+  backup: BackupItem & { driveEmail: string };
+  error?: string;
+}
+
+export interface GDriveAuthUrlResult {
+  authUrl?: string;
+  error?: string;
+}
+
+// ─── Typed API Client ────────────────────────
+
+export class BackupApi extends BaseApi {
+  /** List all backups for the current tenant */
+  async listBackups(): Promise<BackupItem[]> {
+    const data = await this.request<{ backups: BackupItem[] }>('/api/tenant-backups');
+    return data.backups;
+  }
+
+  /** Get backup capabilities for the current tenant/plan */
+  async getCapabilities(): Promise<BackupCapabilities> {
+    return this.request<BackupCapabilities>('/api/tenant-backups/capabilities');
+  }
+
+  /** Trigger a data export (JSON) */
+  async createExport(): Promise<ExportResult> {
+    return this.request<ExportResult>('/api/tenant-backups/export', { method: 'POST' });
+  }
+
+  /** Trigger a cloud backup (encrypted, server-side) */
+  async createCloudBackup(): Promise<CloudBackupResult> {
+    return this.request<CloudBackupResult>('/api/tenant-backups/cloud', { method: 'POST' });
+  }
+
+  /** Get the download URL for a completed backup (with auth token in query) */
+  getDownloadUrl(backupId: string): string {
+    const token = this.config.getAccessToken();
+    const base = `${this.config.basePath}/api/${this.config.apiVersion}/tenant-backups/${backupId}/download`;
+    return token ? `${base}?token=${token}` : base;
+  }
+
+  /** Delete a backup */
+  async deleteBackup(backupId: string): Promise<void> {
+    await this.request<{ success: boolean }>(`/api/tenant-backups/${backupId}`, { method: 'DELETE' });
+  }
+
+  /** Get Google Drive OAuth URL */
+  async getGDriveAuthUrl(): Promise<GDriveAuthUrlResult> {
+    return this.request<GDriveAuthUrlResult>('/api/tenant-backups/gdrive/auth-url');
+  }
+
+  /** Trigger a Google Drive backup */
+  async createGDriveBackup(): Promise<GDriveBackupResult> {
+    return this.request<GDriveBackupResult>('/api/tenant-backups/gdrive', { method: 'POST' });
+  }
+
+  /** Disconnect Google Drive */
+  async disconnectGDrive(): Promise<void> {
+    await this.request<{ success: boolean }>('/api/tenant-backups/gdrive/disconnect', { method: 'DELETE' });
+  }
+}

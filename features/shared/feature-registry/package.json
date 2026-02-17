@@ -1,0 +1,29 @@
+{
+  "name": "@zipybills/factory-feature-registry",
+  "version": "0.1.0",
+  "description": "FactoryOS Feature Registry – production-grade feature flag engine with API + UI toggles, admin API, and backend/frontend guards",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./middleware": "./src/middleware.ts",
+    "./react": "./src/react.tsx"
+  },
+  "peerDependencies": {
+    "express": "catalog:",
+    "react": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "react": { "optional": true }
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/express": "catalog:",
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

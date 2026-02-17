@@ -1,0 +1,19 @@
+{
+  "name": "@zipybills/factory-activity-log",
+  "version": "0.1.0",
+  "description": "FactoryOS Shared Activity Log – audit trail for all feature services",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

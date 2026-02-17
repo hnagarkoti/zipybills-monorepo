@@ -1,0 +1,25 @@
+{
+  "name": "@zipybills/factory-auth-service-runtime",
+  "version": "0.1.0",
+  "description": "FactoryOS Auth Service Runtime – authentication & user management routes",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@zipybills/factory-auth-service-interface": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/factory-multi-tenancy": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "bcryptjs": "catalog:",
+    "express": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "catalog:",
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

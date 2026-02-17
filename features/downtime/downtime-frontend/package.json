@@ -1,0 +1,22 @@
+{
+  "name": "@zipybills/factory-downtime-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Downtime Frontend – downtime tracking and reporting",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "peerDependencies": { "nativewind": "catalog:", "react": "catalog:", "react-native": "catalog:" },
+  "dependencies": {
+    "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/factory-downtime-service-interface": "workspace:*",
+    "@zipybills/factory-machines-frontend": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ui-store": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "lucide-react-native": "catalog:",
+    "react-native-svg": "catalog:"
+  },
+  "devDependencies": { "@types/react": "catalog:", "typescript": "catalog:" },
+  "private": true
+}

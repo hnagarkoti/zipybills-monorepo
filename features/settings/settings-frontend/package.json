@@ -1,0 +1,42 @@
+{
+  "name": "@zipybills/factory-settings-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Settings – Appearance, compliance, and user preference management UI",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@zipybills/factory-backup-service-interface": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ui-store": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "lucide-react-native": "catalog:",
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-native": "catalog:",
+    "react-native-svg": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-native": "^0.76.0"
+  },
+  "private": true
+}

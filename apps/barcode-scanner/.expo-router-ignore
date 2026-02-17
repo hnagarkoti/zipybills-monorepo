@@ -1,5 +1,0 @@
-node_modules/**/*
-**/dist/**
-**/src/index.ts
-**/*.gen.ts
-**/service-interface/**

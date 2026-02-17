@@ -1,0 +1,23 @@
+{
+  "name": "@zipybills/factory-audit-service",
+  "version": "0.1.0",
+  "description": "FactoryOS Audit Service – searchable audit trail with export, retention, and request auto-logging",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "express": "catalog:"
+  },
+  "devDependencies": {
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

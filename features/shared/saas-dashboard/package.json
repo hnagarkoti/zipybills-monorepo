@@ -1,0 +1,24 @@
+{
+  "name": "@zipybills/factory-saas-dashboard",
+  "version": "0.1.0",
+  "description": "FactoryOS SaaS Dashboard – Platform-wide analytics, tenant metrics, MRR tracking",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./router": "./src/router.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-multi-tenancy": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "express": "catalog:"
+  },
+  "devDependencies": {
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

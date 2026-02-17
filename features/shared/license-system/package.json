@@ -1,0 +1,26 @@
+{
+  "name": "@zipybills/factory-license-system",
+  "version": "0.1.0",
+  "description": "FactoryOS License System – on-prem license validation, machine limits, expiry management",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./middleware": "./src/middleware.ts",
+    "./router": "./src/router.ts",
+    "./signed": "./src/signed-license.ts"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-activity-log": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "express": "catalog:"
+  },
+  "devDependencies": {
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

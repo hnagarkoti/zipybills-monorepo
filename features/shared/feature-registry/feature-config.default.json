@@ -1,0 +1,46 @@
+{
+  "$schema": "./feature-config.schema.json",
+  "description": "FactoryOS Feature Configuration – controls which features are active",
+  "features": {
+    "auth": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "machines": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "shifts": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "planning": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "downtime": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "dashboard": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "reports": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    },
+    "theme": {
+      "api": "ENABLED",
+      "ui": "ENABLED",
+      "apiVersion": "v1"
+    }
+  }
+}

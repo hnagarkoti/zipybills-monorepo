@@ -1,0 +1,52 @@
+{
+  "name": "@zipybills/factory-api-gateway",
+  "version": "0.1.0",
+  "description": "FactoryOS API Gateway – mounts all feature service routers into a single Express server",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm exec tsx watch src/index.ts",
+    "start": "pnpm exec tsx src/index.ts",
+    "build": "tsc",
+    "start:compiled": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "dependencies": {
+    "@zipybills/factory-admin-panel": "workspace:*",
+    "@zipybills/factory-audit-service": "workspace:*",
+    "@zipybills/factory-auth-middleware": "workspace:*",
+    "@zipybills/factory-auth-service-runtime": "workspace:*",
+    "@zipybills/factory-backup-system": "workspace:*",
+    "@zipybills/factory-cloud-auth": "workspace:*",
+    "@zipybills/factory-dashboard-service-runtime": "workspace:*",
+    "@zipybills/factory-database-config": "workspace:*",
+    "@zipybills/factory-downtime-service-runtime": "workspace:*",
+    "@zipybills/factory-export-reports": "workspace:*",
+    "@zipybills/factory-feature-registry": "workspace:*",
+    "@zipybills/factory-license-system": "workspace:*",
+    "@zipybills/factory-machines-service-runtime": "workspace:*",
+    "@zipybills/factory-multi-tenancy": "workspace:*",
+    "@zipybills/factory-observability": "workspace:*",
+    "@zipybills/factory-offline-sync": "workspace:*",
+    "@zipybills/factory-permissions": "workspace:*",
+    "@zipybills/factory-planning-service-runtime": "workspace:*",
+    "@zipybills/factory-reports-service-runtime": "workspace:*",
+    "@zipybills/factory-saas-dashboard": "workspace:*",
+    "@zipybills/factory-shifts-service-runtime": "workspace:*",
+    "@zipybills/factory-subscription-billing": "workspace:*",
+    "@zipybills/factory-theme-service": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "cors": "catalog:",
+    "dotenv": "catalog:",
+    "express": "catalog:",
+    "express-rate-limit": "^8.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "catalog:",
+    "@types/express": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

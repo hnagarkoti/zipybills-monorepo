@@ -1,0 +1,5 @@
+{
+  "extends": "@zipybills/ts-config/node",
+  "compilerOptions": { "outDir": "dist", "rootDir": "src" },
+  "include": ["src"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@zipybills/factory-auth-frontend",
+  "version": "0.1.0",
+  "description": "FactoryOS Auth Frontend – Login page and user management",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-native": "catalog:"
+  },
+  "dependencies": {
+    "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/factory-auth-service-interface": "workspace:*",
+    "@zipybills/theme-engine": "workspace:*",
+    "@zipybills/ui-components": "workspace:*",
+    "@zipybills/ts-config": "workspace:*",
+    "lucide-react-native": "catalog:",
+    "react-native-svg": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

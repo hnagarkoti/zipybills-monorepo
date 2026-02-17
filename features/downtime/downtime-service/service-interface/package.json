@@ -1,0 +1,11 @@
+{
+  "name": "@zipybills/factory-downtime-service-interface",
+  "version": "0.1.0",
+  "description": "FactoryOS Downtime Service Interface – types and API contract for downtime tracking",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@zipybills/factory-api-client": "workspace:*", "@zipybills/ts-config": "workspace:*" },
+  "devDependencies": { "typescript": "catalog:" },
+  "private": true
+}

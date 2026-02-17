@@ -1,0 +1,27 @@
+{
+  "name": "@zipybills/factory-observability",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./metrics": "./src/metrics.ts",
+    "./health": "./src/health.ts",
+    "./logger": "./src/structured-logger.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zipybills/factory-database-config": "workspace:*",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.17",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@zipybills/factory-shifts-service-interface",
+  "version": "0.1.0",
+  "description": "FactoryOS Shifts Service Interface – types and API contract for shift management",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@zipybills/factory-api-client": "workspace:*", "@zipybills/ts-config": "workspace:*" },
+  "devDependencies": { "typescript": "catalog:" },
+  "private": true
+}
