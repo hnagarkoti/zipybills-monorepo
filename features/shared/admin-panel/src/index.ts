@@ -290,14 +290,22 @@ adminRouter.get('/admin/db-stats', requireAuth, requireRole('ADMIN'), async (req
 
 /** Get system configuration (non-sensitive) */
 adminRouter.get('/admin/config', requireAuth, requireRole('ADMIN'), async (_req, res) => {
+  // Show DATABASE_URL presence without exposing credentials
+  const dbConfig = process.env.DATABASE_URL
+    ? { databaseUrl: 'configured (hidden)', usingCloudDb: true }
+    : {
+        dbHost: process.env.DB_HOST || 'localhost',
+        dbPort: process.env.DB_PORT || '5432',
+        dbName: process.env.DB_NAME || 'factory_os',
+        usingCloudDb: false,
+      };
+
   res.json({
     success: true,
     config: {
       nodeEnv: process.env.NODE_ENV || 'development',
       port: process.env.PORT || 4000,
-      dbHost: process.env.DB_HOST || 'localhost',
-      dbPort: process.env.DB_PORT || '5432',
-      dbName: process.env.DB_NAME || 'factory_os',
+      ...dbConfig,
       backupDir: process.env.BACKUP_DIR || 'backups',
       maxBackups: process.env.MAX_BACKUPS || '20',
       jwtExpiry: process.env.JWT_EXPIRY || '24h',

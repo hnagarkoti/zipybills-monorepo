@@ -31,12 +31,19 @@ export const backupRouter = Router();
 // ─── Config ───────────────────────────────────
 
 const BACKUP_DIR = process.env.BACKUP_DIR || path.resolve(process.cwd(), 'backups');
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_PORT = process.env.DB_PORT || '5432';
-const DB_NAME = process.env.DB_NAME || 'factory_os';
-const DB_USER = process.env.DB_USER || 'postgres';
-const DB_PASSWORD = process.env.DB_PASSWORD || 'postgres';
+const DATABASE_URL = process.env.DATABASE_URL;
 const MAX_BACKUPS = parseInt(process.env.MAX_BACKUPS || '20', 10);
+
+// Parse connection info from DATABASE_URL or use individual env vars
+function getDbConnectionString(): string {
+  if (DATABASE_URL) return DATABASE_URL;
+  const host = process.env.DB_HOST || 'localhost';
+  const port = process.env.DB_PORT || '5432';
+  const dbname = process.env.DB_NAME || 'factory_os';
+  const user = process.env.DB_USER || 'postgres';
+  const password = process.env.DB_PASSWORD || 'postgres';
+  return `postgresql://${user}:${password}@${host}:${port}/${dbname}`;
+}
 
 // ─── Types ────────────────────────────────────
 
@@ -152,7 +159,8 @@ backupRouter.get('/backups', requireAuth, requireRole('ADMIN'), async (_req, res
 /** Create a new backup */
 backupRouter.post('/backups', requireAuth, requireRole('ADMIN'), async (req: AuthenticatedRequest, res) => {
   const backupId = generateBackupId();
-  const filename = `${DB_NAME}_${backupId}.sql.gz`;
+  const dbname = DATABASE_URL ? new URL(DATABASE_URL).pathname.slice(1) : process.env.DB_NAME || 'factory_os';
+  const filename = `${dbname}_${backupId}.sql.gz`;
   const filepath = path.join(BACKUP_DIR, filename);
 
   try {
@@ -165,17 +173,14 @@ backupRouter.post('/backups', requireAuth, requireRole('ADMIN'), async (req: Aut
       [backupId, filename, req.body.type || 'manual', req.user!.user_id, req.body.notes || null],
     );
 
-    // Run pg_dump with gzip
-    const env = { ...process.env, PGPASSWORD: DB_PASSWORD };
+    // Run pg_dump - use connection string for simplicity
+    const connString = getDbConnectionString();
     await execFileAsync('pg_dump', [
-      '-h', DB_HOST,
-      '-p', DB_PORT,
-      '-U', DB_USER,
-      '-d', DB_NAME,
+      connString,
       '--format=custom',
       '--compress=6',
       '-f', filepath,
-    ], { env });
+    ]);
 
     // Get file size
     const stats = fs.statSync(filepath);
@@ -282,16 +287,14 @@ backupRouter.post('/backups/:id/restore', requireAuth, requireRole('ADMIN'), asy
       return;
     }
 
-    const env = { ...process.env, PGPASSWORD: DB_PASSWORD };
+    // Run pg_restore - use connection string
+    const connString = getDbConnectionString();
     await execFileAsync('pg_restore', [
-      '-h', DB_HOST,
-      '-p', DB_PORT,
-      '-U', DB_USER,
-      '-d', DB_NAME,
+      '-d', connString,
       '--clean',
       '--if-exists',
       filepath,
-    ], { env });
+    ]);
 
     await logActivity(
       req.user!.user_id,

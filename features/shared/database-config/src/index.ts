@@ -11,17 +11,31 @@ dotenv.config();
  */
 
 export interface DatabaseConfig {
-  host: string;
-  port: number;
-  database: string;
-  user: string;
-  password: string;
+  host?: string;
+  port?: number;
+  database?: string;
+  user?: string;
+  password?: string;
+  connectionString?: string;
   max: number;
   idleTimeoutMillis: number;
   connectionTimeoutMillis: number;
+  ssl?: boolean | { rejectUnauthorized: boolean };
 }
 
 export function getDatabaseConfig(): DatabaseConfig {
+  // Prioritize DATABASE_URL (for cloud deployments like Render, Neon, etc.)
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      max: parseInt(process.env.DB_POOL_MAX || '20', 10),
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
+      ssl: process.env.DATABASE_URL.includes('sslmode=require') ? { rejectUnauthorized: false } : undefined,
+    };
+  }
+
+  // Fallback to individual env vars (for local development)
   return {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432', 10),
