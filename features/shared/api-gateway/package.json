@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm exec tsx watch src/index.ts",
+    "start": "pnpm exec tsx src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start:compiled": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix"
   },

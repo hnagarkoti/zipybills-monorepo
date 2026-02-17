@@ -424,8 +424,9 @@ async function startServer(): Promise<void> {
     const features = featureRegistry.getAllFeatures();
     const enabledCount = features.filter((f) => f.api !== 'DISABLED').length;
 
-    app.listen(PORT, () => {
-      console.log(`\n🏭 FactoryOS API Gateway running on http://localhost:${PORT}`);
+    const HOST = '0.0.0.0'; // Bind to all interfaces for cloud deployment
+    app.listen(PORT, HOST, () => {
+      console.log(`\n🏭 FactoryOS API Gateway running on http://${HOST}:${PORT}`);
       console.log(`   Features:   ${enabledCount}/${features.length} enabled`);
       console.log(`   Versions:   v1`);
       console.log(`   ─────────────────────────────────────`);

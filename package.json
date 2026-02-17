@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "build:api": "echo 'API backend uses tsx - no build needed'",
     "start:api": "pnpm --filter @zipybills/factory-api-gateway start",
     "clean": "find . -name node_modules -type d -prune -exec rm -rf {} +",
     "combine-coverage": "pnpm --filter @zipybills/test-coverage combine-coverage",
