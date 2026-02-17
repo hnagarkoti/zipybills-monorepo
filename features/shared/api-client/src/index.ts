@@ -13,6 +13,11 @@ import { Platform } from 'react-native';
 // ─── Base URL ────────────────────────────────
 
 const getBaseUrl = (): string => {
+  // Check for environment variable first (production)
+  const envUrl = process.env.EXPO_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL;
+  if (envUrl) return envUrl;
+
+  // Fallback to localhost for development
   if (Platform.OS === 'web') return 'http://localhost:4000';
   return Platform.OS === 'android' ? 'http://10.0.2.2:4000' : 'http://localhost:4000';
 };

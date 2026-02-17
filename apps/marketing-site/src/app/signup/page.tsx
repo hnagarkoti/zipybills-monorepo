@@ -152,7 +152,7 @@ export default function SignupPage() {
                 <div className="text-xs text-gray-400 mt-1">Password: the one you just set</div>
               </div>
               <a
-                href="http://localhost:8081/login"
+                href={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:8081/login'}
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 text-white font-semibold hover:shadow-lg transition-all"
               >
                 Go to FactoryOS Login
@@ -193,7 +193,7 @@ export default function SignupPage() {
                 <div className="mt-10 p-4 rounded-xl bg-gray-50 border border-gray-200">
                   <p className="text-xs text-gray-500">
                     Already have an account?{' '}
-                    <a href="http://localhost:8081/login" className="text-brand-600 font-semibold hover:underline">
+                    <a href={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:8081/login'} className="text-brand-600 font-semibold hover:underline">
                       Log in here
                     </a>
                   </p>
