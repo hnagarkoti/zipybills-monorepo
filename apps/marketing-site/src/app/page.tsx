@@ -4,86 +4,156 @@ import Footer from '@/components/Footer';
 import {
   Factory, BarChart3, Shield, Clock, Zap, Users, CheckCircle2,
   ArrowRight, Monitor, Cog, TrendingUp, Globe, Award, Cpu,
-  ChevronRight, Sparkles, Star,
+  ChevronRight, Sparkles, Star, FileText, Layers, Gauge,
+  Activity, Wrench, Cloud, Settings, Search, BookOpen,
+  BatteryCharging, Radio, CircuitBoard, PenTool,
 } from 'lucide-react';
 
 /* ─── Stats ─────────────────────────────────── */
 const STATS = [
-  { value: '5,000+', label: 'Machines Managed' },
-  { value: '50+', label: 'Factories Digitized' },
-  { value: '99.9%', label: 'Uptime SLA' },
-  { value: '30%', label: 'Avg. OEE Improvement' },
+  { value: '5,000+', label: 'Machines Managed', icon: Cpu },
+  { value: '50+', label: 'Factories Digitized', icon: Factory },
+  { value: '99.9%', label: 'Uptime SLA', icon: Shield },
+  { value: '30%', label: 'Avg. OEE Improvement', icon: TrendingUp },
 ];
 
-/* ─── Features ──────────────────────────────── */
-const FEATURES = [
+/* ─── 13 Solution Capabilities ──────────────── */
+const SOLUTIONS = [
   {
-    icon: Monitor,
-    title: 'Real-Time Production Monitoring',
-    desc: 'Monitor your entire shop floor from a single dashboard. Track machine status, production counts, and cycle times in real-time.',
+    icon: Search,
+    title: 'Traceability',
+    desc: 'Track origin, process, and destination of every product and component end-to-end — from raw material receipt through production to dispatch.',
     accent: 'from-blue-500 to-cyan-500',
+    bg: 'bg-blue-50',
+    iconColor: 'text-blue-600',
   },
   {
-    icon: BarChart3,
-    title: 'OEE Tracking & Analytics',
-    desc: 'Automatically calculate OEE with availability, performance, and quality metrics. Identify bottlenecks with actionable insights.',
-    accent: 'from-purple-500 to-pink-500',
+    icon: FileText,
+    title: 'Digital Work Instructions',
+    desc: 'Interactive multimedia work instructions at operator stations. Replace paper SOPs with step-by-step visual guides and video tutorials.',
+    accent: 'from-amber-500 to-orange-500',
+    bg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+  },
+  {
+    icon: Layers,
+    title: 'Guided Assembly',
+    desc: 'Visual step-by-step guidance for complex assembly operations with poka-yoke integration to prevent errors and ensure consistency.',
+    accent: 'from-violet-500 to-purple-500',
+    bg: 'bg-violet-50',
+    iconColor: 'text-violet-600',
+  },
+  {
+    icon: BookOpen,
+    title: 'Digital Checksheets',
+    desc: 'Replace manual paper inspection forms with digital quality checksheets. Capture data in real-time with auto-validation and alerts.',
+    accent: 'from-emerald-500 to-green-500',
+    bg: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+  },
+  {
+    icon: Settings,
+    title: 'CTP Management System',
+    desc: 'Online Critical-to-Process parameter monitoring. Ensure every process parameter stays within specification with real-time alerts.',
+    accent: 'from-rose-500 to-pink-500',
+    bg: 'bg-rose-50',
+    iconColor: 'text-rose-600',
   },
   {
     icon: Shield,
-    title: 'Quality Management (CTQ/CTP)',
-    desc: 'Critical-to-Quality and Critical-to-Process management with automated alerts, SPC charts, and traceability.',
-    accent: 'from-emerald-500 to-teal-500',
+    title: 'CTQ Management System',
+    desc: 'Online Critical-to-Quality tracking with SPC charts, Cp/Cpk analysis, automated out-of-spec alerts and compliance reporting.',
+    accent: 'from-teal-500 to-cyan-500',
+    bg: 'bg-teal-50',
+    iconColor: 'text-teal-600',
   },
   {
-    icon: Cog,
-    title: 'Digital Work Instructions',
-    desc: 'Replace paper SOPs with interactive, step-by-step digital work instructions. Ensure consistency across all operators.',
-    accent: 'from-orange-500 to-amber-500',
+    icon: BatteryCharging,
+    title: 'Energy Management System',
+    desc: 'Monitor and optimize energy consumption across your entire factory. Real-time energy data, cost analysis and sustainability reporting.',
+    accent: 'from-lime-500 to-green-500',
+    bg: 'bg-lime-50',
+    iconColor: 'text-lime-600',
   },
   {
     icon: Clock,
-    title: 'Downtime Analysis',
-    desc: 'Automatically capture and categorize downtime events. Pareto analysis helps you focus on the biggest losses first.',
+    title: 'Digital Downtime Log Books',
+    desc: 'Automatic digital capture and categorization of every downtime event. Pareto analysis and MTBF/MTTR calculations for root cause elimination.',
     accent: 'from-red-500 to-rose-500',
+    bg: 'bg-red-50',
+    iconColor: 'text-red-600',
   },
   {
-    icon: TrendingUp,
-    title: 'Production Planning & Scheduling',
-    desc: 'Create production plans, assign operators, track targets vs actuals, and manage shift schedules efficiently.',
-    accent: 'from-indigo-500 to-violet-500',
+    icon: CircuitBoard,
+    title: 'IIoT Based Solutions',
+    desc: 'Industrial IoT integration with PLCs, sensors, HMIs and machines. Real-time data acquisition directly from your shop floor equipment.',
+    accent: 'from-indigo-500 to-blue-500',
+    bg: 'bg-indigo-50',
+    iconColor: 'text-indigo-600',
+  },
+  {
+    icon: Cloud,
+    title: 'Cloud / On-Premise',
+    desc: 'Deploy wherever you prefer — cloud for accessibility or on-premise for full data control. Same powerful features, your choice of infrastructure.',
+    accent: 'from-sky-500 to-blue-500',
+    bg: 'bg-sky-50',
+    iconColor: 'text-sky-600',
+  },
+  {
+    icon: PenTool,
+    title: 'Dedicated Tailored Fit',
+    desc: 'No one-size-fits-all. We customize every deployment to your specific manufacturing processes, workflows and reporting requirements.',
+    accent: 'from-fuchsia-500 to-purple-500',
+    bg: 'bg-fuchsia-50',
+    iconColor: 'text-fuchsia-600',
+  },
+  {
+    icon: Wrench,
+    title: 'Tools Management System',
+    desc: 'Full tool lifecycle management — track usage, calibration schedules, maintenance history and replacement planning across all your lines.',
+    accent: 'from-orange-500 to-red-500',
+    bg: 'bg-orange-50',
+    iconColor: 'text-orange-600',
+  },
+  {
+    icon: Activity,
+    title: 'Traceability Implementation',
+    desc: 'End-to-end traceability implementation as a managed service. From assessment and planning to barcode/RFID deployment and go-live support.',
+    accent: 'from-purple-500 to-indigo-500',
+    bg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
   },
 ];
 
 /* ─── Industries ────────────────────────────── */
 const INDUSTRIES = [
-  { name: 'Automotive', icon: Cog },
-  { name: 'Appliances', icon: Cpu },
-  { name: 'FMCG', icon: Globe },
-  { name: 'Electronics', icon: Zap },
-  { name: 'Pharma', icon: Shield },
-  { name: 'Metal & Die Casting', icon: Factory },
+  { name: 'Automotive', icon: Cog, desc: 'Tier-1 & Tier-2 suppliers' },
+  { name: 'Appliances', icon: Cpu, desc: 'Consumer electronics' },
+  { name: 'FMCG', icon: Globe, desc: 'Fast-moving goods' },
+  { name: 'Electronics', icon: Zap, desc: 'PCB & Assembly' },
+  { name: 'Pharma', icon: Shield, desc: 'GMP compliant' },
+  { name: 'Die Casting', icon: Factory, desc: 'Metal fabrication' },
 ];
 
 /* ─── Testimonials ──────────────────────────── */
 const TESTIMONIALS = [
   {
-    quote:
-      'With FactoryOS, I can quickly take the right decisions with automated data and reports. I can keep an eye on what is happening even from home. A big thumbs up!',
+    quote: 'With FactoryOS, I can quickly take the right decisions with automated data and reports. I can keep an eye on what is happening even from home. A big thumbs up!',
     title: 'Welding Shop Production Head',
     company: 'Tier-1 Supplier, Maruti',
+    initials: 'WS',
   },
   {
-    quote:
-      'FactoryOS is a game changer. It reduced our unnecessary paperwork and managed our time & efforts on analysis and CAPA rather than data collection.',
+    quote: 'FactoryOS is a game changer. It reduced our unnecessary paperwork and managed our time & efforts on analysis and CAPA rather than data collection.',
     title: 'Senior Manager Production',
     company: 'Die-Casting Industry',
+    initials: 'SM',
   },
   {
-    quote:
-      'Going from spreadsheets to real-time dashboards improved our OEE by 22% in the first quarter. The ROI was immediate.',
+    quote: 'Going from spreadsheets to real-time dashboards improved our OEE by 22% in the first quarter. The ROI was immediate.',
     title: 'Plant Manager',
     company: 'Appliance Manufacturer',
+    initials: 'PM',
   },
 ];
 
@@ -93,121 +163,114 @@ export default function HomePage() {
       <Navbar />
 
       {/* ─── Hero Section ─────────────────────── */}
-      <section className="relative pt-24 pb-20 overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-brand-100/40 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-accent-100/30 blur-3xl" />
-        </div>
+      <section className="relative pt-24 pb-20 overflow-hidden mesh-gradient min-h-[90vh] flex items-center">
+        {/* Decorative orbs */}
+        <div className="absolute top-20 right-[10%] w-72 h-72 rounded-full bg-brand-200/30 blur-3xl animate-float" />
+        <div className="absolute bottom-10 left-[5%] w-64 h-64 rounded-full bg-accent-200/20 blur-3xl animate-float-delay" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200">
-                <Sparkles className="w-4 h-4 text-brand-600" />
-                <span className="text-sm font-medium text-brand-700">Smart Manufacturing Platform</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-brand-100 shadow-sm">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+                </span>
+                <span className="text-sm font-medium text-brand-700">Industry 4.0 Manufacturing Platform</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-                Digitize Your{' '}
-                <span className="gradient-text">Shop Floor.</span>
-                <br />
-                Maximize{' '}
-                <span className="gradient-text">Efficiency.</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.1] tracking-tight text-balance">
+                Your Complete{' '}
+                <span className="gradient-text">Digital Factory</span>
+                {' '}Operating System
               </h1>
 
               <p className="text-lg text-gray-600 max-w-xl leading-relaxed">
-                FactoryOS brings Industry 4.0 to your manufacturing floor with real-time
-                production monitoring, OEE tracking, quality management, and lean manufacturing
-                tools — all in one platform.
+                13 powerful solutions to digitize your shop floor — from traceability and
+                quality management to IIoT and energy monitoring.
+                Built for Indian manufacturers who demand flexibility.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 text-white font-semibold text-base hover:shadow-xl hover:shadow-brand-500/25 transition-all"
+                  className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 text-white font-semibold text-base hover:shadow-xl hover:shadow-brand-500/25 transition-all"
                 >
                   Start Free Trial
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   href="/solutions"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold text-base hover:border-brand-300 hover:text-brand-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white border-2 border-gray-200 text-gray-700 font-semibold text-base hover:border-brand-300 hover:text-brand-600 transition-colors shadow-sm"
                 >
-                  Explore Solutions
+                  Explore 13 Solutions
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
 
               {/* Trust badges */}
-              <div className="flex items-center gap-6 pt-4">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm text-gray-500">14-day free trial</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm text-gray-500">No credit card</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm text-gray-500">Setup in 5 min</span>
-                </div>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2">
+                {['14-day free trial', 'No credit card', 'Setup in 5 min', 'Cloud + On-Prem'].map((t) => (
+                  <div key={t} className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <span className="text-sm text-gray-500">{t}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Hero visual — Dashboard mockup */}
             <div className="relative hidden lg:block">
-              <div className="relative rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 p-1 shadow-2xl">
+              <div className="relative rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 p-1 shadow-2xl shadow-brand-500/10">
                 <div className="rounded-xl bg-gray-950 overflow-hidden">
-                  {/* Fake browser bar */}
+                  {/* Browser bar */}
                   <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-800">
                     <div className="flex gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-red-500/80" />
                       <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                       <div className="w-3 h-3 rounded-full bg-green-500/80" />
                     </div>
-                    <div className="flex-1 mx-4 h-6 rounded bg-gray-800 flex items-center px-3">
-                      <span className="text-[11px] text-gray-500">app.factoryos.in/dashboard</span>
+                    <div className="flex-1 mx-4 h-6 rounded-md bg-gray-800 flex items-center px-3">
+                      <span className="text-[11px] text-gray-500">app.factoryos.zipybills.com/dashboard</span>
                     </div>
                   </div>
-                  {/* Fake dashboard */}
+                  {/* Dashboard content */}
                   <div className="p-6 space-y-4">
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { label: 'OEE', value: '87.3%', color: 'text-emerald-400' },
-                        { label: 'Machines Running', value: '24/28', color: 'text-blue-400' },
-                        { label: 'Today Output', value: '1,247', color: 'text-purple-400' },
+                        { label: 'OEE', value: '87.3%', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+                        { label: 'Machines Running', value: '24/28', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+                        { label: 'Today Output', value: '1,247', color: 'text-purple-400', bg: 'bg-purple-500/10' },
                       ].map((stat) => (
-                        <div key={stat.label} className="rounded-lg bg-gray-800/50 p-3">
+                        <div key={stat.label} className={`rounded-lg ${stat.bg} p-3 border border-gray-800`}>
                           <div className="text-[11px] text-gray-500">{stat.label}</div>
                           <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
                         </div>
                       ))}
                     </div>
-                    {/* Fake chart bars */}
-                    <div className="rounded-lg bg-gray-800/50 p-4">
+                    {/* Chart */}
+                    <div className="rounded-lg bg-gray-800/50 p-4 border border-gray-800">
                       <div className="text-[11px] text-gray-500 mb-3">Production Output — Last 7 Days</div>
                       <div className="flex items-end gap-2 h-24">
                         {[65, 80, 55, 90, 75, 95, 88].map((h, i) => (
                           <div
                             key={i}
-                            className="flex-1 rounded-t bg-gradient-to-t from-brand-600 to-accent-500 opacity-80"
-                            style={{ height: `${h}%` }}
+                            className="flex-1 rounded-t bg-gradient-to-t from-brand-600 to-accent-500"
+                            style={{ height: `${h}%`, opacity: 0.7 + i * 0.04 }}
                           />
                         ))}
                       </div>
                     </div>
-                    {/* Fake machine list */}
+                    {/* Machine list */}
                     <div className="space-y-2">
                       {[
                         { name: 'CNC-01', status: 'Running', color: 'bg-emerald-500' },
                         { name: 'Press-03', status: 'Idle', color: 'bg-yellow-500' },
                         { name: 'Weld-07', status: 'Running', color: 'bg-emerald-500' },
                       ].map((m) => (
-                        <div key={m.name} className="flex items-center justify-between rounded bg-gray-800/30 px-3 py-2">
-                          <span className="text-xs text-gray-400">{m.name}</span>
+                        <div key={m.name} className="flex items-center justify-between rounded-md bg-gray-800/30 border border-gray-800 px-3 py-2">
+                          <span className="text-xs text-gray-400 font-medium">{m.name}</span>
                           <div className="flex items-center gap-1.5">
                             <div className={`w-1.5 h-1.5 rounded-full ${m.color}`} />
                             <span className="text-[11px] text-gray-500">{m.status}</span>
@@ -218,9 +281,18 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-xl">
+              {/* Floating badge */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-xl animate-float-slow">
                 <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+              <div className="absolute -bottom-3 -left-3 px-4 py-2 rounded-xl bg-white shadow-lg border border-gray-100 flex items-center gap-2 animate-float-delay">
+                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                </div>
+                <div>
+                  <div className="text-[11px] text-gray-500">OEE Improved</div>
+                  <div className="text-sm font-bold text-emerald-600">+22%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -228,71 +300,183 @@ export default function HomePage() {
       </section>
 
       {/* ─── Stats Bar ────────────────────────── */}
-      <section className="py-12 bg-gray-50 border-y border-gray-100">
+      <section className="py-14 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {STATS.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl sm:text-4xl font-extrabold gradient-text">{stat.value}</div>
-                <div className="mt-1 text-sm text-gray-500">{stat.label}</div>
+              <div key={stat.label} className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                  <stat.icon className="w-6 h-6 text-brand-600" />
+                </div>
+                <div>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-gray-900">{stat.value}</div>
+                  <div className="text-sm text-gray-500">{stat.label}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Features Grid ────────────────────── */}
-      <section id="features" className="py-24">
+      {/* ─── 13 Solutions Showcase ─────────────── */}
+      <section id="solutions" className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">Modern Solutions</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-gray-900">
-              Manufacturing Shop Floor Information —<br />
-              <span className="gradient-text">Anytime, Anywhere, At Will</span>
-            </h2>
-            <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-              Everything you need to digitize, monitor, and optimize your production floor.
-            </p>
+          <div className="text-center mb-6">
+            <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">Complete Solution Suite</span>
           </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center text-balance mb-4">
+            13 Powerful Solutions for Your{' '}
+            <span className="gradient-text">Digital Factory</span>
+          </h2>
+          <p className="text-lg text-gray-500 text-center max-w-3xl mx-auto mb-16">
+            From the shop floor to the board room — everything you need to digitize,
+            monitor, and continuously improve your manufacturing operations.
+          </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {FEATURES.map((f) => (
+          {/* Solution Cards — staggered grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SOLUTIONS.map((sol, i) => (
               <div
-                key={f.title}
-                className="card-hover rounded-2xl border border-gray-100 bg-white p-8 relative overflow-hidden group"
+                key={sol.title}
+                className="group card-hover rounded-2xl border border-gray-100 bg-white p-7 relative overflow-hidden"
               >
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${f.accent} mb-5`}>
-                  <f.icon className="w-6 h-6 text-white" />
+                {/* Number badge */}
+                <div className="absolute top-5 right-5 text-[11px] font-bold text-gray-200 tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-                {/* Hover accent line */}
-                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${f.accent} opacity-0 group-hover:opacity-100 transition-opacity`} />
+
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${sol.bg} mb-5`}>
+                  <sol.icon className={`w-6 h-6 ${sol.iconColor}`} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{sol.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{sol.desc}</p>
+
+                {/* Bottom accent bar on hover */}
+                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${sol.accent} scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500`} />
               </div>
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/solutions"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-brand-200 text-brand-600 font-semibold hover:bg-brand-50 transition-colors"
+            >
+              View Detailed Solutions
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Why FactoryOS — Differentiators ──── */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left — Content */}
+            <div>
+              <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">Why FactoryOS</span>
+              <h2 className="mt-4 text-3xl sm:text-4xl font-extrabold text-gray-900 text-balance">
+                Not just software.{' '}
+                <span className="gradient-text">A manufacturing partner.</span>
+              </h2>
+              <p className="mt-6 text-gray-600 leading-relaxed">
+                We don&apos;t force your processes into our software. We tailor our platform to fit
+                your specific workflows — because every factory is different.
+              </p>
+
+              <div className="mt-10 space-y-6">
+                {[
+                  {
+                    icon: PenTool,
+                    title: 'Tailored to Your Process',
+                    desc: 'Custom workflows, parameters, and reports built around how your factory actually operates.',
+                  },
+                  {
+                    icon: Cloud,
+                    title: 'Cloud or On-Premise — You Choose',
+                    desc: 'Full flexibility. Same powerful features whether deployed on cloud or inside your own data center.',
+                  },
+                  {
+                    icon: CircuitBoard,
+                    title: 'Works with Your Equipment',
+                    desc: 'Integrates with existing PLCs, sensors, HMIs and machines. No rip-and-replace required.',
+                  },
+                  {
+                    icon: Zap,
+                    title: 'ROI in Weeks, Not Months',
+                    desc: 'Customers report 15-30% OEE improvement within the first quarter of deployment.',
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-brand-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                      <p className="text-sm text-gray-500 mt-1">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — Visual metrics */}
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm card-hover-subtle">
+                    <div className="text-3xl font-extrabold text-brand-600">30%</div>
+                    <div className="text-sm text-gray-500 mt-1">Average OEE improvement</div>
+                  </div>
+                  <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-accent-600 p-6 text-white shadow-lg">
+                    <div className="text-3xl font-extrabold">5,000+</div>
+                    <div className="text-sm text-white/70 mt-1">Machines under monitoring</div>
+                  </div>
+                </div>
+                <div className="space-y-4 mt-8">
+                  <div className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm card-hover-subtle">
+                    <div className="text-3xl font-extrabold text-emerald-600">99.9%</div>
+                    <div className="text-sm text-gray-500 mt-1">Platform uptime SLA</div>
+                  </div>
+                  <div className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm card-hover-subtle">
+                    <div className="text-3xl font-extrabold text-gray-900">50+</div>
+                    <div className="text-sm text-gray-500 mt-1">Factories digitized across India</div>
+                  </div>
+                </div>
+              </div>
+              {/* Decorative */}
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-brand-50 blur-3xl" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* ─── Industries ───────────────────────── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900">
               Trusted Across <span className="gradient-text">Industries</span>
             </h2>
-            <p className="mt-3 text-gray-500">
-              From automotive to FMCG, FactoryOS adapts to your manufacturing process.
+            <p className="mt-3 text-gray-500 max-w-xl mx-auto">
+              From automotive OEMs to FMCG plants, FactoryOS adapts to your specific
+              manufacturing processes and compliance requirements.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {INDUSTRIES.map((ind) => (
               <div
                 key={ind.name}
-                className="card-hover flex flex-col items-center gap-3 p-6 rounded-xl bg-white border border-gray-100"
+                className="card-hover-subtle flex flex-col items-center gap-3 p-6 rounded-2xl bg-gray-50 border border-gray-100 text-center"
               >
-                <ind.icon className="w-8 h-8 text-brand-600" />
-                <span className="text-sm font-medium text-gray-700">{ind.name}</span>
+                <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+                  <ind.icon className="w-6 h-6 text-brand-600" />
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-gray-800">{ind.name}</span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">{ind.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -300,27 +484,32 @@ export default function HomePage() {
       </section>
 
       {/* ─── Testimonials ─────────────────────── */}
-      <section className="py-24">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">Testimonials</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-gray-900">
-              They Acknowledged the Value of <span className="gradient-text">Our Services</span>
+              Valued by Manufacturing Leaders
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="card-hover rounded-2xl border border-gray-100 bg-white p-8">
+              <div key={i} className="card-hover rounded-2xl bg-white border border-gray-100 p-8 flex flex-col">
                 {/* Stars */}
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-5">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <Star key={s} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-600 leading-relaxed mb-6 italic">&ldquo;{t.quote}&rdquo;</p>
-                <div>
-                  <div className="text-sm font-semibold text-gray-900">{t.title}</div>
-                  <div className="text-sm text-gray-500">{t.company}</div>
+                <p className="text-gray-600 leading-relaxed mb-8 flex-1">&ldquo;{t.quote}&rdquo;</p>
+                <div className="flex items-center gap-3 pt-5 border-t border-gray-100">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
+                    <span className="text-xs font-bold text-white">{t.initials}</span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">{t.title}</div>
+                    <div className="text-xs text-gray-500">{t.company}</div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -332,8 +521,12 @@ export default function HomePage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animated-gradient rounded-3xl p-12 md:p-16 text-center text-white relative overflow-hidden">
+            {/* Decorative circles */}
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/3" />
+
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
+              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-balance">
                 Ready to Digitize Your Manufacturing?
               </h2>
               <p className="text-lg text-white/80 mb-8 max-w-xl mx-auto">
@@ -343,10 +536,10 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-brand-700 font-bold text-base hover:bg-gray-50 transition-colors shadow-xl"
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-brand-700 font-bold text-base hover:bg-gray-50 transition-colors shadow-xl"
                 >
                   Start Free Trial
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   href="/contact"

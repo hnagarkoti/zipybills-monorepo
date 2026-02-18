@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Digitalizing manufacturing processes since 2020.
-              Trusted by 5000+ machines worldwide.
+              13 solutions powering 5,000+ machines across India.
             </p>
           </div>
 
@@ -32,6 +32,7 @@ export default function Footer() {
                 { href: '/solutions', label: 'Our Solutions' },
                 { href: '/pricing', label: 'Pricing & Plans' },
                 { href: '/brochure', label: 'Download Brochure' },
+                { href: '/contact', label: 'Contact Us' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-colors">
@@ -47,14 +48,17 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Solutions</h3>
             <ul className="space-y-2">
               {[
-                'Production Monitoring',
-                'OEE Tracking',
-                'Quality Management',
-                'Digital Work Instructions',
-                'Downtime Analysis',
+                { href: '/solutions#traceability', label: 'Traceability' },
+                { href: '/solutions#digital-work-instructions', label: 'Digital Work Instructions' },
+                { href: '/solutions#ctq-management', label: 'CTQ Management' },
+                { href: '/solutions#downtime-logbooks', label: 'Downtime Analysis' },
+                { href: '/solutions#iiot-solutions', label: 'IIoT Solutions' },
+                { href: '/solutions#energy-management', label: 'Energy Management' },
               ].map((item) => (
-                <li key={item}>
-                  <span className="text-sm text-gray-400">{item}</span>
+                <li key={item.label}>
+                  <Link href={item.href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -66,9 +70,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 text-brand-400 shrink-0" />
-                <span className="text-sm text-gray-400">
-                  India
-                </span>
+                <span className="text-sm text-gray-400">India</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-brand-400 shrink-0" />
