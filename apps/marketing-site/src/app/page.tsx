@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import IIoTFlowAnimation from '@/components/IIoTFlowAnimation';
+import HeroAnimation from '@/components/HeroAnimation';
 import {
   Factory, BarChart3, Shield, Clock, Zap, Users, CheckCircle2,
   ArrowRight, Monitor, Cog, TrendingUp, Globe, Award, Cpu,
@@ -221,72 +222,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero visual — Dashboard mockup */}
-            <div className="relative hidden lg:block">
-              <div className="relative rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 p-1 shadow-2xl shadow-brand-500/10">
-                <div className="rounded-xl bg-gray-950 overflow-hidden">
-                  {/* Browser bar */}
-                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-800">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                    </div>
-                    <div className="flex-1 mx-4 h-6 rounded-md bg-gray-800 flex items-center px-3">
-                      <span className="text-[11px] text-gray-500">app.factoryos.zipybills.com/dashboard</span>
-                    </div>
-                  </div>
-                  {/* Dashboard content */}
-                  <div className="p-6 space-y-4">
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { label: 'OEE', value: '87.3%', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-                        { label: 'Machines Running', value: '24/28', color: 'text-blue-400', bg: 'bg-blue-500/10' },
-                        { label: 'Today Output', value: '1,247', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-                      ].map((stat) => (
-                        <div key={stat.label} className={`rounded-lg ${stat.bg} p-3 border border-gray-800`}>
-                          <div className="text-[11px] text-gray-500">{stat.label}</div>
-                          <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                    {/* Chart */}
-                    <div className="rounded-lg bg-gray-800/50 p-4 border border-gray-800">
-                      <div className="text-[11px] text-gray-500 mb-3">Production Output — Last 7 Days</div>
-                      <div className="flex items-end gap-2 h-24">
-                        {[65, 80, 55, 90, 75, 95, 88].map((h, i) => (
-                          <div
-                            key={i}
-                            className="flex-1 rounded-t bg-gradient-to-t from-brand-600 to-accent-500"
-                            style={{ height: `${h}%`, opacity: 0.7 + i * 0.04 }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    {/* Machine list */}
-                    <div className="space-y-2">
-                      {[
-                        { name: 'CNC-01', status: 'Running', color: 'bg-emerald-500' },
-                        { name: 'Press-03', status: 'Idle', color: 'bg-yellow-500' },
-                        { name: 'Weld-07', status: 'Running', color: 'bg-emerald-500' },
-                      ].map((m) => (
-                        <div key={m.name} className="flex items-center justify-between rounded-md bg-gray-800/30 border border-gray-800 px-3 py-2">
-                          <span className="text-xs text-gray-400 font-medium">{m.name}</span>
-                          <div className="flex items-center gap-1.5">
-                            <div className={`w-1.5 h-1.5 rounded-full ${m.color}`} />
-                            <span className="text-[11px] text-gray-500">{m.status}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Floating badge */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-xl animate-float-slow">
+            {/* Hero visual — Animated factory journey */}
+            <div className="relative hidden lg:block pb-8">
+              <HeroAnimation />
+              {/* Floating badges */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-xl animate-float-slow z-10">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
-              <div className="absolute -bottom-3 -left-3 px-4 py-2 rounded-xl bg-white shadow-lg border border-gray-100 flex items-center gap-2 animate-float-delay">
+              <div className="absolute -bottom-2 -left-3 px-4 py-2 rounded-xl bg-white shadow-lg border border-gray-100 flex items-center gap-2 animate-float-delay z-10">
                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 </div>
