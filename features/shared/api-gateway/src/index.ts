@@ -83,7 +83,21 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '4000', 10);
 const SAAS_MODE = process.env.SAAS_MODE === 'true';
 
-app.use(cors());
+// CORS configuration - allow production domains
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:8081',
+    'https://factoryos.zipybills.com',
+    'https://app.factoryos.zipybills.com',
+    'https://zipybills-monorepo-marketing-site.vercel.app',
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-compliance-reason'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ─── J2: Rate Limiting ───────────────────────
