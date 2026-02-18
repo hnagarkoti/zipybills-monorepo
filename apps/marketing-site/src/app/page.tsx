@@ -1,8 +1,17 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import IIoTFlowAnimation from '@/components/IIoTFlowAnimation';
-import HeroAnimation from '@/components/HeroAnimation';
+
+// Dynamic import keeps the heavy SVG animation out of the initial JS bundle
+// — improves LCP and Core Web Vitals score on Indian mobile connections
+const HeroAnimation = dynamic(() => import('@/components/HeroAnimation'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full rounded-2xl bg-[#050d1a] animate-pulse" style={{ minHeight: 420 }} />
+  ),
+});
 import {
   Factory, BarChart3, Shield, Clock, Zap, Users, CheckCircle2,
   ArrowRight, Monitor, Cog, TrendingUp, Globe, Award, Cpu,
