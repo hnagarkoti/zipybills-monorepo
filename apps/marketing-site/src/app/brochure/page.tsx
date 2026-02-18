@@ -7,10 +7,10 @@ const resources = [
   {
     icon: FileText,
     title: 'FactoryOS Product Brochure',
-    description: 'Comprehensive overview of all FactoryOS modules — Proefficient, OEE Tracking, Quality Management, Digital Work Instructions, and more.',
+    description: 'Comprehensive overview of all FactoryOS modules — Traceability, OEE Tracking, Quality Management, Digital Work Instructions, IIoT, and more.',
     format: 'PDF',
-    size: '4.2 MB',
-    href: 'https://felidaesystems.co.in/wp-content/uploads/2023/06/Power-Profit-Technologies-Brochure.pdf',
+    size: '8 pages',
+    href: '/brochure/view',
     primary: true,
   },
   {
@@ -93,13 +93,13 @@ export default function BrochurePage() {
                   </div>
 
                   <a
-                    href="https://felidaesystems.co.in/wp-content/uploads/2023/06/Power-Profit-Technologies-Brochure.pdf"
+                    href="/brochure/view"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 text-white font-semibold hover:shadow-lg transition-all"
                   >
                     <Download className="w-5 h-5" />
-                    Download Brochure (PDF)
+                    View &amp; Download Brochure
                   </a>
                 </div>
               </div>
