@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Digitalizing manufacturing processes since 2020.
-              13 solutions powering 5,000+ machines across India.
+              13 solutions. Real-time data. Built for Indian manufacturing.
             </p>
           </div>
 

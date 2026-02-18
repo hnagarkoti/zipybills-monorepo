@@ -57,8 +57,8 @@ export default function BrochureViewPage() {
             <div className="mt-14 grid grid-cols-3 gap-6 text-center">
               {[
                 { value: '13+', label: 'Solution Modules' },
-                { value: '5,000+', label: 'Machines Monitored' },
-                { value: '30%', label: 'Avg OEE Improvement' },
+                { value: '4+', label: 'Industries Targeted' },
+                { value: 'IIoT', label: 'Hardware Ready' },
               ].map((s) => (
                 <div key={s.label} className="bg-white/10 rounded-2xl p-5">
                   <div className="text-3xl font-black text-white">{s.value}</div>

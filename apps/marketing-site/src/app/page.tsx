@@ -12,8 +12,8 @@ import {
 
 /* ─── Stats ─────────────────────────────────── */
 const STATS = [
-  { value: '5,000+', label: 'Machines Managed', icon: Cpu },
-  { value: '50+', label: 'Factories Digitized', icon: Factory },
+  { value: '13', label: 'Solution Modules', icon: Cpu },
+  { value: '4+', label: 'Industries Served', icon: Factory },
   { value: '99.9%', label: 'Uptime SLA', icon: Shield },
   { value: '30%', label: 'Avg. OEE Improvement', icon: TrendingUp },
 ];
@@ -493,8 +493,8 @@ export default function HomePage() {
                     <div className="text-sm text-gray-500 mt-1">Average OEE improvement</div>
                   </div>
                   <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-accent-600 p-6 text-white shadow-lg">
-                    <div className="text-3xl font-extrabold">5,000+</div>
-                    <div className="text-sm text-white/70 mt-1">Machines under monitoring</div>
+                    <div className="text-3xl font-extrabold">IIoT</div>
+                    <div className="text-sm text-white/70 mt-1">Ready — any PLC or sensor</div>
                   </div>
                 </div>
                 <div className="space-y-4 mt-8">
@@ -503,8 +503,8 @@ export default function HomePage() {
                     <div className="text-sm text-gray-500 mt-1">Platform uptime SLA</div>
                   </div>
                   <div className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm card-hover-subtle">
-                    <div className="text-3xl font-extrabold text-gray-900">50+</div>
-                    <div className="text-sm text-gray-500 mt-1">Factories digitized across India</div>
+                    <div className="text-3xl font-extrabold text-gray-900">14</div>
+                    <div className="text-sm text-gray-500 mt-1">Day free trial, no card needed</div>
                   </div>
                 </div>
               </div>

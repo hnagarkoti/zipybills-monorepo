@@ -4,7 +4,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'FactoryOS by Zipybills — Smart Manufacturing Platform',
   description:
-    'FactoryOS digitizes your shop floor with real-time OEE tracking, production monitoring, quality management, and lean manufacturing tools. Trusted by 5000+ machines across automotive, appliances & FMCG.',
+    'FactoryOS by Zipybills — digitise your shop floor with real-time OEE tracking, production monitoring, quality management, and 13 Industry 4.0 modules. Built for Indian manufacturing. IIoT ready, cloud or on-premise.',
   keywords: [
     'manufacturing software',
     'OEE tracking',
