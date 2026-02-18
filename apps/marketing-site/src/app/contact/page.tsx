@@ -5,8 +5,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
 
-// ← Replace with your WhatsApp number (country code + number, no + or spaces)
-const WHATSAPP_NUMBER = '919876543210';
+// ← Your WhatsApp number (country code + number, no + or spaces)
+const WHATSAPP_NUMBER = '918791992976';
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -98,7 +98,7 @@ export default function ContactPage() {
             </a>
 
             <a
-              href="tel:+919876543210"
+              href="tel:+918791992976"
               className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-gray-100 bg-white"
             >
               <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
@@ -106,7 +106,8 @@ export default function ContactPage() {
               </div>
               <div>
                 <div className="text-sm text-gray-500">Call Us</div>
-                <div className="font-semibold text-gray-900 text-sm">+91 98765 43210</div>
+                <div className="font-semibold text-gray-900 text-sm">+91 87919 92976</div>
+                <div className="text-xs text-gray-400">Mon–Sat, 9 AM–7 PM IST</div>
               </div>
             </a>
 
