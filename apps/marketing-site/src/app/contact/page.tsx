@@ -5,6 +5,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
 
+// ← Replace with your WhatsApp number (country code + number, no + or spaces)
+const WHATSAPP_NUMBER = '919876543210';
+
 export default function ContactPage() {
   const [form, setForm] = useState({
     name: '',
@@ -18,7 +21,24 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // In production, this would POST to an API endpoint
+
+    // Build a readable WhatsApp message from the form data
+    const lines = [
+      `📋 *New FactoryOS Enquiry*`,
+      ``,
+      `👤 *Name:* ${form.name}`,
+      form.email   ? `📧 *Email:* ${form.email}`     : null,
+      form.company ? `🏭 *Company:* ${form.company}` : null,
+      form.phone   ? `📞 *Phone:* ${form.phone}`     : null,
+      form.subject ? `📌 *Subject:* ${form.subject}` : null,
+      ``,
+      `💬 *Message:*`,
+      form.message,
+    ].filter(Boolean).join('\n');
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+
     setSubmitted(true);
   }
 
@@ -45,26 +65,63 @@ export default function ContactPage() {
       {/* Contact Cards */}
       <section className="pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-3 gap-6">
-            {[
-              { icon: Mail, title: 'Email Us', value: 'contact@factoryos.in', href: 'mailto:contact@factoryos.in' },
-              { icon: Phone, title: 'Call Us', value: '+91 98765 43210', href: 'tel:+919876543210' },
-              { icon: MapPin, title: 'Visit Us', value: 'India', href: '#' },
-            ].map((c) => (
-              <a
-                key={c.title}
-                href={c.href}
-                className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-gray-100 bg-white"
-              >
-                <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
-                  <c.icon className="w-5 h-5 text-brand-600" />
-                </div>
-                <div>
-                  <div className="text-sm text-gray-500">{c.title}</div>
-                  <div className="font-semibold text-gray-900">{c.value}</div>
-                </div>
-              </a>
-            ))}
+          <div className="grid sm:grid-cols-4 gap-6">
+            <a
+              href="mailto:contact@factoryos.in"
+              className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-gray-100 bg-white"
+            >
+              <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-brand-600" />
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Email Us</div>
+                <div className="font-semibold text-gray-900 text-sm">contact@factoryos.in</div>
+              </div>
+            </a>
+
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-emerald-200 bg-emerald-50"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                {/* WhatsApp icon */}
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#25D366">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-emerald-700 font-medium">WhatsApp</div>
+                <div className="font-semibold text-gray-900 text-sm">Chat instantly</div>
+              </div>
+            </a>
+
+            <a
+              href="tel:+919876543210"
+              className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-gray-100 bg-white"
+            >
+              <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                <Phone className="w-5 h-5 text-brand-600" />
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Call Us</div>
+                <div className="font-semibold text-gray-900 text-sm">+91 98765 43210</div>
+              </div>
+            </a>
+
+            <a
+              href="#"
+              className="card-hover flex items-center gap-4 p-6 rounded-2xl border border-gray-100 bg-white"
+            >
+              <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5 text-brand-600" />
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Location</div>
+                <div className="font-semibold text-gray-900 text-sm">India</div>
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -78,17 +135,31 @@ export default function ContactPage() {
               <div className="rounded-2xl border border-gray-100 bg-white p-8">
                 {submitted ? (
                   <div className="text-center py-16">
-                    <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h3>
-                    <p className="text-gray-500">
-                      Thank you for reaching out. Our team will get back to you within 24 hours.
+                    <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
+                      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="#25D366">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">WhatsApp Opened!</h3>
+                    <p className="text-gray-500 max-w-xs mx-auto">
+                      Your message has been pre-filled in WhatsApp. Just hit <strong>Send</strong> and we&apos;ll reply shortly.
                     </p>
-                    <button
-                      onClick={() => { setSubmitted(false); setForm({ name: '', email: '', company: '', phone: '', subject: '', message: '' }); }}
-                      className="mt-6 text-brand-600 font-semibold hover:underline"
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors"
                     >
-                      Send another message
-                    </button>
+                      Open WhatsApp again
+                    </a>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => { setSubmitted(false); setForm({ name: '', email: '', company: '', phone: '', subject: '', message: '' }); }}
+                        className="text-brand-600 font-semibold hover:underline text-sm"
+                      >
+                        Send another message
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -168,10 +239,13 @@ export default function ContactPage() {
                     </div>
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 text-white font-semibold hover:shadow-lg transition-all"
+                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-all"
                     >
-                      <Send className="w-4 h-4" />
-                      Send Message
+                      {/* WhatsApp icon inline */}
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="white">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                      Send via WhatsApp
                     </button>
                   </form>
                 )}
