@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import IIoTFlowAnimation from '@/components/IIoTFlowAnimation';
 import {
   Factory, BarChart3, Shield, Clock, Zap, Users, CheckCircle2,
   ArrowRight, Monitor, Cog, TrendingUp, Globe, Award, Cpu,
@@ -365,6 +366,68 @@ export default function HomePage() {
               View Detailed Solutions
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── How It Works — IIoT Animation ───── */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">How It Works</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-gray-900">
+              Factory Floor to Dashboard —{' '}
+              <span className="gradient-text">In Under a Second</span>
+            </h2>
+            <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg">
+              No manual data entry. No shift-end reports. FactoryOS captures machine data in real time
+              via our IIoT gateway and shows it live on any screen across your organisation.
+            </p>
+          </div>
+
+          {/* Animated IIoT Illustration */}
+          <IIoTFlowAnimation />
+
+          {/* 4-step cards */}
+          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                step: '01',
+                icon: '🔌',
+                title: 'Connect Machines',
+                desc: 'Our IIoT gateway plugs into any PLC, sensor, or legacy machine. No rewiring, no downtime during setup.',
+                color: 'from-blue-500 to-blue-600',
+              },
+              {
+                step: '02',
+                icon: '📡',
+                title: 'Data Streams Live',
+                desc: 'Cycle times, temperatures, vibration, energy — all captured and transmitted in under a second.',
+                color: 'from-violet-500 to-violet-600',
+              },
+              {
+                step: '03',
+                icon: '☁️',
+                title: 'Secure Cloud Processing',
+                desc: 'Data lands on enterprise-grade infrastructure. Validated, stored, and available anywhere, instantly.',
+                color: 'from-cyan-500 to-cyan-600',
+              },
+              {
+                step: '04',
+                icon: '📊',
+                title: 'Act on Real-Time Insights',
+                desc: 'Operators see it on the floor. Managers see it on their phones. Everyone acts faster.',
+                color: 'from-emerald-500 to-emerald-600',
+              },
+            ].map((s) => (
+              <div key={s.step} className="relative rounded-2xl bg-gray-50 border border-gray-100 p-7 card-hover-subtle group overflow-hidden">
+                <div className={`absolute top-0 left-0 w-1 h-full rounded-l-2xl bg-gradient-to-b ${s.color}`} />
+                <div className="text-xs font-black text-gray-300 mb-3 tracking-widest">{s.step}</div>
+                <div className="text-3xl mb-4">{s.icon}</div>
+                <h3 className="font-bold text-gray-900 mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

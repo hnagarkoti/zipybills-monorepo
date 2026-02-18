@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import IIoTFlowAnimation from '@/components/IIoTFlowAnimation';
 import {
   Target, Heart, Users, Award, Lightbulb, Shield,
   Factory, Rocket, BookOpen, Globe, Handshake,
@@ -148,12 +149,12 @@ export default function AboutPage() {
             </h2>
           </div>
           <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-brand-200 hidden sm:block" />
+            {/* Vertical line — aligned to center of the wider badge */}
+            <div className="absolute left-[52px] top-0 bottom-0 w-0.5 bg-brand-200 hidden sm:block" />
             <div className="space-y-8">
               {MILESTONES.map((m, i) => (
                 <div key={i} className="flex gap-6 items-start">
-                  <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white font-bold text-sm shadow-lg relative z-10">
+                  <div className="shrink-0 min-w-[104px] rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white font-bold text-sm shadow-lg relative z-10 py-5 px-3 text-center leading-tight">
                     {m.year}
                   </div>
                   <div className="flex-1 rounded-xl border border-gray-100 bg-white p-5">
@@ -163,6 +164,38 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* IIoT Flow — Live Data Illustration */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-sm font-semibold text-brand-600 uppercase tracking-wider">How It Works</span>
+            <h2 className="mt-3 text-3xl font-extrabold text-gray-900">
+              From Shop Floor to <span className="gradient-text">Dashboard — In Real Time</span>
+            </h2>
+            <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
+              FactoryOS connects directly to your PLCs, sensors, and machines via our IIoT gateway.
+              Data flows from the factory floor to secure cloud infrastructure and appears live on any device — phone, tablet, or monitor.
+            </p>
+          </div>
+          <IIoTFlowAnimation />
+          <div className="mt-10 grid sm:grid-cols-4 gap-6">
+            {[
+              { step: '01', icon: '🔌', title: 'Connect Machines', desc: 'Plug in our IIoT gateway — works with any PLC, sensor, or legacy machine. No rewiring needed.' },
+              { step: '02', icon: '📡', title: 'Data Streams Live', desc: 'Sensor readings, cycle times, and alerts are captured and sent to the cloud in under a second.' },
+              { step: '03', icon: '☁️', title: 'Secure Cloud Processing', desc: 'Data is validated, stored, and processed on enterprise-grade infrastructure with 99.9% uptime.' },
+              { step: '04', icon: '📊', title: 'Act on Insights', desc: 'Operators and managers see live dashboards. Downtime alerts hit your phone the moment they happen.' },
+            ].map((s) => (
+              <div key={s.step} className="relative p-6 rounded-2xl bg-gray-50 border border-gray-100">
+                <div className="text-xs font-black text-brand-300 mb-3">{s.step}</div>
+                <div className="text-2xl mb-3">{s.icon}</div>
+                <h3 className="font-bold text-gray-900 mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
