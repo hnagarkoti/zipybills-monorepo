@@ -107,7 +107,7 @@ export default function ContactPage() {
               <div>
                 <div className="text-sm text-gray-500">Call Us</div>
                 <div className="font-semibold text-gray-900 text-sm">+91 87919 92976</div>
-                <div className="text-xs text-gray-400">Mon–Sat, 9 AM–7 PM IST</div>
+                <div className="text-xs text-gray-400">Mon–Fri, 9 AM–6 PM IST</div>
               </div>
             </a>
 
