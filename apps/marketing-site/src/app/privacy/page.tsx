@@ -118,9 +118,55 @@ export default function PrivacyPage() {
               </ul>
             </section>
 
-            {/* 7 */}
+            {/* 7 - Google API */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">7. Data Retention</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">7. Google API Services &amp; Google Drive Integration</h2>
+              <p className="text-gray-600 leading-relaxed mb-3">
+                FactoryOS offers an optional Google Drive integration for tenant administrators to back up their
+                manufacturing data to their own Google Drive account. This section describes how we access,
+                use, store, and share Google user data.
+              </p>
+
+              <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">7.1 What We Access</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
+                <li><strong>drive.file scope:</strong> Permission to create and manage files that FactoryOS itself creates in your Google Drive (specifically, a &ldquo;FactoryOS Backups&rdquo; folder). We cannot access, read, or modify any other files in your Drive.</li>
+                <li><strong>Email address:</strong> Your Google account email address, used only to display which account is connected in the app settings.</li>
+              </ul>
+
+              <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">7.2 How We Use Google Data</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
+                <li>We use Drive access exclusively to upload encrypted backup files of your own manufacturing data to your connected Google Drive account.</li>
+                <li>We store your Google OAuth refresh token securely in our database, encrypted at rest, solely to perform authorized backups on your behalf.</li>
+                <li>Your Google email is stored to show you which account is connected — it is never used for marketing or shared with third parties.</li>
+              </ul>
+
+              <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">7.3 What We Do NOT Do</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
+                <li>We do not read, download, or process any pre-existing files in your Google Drive.</li>
+                <li>We do not share your Google account data or tokens with any third party.</li>
+                <li>We do not use Google data for advertising, profiling, or any purpose beyond the backup feature you explicitly enable.</li>
+                <li>We do not transfer your Google data to AI or machine learning systems.</li>
+              </ul>
+
+              <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">7.4 Revoking Access</h3>
+              <p className="text-gray-600 leading-relaxed">
+                You can disconnect Google Drive at any time from <strong>Settings → Backup &amp; Data → Google Drive → Disconnect</strong>.
+                This immediately deletes your stored OAuth tokens from our servers. You can also revoke access
+                directly from your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">Google Account permissions page</a>.
+              </p>
+
+              <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">7.5 Compliance with Google API Services User Data Policy</h3>
+              <p className="text-gray-600 leading-relaxed">
+                FactoryOS&apos;s use and transfer of information received from Google APIs adheres to the{' '}
+                <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
+                  Google API Services User Data Policy
+                </a>, including the Limited Use requirements.
+              </p>
+            </section>
+
+            {/* 8 */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">8. Data Retention</h2>
               <p className="text-gray-600 leading-relaxed">
                 We retain your data for as long as your account is active or as needed to provide
                 the Service. If you choose to terminate your account, we will retain your data for
@@ -130,9 +176,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 8 */}
+            {/* 9 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">8. Your Rights</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">9. Your Rights</h2>
               <p className="text-gray-600 leading-relaxed mb-3">You have the following rights regarding your data:</p>
               <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
                 <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
@@ -150,9 +196,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 9 */}
+            {/* 10 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">9. Cookies</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">10. Cookies</h2>
               <p className="text-gray-600 leading-relaxed">
                 We use essential cookies for authentication and session management. We do not use
                 advertising or tracking cookies. Essential cookies are required for the Service to
@@ -161,9 +207,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 10 */}
+            {/* 11 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">10. On-Premise Deployments</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">11. On-Premise Deployments</h2>
               <p className="text-gray-600 leading-relaxed">
                 For customers who choose on-premise deployment, all data resides on your own servers
                 within your own network. In this case, Zipybills does not have access to your data
@@ -173,9 +219,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 11 */}
+            {/* 12 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">11. Children&apos;s Privacy</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">12. Children&apos;s Privacy</h2>
               <p className="text-gray-600 leading-relaxed">
                 FactoryOS is a business application designed for manufacturing operations. We do not
                 knowingly collect personal information from children under the age of 18. If we
@@ -184,9 +230,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 12 */}
+            {/* 13 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">12. Changes to This Policy</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">13. Changes to This Policy</h2>
               <p className="text-gray-600 leading-relaxed">
                 We may update this Privacy Policy from time to time. Material changes will be
                 communicated via email or a prominent notice on the platform. We encourage you to
@@ -194,9 +240,9 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            {/* 13 */}
+            {/* 14 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">13. Contact Us</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">14. Contact Us</h2>
               <p className="text-gray-600 leading-relaxed">
                 If you have questions or concerns about this Privacy Policy, please contact us at:{' '}
                 <a href="mailto:contact@factoryos.in" className="text-brand-600 font-semibold hover:underline">
