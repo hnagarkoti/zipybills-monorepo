@@ -15,14 +15,14 @@
 import React from 'react';
 import { View, Text, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import {
-  Palette, Shield, HardDrive, User, ChevronRight, Settings,
+  Palette, Shield, HardDrive, Globe, User, ChevronRight, Settings,
 } from 'lucide-react-native';
 import { PageHeader } from '@zipybills/ui-components';
 import { useAuthStore } from '@zipybills/ui-store';
 
 // ─── Types ────────────────────────────────────
 
-export type SettingsTab = 'appearance' | 'compliance' | 'backup';
+export type SettingsTab = 'appearance' | 'language' | 'compliance' | 'backup';
 
 interface TabConfig {
   id: SettingsTab;
@@ -48,6 +48,15 @@ const TABS: TabConfig[] = [
     path: '/settings/appearance',
     color: '#8B5CF6',
     bgColor: 'bg-violet-100 dark:bg-violet-900/30',
+  },
+  {
+    id: 'language',
+    label: 'Language',
+    description: 'App language and region',
+    icon: <Globe size={20} />,
+    path: '/settings/language',
+    color: '#3B82F6',
+    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
   },
   {
     id: 'compliance',

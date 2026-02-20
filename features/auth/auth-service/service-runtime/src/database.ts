@@ -65,7 +65,7 @@ export async function createUser(
 
 export async function updateUser(
   userId: number,
-  data: { full_name?: string; role?: string; is_active?: boolean },
+  data: { full_name?: string; role?: string; is_active?: boolean; preferred_locale?: string },
   tenantId?: number | null,
 ): Promise<User | null> {
   const sets: string[] = [];
@@ -75,6 +75,7 @@ export async function updateUser(
   if (data.full_name !== undefined) { sets.push(`full_name = $${idx++}`); params.push(data.full_name); }
   if (data.role !== undefined) { sets.push(`role = $${idx++}`); params.push(data.role); }
   if (data.is_active !== undefined) { sets.push(`is_active = $${idx++}`); params.push(data.is_active); }
+  if (data.preferred_locale !== undefined) { sets.push(`preferred_locale = $${idx++}`); params.push(data.preferred_locale); }
   sets.push(`updated_at = NOW()`);
 
   params.push(userId);

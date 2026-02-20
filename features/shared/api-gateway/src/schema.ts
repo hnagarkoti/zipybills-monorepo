@@ -11,15 +11,16 @@ export async function initializeDatabase(): Promise<void> {
 
   await query(`
     CREATE TABLE IF NOT EXISTS users (
-      user_id       SERIAL PRIMARY KEY,
-      username      VARCHAR(100) UNIQUE NOT NULL,
-      password_hash VARCHAR(255) NOT NULL,
-      full_name     VARCHAR(200) NOT NULL,
-      role          VARCHAR(20) NOT NULL DEFAULT 'OPERATOR'
-                    CHECK (role IN ('ADMIN', 'SUPERVISOR', 'OPERATOR')),
-      is_active     BOOLEAN DEFAULT true,
-      created_at    TIMESTAMPTZ DEFAULT NOW(),
-      updated_at    TIMESTAMPTZ DEFAULT NOW()
+      user_id          SERIAL PRIMARY KEY,
+      username         VARCHAR(100) UNIQUE NOT NULL,
+      password_hash    VARCHAR(255) NOT NULL,
+      full_name        VARCHAR(200) NOT NULL,
+      role             VARCHAR(20) NOT NULL DEFAULT 'OPERATOR'
+                       CHECK (role IN ('ADMIN', 'SUPERVISOR', 'OPERATOR')),
+      is_active        BOOLEAN DEFAULT true,
+      preferred_locale VARCHAR(10) DEFAULT 'en',
+      created_at       TIMESTAMPTZ DEFAULT NOW(),
+      updated_at       TIMESTAMPTZ DEFAULT NOW()
     );
   `);
 

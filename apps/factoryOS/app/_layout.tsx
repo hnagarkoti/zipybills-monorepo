@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryProvider } from '@zipybills/ui-query';
 import { ServerErrorPage } from '@zipybills/ui-components';
 import { ThemeProvider, useTheme } from '@zipybills/theme-engine';
+import { I18nProvider } from '@zipybills/i18n-engine';
 import { ComplianceProvider, useComplianceStore } from '@zipybills/ui-store';
 
 /**
@@ -41,20 +42,22 @@ function ComplianceThemeSync() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        <QueryProvider>
-          <ComplianceProvider>
-            <ComplianceThemeSync />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="login" />
-              <Stack.Screen name="(app)" />
-              <Stack.Screen name="platform" />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </ComplianceProvider>
-        </QueryProvider>
-      </ThemeProvider>
+      <I18nProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <ComplianceProvider>
+              <ComplianceThemeSync />
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="index" />
+                <Stack.Screen name="login" />
+                <Stack.Screen name="(app)" />
+                <Stack.Screen name="platform" />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </ComplianceProvider>
+          </QueryProvider>
+        </ThemeProvider>
+      </I18nProvider>
     </SafeAreaProvider>
   );
 }

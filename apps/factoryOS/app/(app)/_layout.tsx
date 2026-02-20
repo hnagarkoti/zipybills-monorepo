@@ -16,7 +16,7 @@ import { Slot, Redirect, usePathname, useRouter } from 'expo-router';
 import {
   LayoutDashboard, ClipboardList, Pencil, Factory,
   AlertTriangle, Clock, BarChart3, Users, LogOut, Settings,
-  ShieldCheck, Palette, Shield, HardDrive,
+  ShieldCheck, Palette, Shield, HardDrive, Globe,
 } from 'lucide-react-native';
 import { AppShell, type NavItem, type BreadcrumbItem } from '@zipybills/factory-home-frontend';
 import { useAuthStore } from '@zipybills/ui-store';
@@ -58,6 +58,7 @@ const ROUTES: RouteConfig[] = [
     href: '/settings', label: 'Settings', icon: <Settings size={ICON_SIZE} />,
     children: [
       { href: '/settings/appearance', label: 'Appearance', icon: <Palette size={ICON_SIZE} /> },
+      { href: '/settings/language', label: 'Language', icon: <Globe size={ICON_SIZE} /> },
       { href: '/settings/compliance', label: 'Compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'] },
       { href: '/settings/backup', label: 'Backup & Data', icon: <HardDrive size={ICON_SIZE} />, roles: ['ADMIN'] },
     ],

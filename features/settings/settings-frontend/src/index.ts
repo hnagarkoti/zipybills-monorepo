@@ -12,3 +12,4 @@ export type { SettingsTab } from './components/SettingsPage';
 export { AppearanceSettings } from './components/AppearanceSettings';
 export { ComplianceSettings } from './components/ComplianceSettings';
 export { BackupSettings } from './components/BackupSettings';
+export { LanguageSettings } from './components/LanguageSettings';

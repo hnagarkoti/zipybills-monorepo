@@ -299,6 +299,15 @@ export async function initializeMultiTenancySchema(): Promise<void> {
       WHERE deleted_at IS NULL;
   `);
 
+  // ─── User Preferred Locale ────────────────────────
+  await query(`
+    DO $$ BEGIN
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'preferred_locale') THEN
+        ALTER TABLE users ADD COLUMN preferred_locale VARCHAR(10) DEFAULT 'en';
+      END IF;
+    END $$;
+  `);
+
   console.log('[Multi-Tenancy] ✅ Schema initialized');
 }
 

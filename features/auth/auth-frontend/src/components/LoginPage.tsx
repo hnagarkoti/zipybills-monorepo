@@ -6,6 +6,7 @@ import { login as apiLogin } from '../services/api';
 import { setAuthToken } from '@zipybills/factory-api-client';
 import { Alert } from '@zipybills/ui-components';
 import { colors } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 interface LoginPageProps {
   onLogin: (user: { user_id: number; username: string; full_name: string; role: string }, token: string) => void;
@@ -14,6 +15,7 @@ interface LoginPageProps {
 type Step = 'workspace' | 'credentials';
 
 export function LoginPage({ onLogin }: LoginPageProps) {
+  const { t } = useLocale();
   const [step, setStep] = useState<Step>('workspace');
   const [workspaceId, setWorkspaceId] = useState('');
   const [username, setUsername] = useState('');
@@ -24,7 +26,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const handleWorkspaceContinue = () => {
     const trimmed = workspaceId.trim().toLowerCase();
     if (!trimmed) {
-      setError('Please enter your Workspace ID');
+      setError(t('auth.requiredWorkspace'));
       return;
     }
     setWorkspaceId(trimmed);
@@ -34,7 +36,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      setError('Please enter username and password');
+      setError(t('auth.requiredFields'));
       return;
     }
     try {
@@ -44,7 +46,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       setAuthToken(res.token);
       onLogin(res.user, res.token);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Login failed';
+      const message = err instanceof Error ? err.message : t('auth.loginFailed');
       setError(message);
     } finally {
       setLoading(false);
@@ -84,8 +86,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             >
               <Factory size={32} color={colors.white} />
             </LinearGradient>
-            <Text className="text-2xl font-bold text-white">FactoryOS</Text>
-            <Text className="text-sm text-blue-300/70 mt-1">Smart Manufacturing Platform</Text>
+            <Text className="text-2xl font-bold text-white">{t('common.appName')}</Text>
+            <Text className="text-sm text-blue-300/70 mt-1">{t('common.tagline')}</Text>
           </View>
 
           {/* Form */}
@@ -94,7 +96,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             {step === 'credentials' && (
               <Pressable onPress={handleBack} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
                 <ArrowLeft size={16} color="rgba(147,197,253,0.7)" />
-                <Text style={{ color: 'rgba(147,197,253,0.7)', fontSize: 13, marginLeft: 4 }}>Back</Text>
+                <Text style={{ color: 'rgba(147,197,253,0.7)', fontSize: 13, marginLeft: 4 }}>{t('common.back')}</Text>
               </Pressable>
             )}
 
@@ -108,18 +110,18 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               <>
                 {/* Step 1: Workspace ID */}
                 <View className="mb-2">
-                  <Text className="text-white text-base font-semibold mb-1">Sign in to your workspace</Text>
-                  <Text className="text-blue-200/50 text-xs mb-4">Enter your company's Workspace ID to continue</Text>
+                  <Text className="text-white text-base font-semibold mb-1">{t('auth.signInToWorkspace')}</Text>
+                  <Text className="text-blue-200/50 text-xs mb-4">{t('auth.enterWorkspaceId')}</Text>
                 </View>
                 <View className="mb-6">
-                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">WORKSPACE ID</Text>
+                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">{t('auth.workspaceId').toUpperCase()}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.07)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 8 }}>
                     <Building2 size={16} color="rgba(148,163,184,0.5)" style={{ marginLeft: 14 }} />
                     <TextInput
                       style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 12, color: '#fff', fontSize: 14 }}
                       value={workspaceId}
                       onChangeText={setWorkspaceId}
-                      placeholder="e.g. acme-manufacturing"
+                      placeholder={t('auth.workspaceIdPlaceholder')}
                       placeholderTextColor="rgba(148,163,184,0.5)"
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -127,7 +129,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                       returnKeyType="next"
                     />
                   </View>
-                  <Text className="text-xs text-blue-200/30 mt-1.5">Your admin set this when creating your account</Text>
+                  <Text className="text-xs text-blue-200/30 mt-1.5">{t('auth.workspaceIdHint')}</Text>
                 </View>
                 <Pressable onPress={handleWorkspaceContinue}>
                   <LinearGradient
@@ -136,7 +138,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     end={{ x: 1, y: 0 }}
                     style={{ paddingVertical: 14, borderRadius: 10, alignItems: 'center' }}
                   >
-                    <Text className="text-white font-semibold text-base">Continue</Text>
+                    <Text className="text-white font-semibold text-base">{t('auth.continue')}</Text>
                   </LinearGradient>
                 </Pressable>
               </>
@@ -150,13 +152,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </View>
 
                 <View className="mb-4">
-                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">USERNAME</Text>
+                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">{t('auth.username').toUpperCase()}</Text>
                   <TextInput
                     className="rounded-lg px-4 py-3 text-white text-sm"
                     style={{ backgroundColor: 'rgba(255,255,255,0.07)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                     value={username}
                     onChangeText={setUsername}
-                    placeholder="Enter username"
+                    placeholder={t('auth.usernamePlaceholder')}
                     placeholderTextColor="rgba(148,163,184,0.5)"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -165,13 +167,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </View>
 
                 <View className="mb-6">
-                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">PASSWORD</Text>
+                  <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">{t('auth.password').toUpperCase()}</Text>
                   <TextInput
                     className="rounded-lg px-4 py-3 text-white text-sm"
                     style={{ backgroundColor: 'rgba(255,255,255,0.07)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Enter password"
+                    placeholder={t('auth.passwordPlaceholder')}
                     placeholderTextColor="rgba(148,163,184,0.5)"
                     secureTextEntry
                     onSubmitEditing={handleLogin}
@@ -186,7 +188,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     style={{ paddingVertical: 14, borderRadius: 10, alignItems: 'center' }}
                   >
                     <Text className="text-white font-semibold text-base">
-                      {loading ? 'Signing in...' : 'Sign In'}
+                      {loading ? t('auth.signingIn') : t('auth.signIn')}
                     </Text>
                   </LinearGradient>
                 </Pressable>
@@ -196,7 +198,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
           {/* Powered by */}
           <View className="items-center mt-8">
-            <Text className="text-xs text-blue-300/30">Powered by Zipybills</Text>
+            <Text className="text-xs text-blue-300/30">{t('common.poweredBy')}</Text>
           </View>
         </View>
       </LinearGradient>

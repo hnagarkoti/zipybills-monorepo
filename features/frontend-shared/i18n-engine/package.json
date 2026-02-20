@@ -1,0 +1,29 @@
+{
+  "name": "@zipybills/i18n-engine",
+  "version": "0.1.0",
+  "description": "FactoryOS i18n Engine – Multilingual support with device detection, runtime switching, and offline-first locale persistence",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@zipybills/ts-config": "workspace:*",
+    "i18next": "catalog:",
+    "react-i18next": "catalog:",
+    "expo-localization": "catalog:",
+    "zustand": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-native": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "react-native": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "private": true
+}

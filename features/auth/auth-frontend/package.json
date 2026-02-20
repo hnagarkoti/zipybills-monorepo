@@ -15,6 +15,7 @@
   "dependencies": {
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-auth-service-interface": "workspace:*",
+    "@zipybills/i18n-engine": "workspace:*",
     "@zipybills/theme-engine": "workspace:*",
     "@zipybills/ui-components": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
