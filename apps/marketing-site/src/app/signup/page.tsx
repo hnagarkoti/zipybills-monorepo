@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import PhoneInput, { isValidPhoneNumber, type Country } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import {
   Building2, User, Lock, Mail, Phone, ArrowRight, CheckCircle2,
   XCircle, Loader2, Eye, EyeOff, Sparkles, Shield, Zap,
@@ -18,6 +20,41 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
+/** Auto-detect user's country from browser locale/timezone */
+function detectCountry(): Country {
+  try {
+    // Try timezone → country mapping first (most reliable)
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. 'Asia/Kolkata'
+    const tzCountryMap: Record<string, Country> = {
+      'Asia/Kolkata': 'IN', 'Asia/Calcutta': 'IN', 'Asia/Colombo': 'LK',
+      'America/New_York': 'US', 'America/Chicago': 'US', 'America/Denver': 'US',
+      'America/Los_Angeles': 'US', 'America/Phoenix': 'US', 'America/Anchorage': 'US',
+      'Pacific/Honolulu': 'US',
+      'America/Toronto': 'CA', 'America/Vancouver': 'CA',
+      'Europe/London': 'GB', 'Europe/Berlin': 'DE', 'Europe/Paris': 'FR',
+      'Europe/Rome': 'IT', 'Europe/Madrid': 'ES', 'Europe/Amsterdam': 'NL',
+      'Australia/Sydney': 'AU', 'Australia/Melbourne': 'AU', 'Australia/Perth': 'AU',
+      'Asia/Tokyo': 'JP', 'Asia/Shanghai': 'CN', 'Asia/Hong_Kong': 'HK',
+      'Asia/Singapore': 'SG', 'Asia/Dubai': 'AE', 'Asia/Riyadh': 'SA',
+      'Asia/Karachi': 'PK', 'Asia/Dhaka': 'BD', 'Asia/Bangkok': 'TH',
+      'Asia/Jakarta': 'ID', 'Asia/Manila': 'PH', 'Asia/Seoul': 'KR',
+      'Africa/Lagos': 'NG', 'Africa/Cairo': 'EG', 'Africa/Johannesburg': 'ZA',
+      'America/Mexico_City': 'MX', 'America/Sao_Paulo': 'BR', 'America/Argentina/Buenos_Aires': 'AR',
+      'Pacific/Auckland': 'NZ',
+    };
+    if (tz && tzCountryMap[tz]) return tzCountryMap[tz];
+
+    // Fallback: extract region from navigator.language (e.g. 'en-US' → 'US')
+    const lang = navigator.language || (navigator as any).userLanguage || '';
+    const parts = lang.split('-');
+    if (parts.length >= 2) {
+      const region = parts[parts.length - 1].toUpperCase();
+      if (region.length === 2) return region as Country;
+    }
+  } catch { /* ignore */ }
+  return 'IN'; // Default to India
+}
+
 export default function SignupPage() {
   const [form, setForm] = useState({
     company_name: '',
@@ -25,10 +62,11 @@ export default function SignupPage() {
     admin_full_name: '',
     admin_username: '',
     admin_email: '',
-    admin_phone: '',
+    admin_phone: '' as string | undefined,
     admin_password: '',
     confirm_password: '',
   });
+  const [defaultCountry, setDefaultCountry] = useState<Country>('IN');
   const [slugManual, setSlugManual] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
@@ -44,6 +82,10 @@ export default function SignupPage() {
       slug: slugManual ? prev.slug : slugify(value),
     }));
   }
+
+  useEffect(() => {
+    setDefaultCountry(detectCountry());
+  }, []);
 
   // Debounced username availability check
   const checkUsername = useCallback(async (username: string) => {
@@ -77,12 +119,13 @@ export default function SignupPage() {
   // Validation
   const passwordValid = form.admin_password.length >= 8;
   const passwordsMatch = form.admin_password === form.confirm_password && form.confirm_password.length > 0;
+  const phoneValid = form.admin_phone ? isValidPhoneNumber(form.admin_phone) : false;
   const formReady =
     form.company_name.trim().length >= 2 &&
     form.slug.trim().length >= 2 &&
     form.admin_full_name.trim().length >= 2 &&
     form.admin_email.trim().length >= 5 &&
-    form.admin_phone.trim().length >= 7 &&
+    phoneValid &&
     form.admin_username.trim().length >= 3 &&
     usernameStatus === 'available' &&
     passwordValid &&
@@ -105,7 +148,7 @@ export default function SignupPage() {
           admin_username: form.admin_username.trim(),
           admin_password: form.admin_password,
           admin_email: form.admin_email.trim(),
-          admin_phone: form.admin_phone.trim(),
+          admin_phone: form.admin_phone || '', // E.164 format: +919876543210
           plan_code: 'FREE', // Default free trial
         }),
       });
@@ -300,14 +343,17 @@ export default function SignupPage() {
                           <Phone className="w-3.5 h-3.5" /> Phone Number *
                         </span>
                       </label>
-                      <input
-                        type="tel"
-                        required
+                      <PhoneInput
+                        international
+                        countryCallingCodeEditable={false}
+                        defaultCountry={defaultCountry}
                         value={form.admin_phone}
-                        onChange={(e) => setForm({ ...form, admin_phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
-                        placeholder="+91 98765 43210"
+                        onChange={(value) => setForm({ ...form, admin_phone: value })}
+                        className="phone-input-wrapper w-full px-4 py-3 rounded-xl border border-gray-200 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 text-sm"
                       />
+                      {form.admin_phone && !phoneValid && (
+                        <p className="text-xs text-red-600 mt-1">Please enter a valid phone number.</p>
+                      )}
                       <p className="text-xs text-gray-400 mt-1">Used only for onboarding support. Never shared.</p>
                     </div>
 

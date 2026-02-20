@@ -182,3 +182,44 @@ body {
   background: rgba(37, 99, 235, 0.15);
   color: #1e3a8a;
 }
+
+/* ─── Phone Input (react-phone-number-input) ── */
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phone-input-wrapper .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.phone-input-wrapper .PhoneInputCountrySelect {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  padding-right: 4px;
+}
+.phone-input-wrapper .PhoneInputCountryIcon {
+  width: 24px;
+  height: 16px;
+}
+.phone-input-wrapper .PhoneInputCountrySelectArrow {
+  width: 6px;
+  height: 6px;
+  border-color: #94a3b8;
+}
+.phone-input-wrapper .PhoneInputInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #111827;
+  padding: 0;
+}
+.phone-input-wrapper .PhoneInputInput::placeholder {
+  color: #9ca3af;
+}
