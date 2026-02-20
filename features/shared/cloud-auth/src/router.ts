@@ -57,10 +57,10 @@ cloudAuthRouter.post('/saas/signup', async (req: Request, res: Response) => {
   try {
     const body = req.body as SignupRequest;
 
-    if (!body.company_name || !body.slug || !body.admin_username || !body.admin_password || !body.admin_full_name) {
+    if (!body.company_name || !body.slug || !body.admin_username || !body.admin_password || !body.admin_full_name || !body.admin_email || !body.admin_phone) {
       return res.status(400).json({
         success: false,
-        error: 'Required fields: company_name, slug, admin_username, admin_password, admin_full_name',
+        error: 'Required fields: company_name, slug, admin_username, admin_password, admin_full_name, admin_email, admin_phone',
       });
     }
 

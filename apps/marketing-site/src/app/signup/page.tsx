@@ -81,6 +81,8 @@ export default function SignupPage() {
     form.company_name.trim().length >= 2 &&
     form.slug.trim().length >= 2 &&
     form.admin_full_name.trim().length >= 2 &&
+    form.admin_email.trim().length >= 5 &&
+    form.admin_phone.trim().length >= 7 &&
     form.admin_username.trim().length >= 3 &&
     usernameStatus === 'available' &&
     passwordValid &&
@@ -102,8 +104,8 @@ export default function SignupPage() {
           admin_full_name: form.admin_full_name.trim(),
           admin_username: form.admin_username.trim(),
           admin_password: form.admin_password,
-          admin_email: form.admin_email.trim() || undefined,
-          admin_phone: form.admin_phone.trim() || undefined,
+          admin_email: form.admin_email.trim(),
+          admin_phone: form.admin_phone.trim(),
           plan_code: 'FREE', // Default free trial
         }),
       });
@@ -278,15 +280,16 @@ export default function SignupPage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
                         <span className="flex items-center gap-1.5">
-                          <Mail className="w-3.5 h-3.5" /> Email
+                          <Mail className="w-3.5 h-3.5" /> Email *
                         </span>
                       </label>
                       <input
                         type="email"
+                        required
                         value={form.admin_email}
                         onChange={(e) => setForm({ ...form, admin_email: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
-                        placeholder="rajesh@acme.com (optional)"
+                        placeholder="rajesh@acme.com"
                       />
                     </div>
 
@@ -294,15 +297,16 @@ export default function SignupPage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
                         <span className="flex items-center gap-1.5">
-                          <Phone className="w-3.5 h-3.5" /> Phone Number
+                          <Phone className="w-3.5 h-3.5" /> Phone Number *
                         </span>
                       </label>
                       <input
                         type="tel"
+                        required
                         value={form.admin_phone}
                         onChange={(e) => setForm({ ...form, admin_phone: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
-                        placeholder="+91 98765 43210 (optional)"
+                        placeholder="+91 98765 43210"
                       />
                       <p className="text-xs text-gray-400 mt-1">Used only for onboarding support. Never shared.</p>
                     </div>
