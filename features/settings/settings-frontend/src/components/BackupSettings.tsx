@@ -133,7 +133,7 @@ function BackupRow({ backup, onDelete, t }: { backup: BackupItem; onDelete: (id:
           {typeLabels[backup.type] || backup.type}
         </Text>
         <Text className="text-xs text-gray-500 mt-0.5">
-          {formatDate(backup.createdAt)} · {backup.sizeHuman} · {totalRecords} records
+          {formatDate(backup.createdAt)} · {backup.sizeHuman} · {totalRecords} {t('common.records')}
         </Text>
       </View>
       <View className="flex-row items-center gap-2">
@@ -222,17 +222,17 @@ export function BackupSettings() {
       setExporting(true);
       const res = await createExport();
       if (res.success) {
-        showToast(`Export created: ${res.backup.sizeHuman} (${Object.values(res.backup.recordCounts || {}).reduce((a: number, b: any) => a + b, 0)} records)`);
+        showToast(t('backup.exportCreated'));
         // Auto-download on web
         if (Platform.OS === 'web') {
           window.open(getDownloadUrl(res.backup.id), '_blank');
         }
         loadData();
       } else {
-        showToast(res.error || 'Export failed', 'error');
+        showToast(res.error || t('backup.exportFailed'), 'error');
       }
     } catch (err: any) {
-      showToast(err.message || 'Export failed', 'error');
+      showToast(err.message || t('backup.exportFailed'), 'error');
     } finally {
       setExporting(false);
     }
@@ -243,13 +243,13 @@ export function BackupSettings() {
       setCloudBacking(true);
       const res = await createCloudBackup();
       if (res.success) {
-        showToast(`Cloud backup created: ${res.backup.sizeHuman} (encrypted, expires in 90 days)`);
+        showToast(t('backup.cloudBackupCreated'));
         loadData();
       } else {
-        showToast(res.error || 'Cloud backup failed', 'error');
+        showToast(res.error || t('backup.cloudBackupFailed'), 'error');
       }
     } catch (err: any) {
-      showToast(err.message || 'Cloud backup failed', 'error');
+      showToast(err.message || t('backup.cloudBackupFailed'), 'error');
     } finally {
       setCloudBacking(false);
     }
@@ -264,7 +264,7 @@ export function BackupSettings() {
           // Listen for connection success
           const handler = (event: MessageEvent) => {
             if (event.data?.type === 'GDRIVE_CONNECTED') {
-              showToast(`Google Drive connected: ${event.data.email}`);
+              showToast(t('backup.gdriveConnected'));
               loadData();
               window.removeEventListener('message', handler);
             }
@@ -274,10 +274,10 @@ export function BackupSettings() {
           Linking.openURL(res.authUrl);
         }
       } else {
-        showToast(res.error || 'Google Drive not configured', 'error');
+        showToast(res.error || t('backup.gdriveNotConfigured'), 'error');
       }
     } catch (err: any) {
-      showToast(err.message || 'Failed to connect Google Drive', 'error');
+      showToast(err.message || t('backup.gdriveConnectFailed'), 'error');
     }
   };
 
@@ -286,13 +286,13 @@ export function BackupSettings() {
       setGdriveBacking(true);
       const res = await createGDriveBackup();
       if (res.success) {
-        showToast(`Backed up to Google Drive: ${res.backup.sizeHuman} → ${res.backup.driveEmail}`);
+        showToast(t('backup.gdriveBackupDone'));
         loadData();
       } else {
-        showToast(res.error || 'Google Drive backup failed', 'error');
+        showToast(res.error || t('backup.gdriveBackupFailed'), 'error');
       }
     } catch (err: any) {
-      showToast(err.message || 'Google Drive backup failed', 'error');
+      showToast(err.message || t('backup.gdriveBackupFailed'), 'error');
     } finally {
       setGdriveBacking(false);
     }
@@ -301,20 +301,20 @@ export function BackupSettings() {
   const handleGDriveDisconnect = async () => {
     try {
       await disconnectGDrive();
-      showToast('Google Drive disconnected');
+      showToast(t('backup.gdriveDisconnected'));
       loadData();
     } catch (err: any) {
-      showToast('Failed to disconnect', 'error');
+      showToast(t('backup.disconnectFailed'), 'error');
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteBackup(id);
-      showToast('Backup deleted');
+      showToast(t('backup.backupDeleted'));
       loadData();
     } catch {
-      showToast('Delete failed', 'error');
+      showToast(t('backup.deleteFailed'), 'error');
     }
   };
 

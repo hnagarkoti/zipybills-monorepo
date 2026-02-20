@@ -351,7 +351,7 @@ function OnboardingBanner() {
                     </View>
                     <View>
                       <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.fiveMachines')}</Text>
-                      <Text className="text-xs text-gray-500">2 CNC, Lathe, Press, Assembly</Text>
+                      <Text className="text-xs text-gray-500">{t('onboarding.machineDetails')}</Text>
                     </View>
                   </View>
                   <View className="flex-row items-center gap-3">
@@ -360,7 +360,7 @@ function OnboardingBanner() {
                     </View>
                     <View>
                       <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeShifts')}</Text>
-                      <Text className="text-xs text-gray-500">Morning, Afternoon, Night</Text>
+                      <Text className="text-xs text-gray-500">{t('onboarding.shiftDetails')}</Text>
                     </View>
                   </View>
                   <View className="flex-row items-center gap-3">
@@ -369,7 +369,7 @@ function OnboardingBanner() {
                     </View>
                     <View>
                       <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeMonths')}</Text>
-                      <Text className="text-xs text-gray-500">Past 2 months + upcoming month</Text>
+                      <Text className="text-xs text-gray-500">{t('onboarding.planDetails')}</Text>
                     </View>
                   </View>
                   <View className="flex-row items-center gap-3">
@@ -378,7 +378,7 @@ function OnboardingBanner() {
                     </View>
                     <View>
                       <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeUsers')}</Text>
-                      <Text className="text-xs text-gray-500">2 Operators + 1 Supervisor (password: Test@1234)</Text>
+                      <Text className="text-xs text-gray-500">{t('onboarding.userDetails')}</Text>
                     </View>
                   </View>
                 </View>

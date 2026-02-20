@@ -100,7 +100,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
               await deleteUser(u.user_id);
               loadData();
             } catch (err: unknown) {
-              setError(err instanceof Error ? err.message : 'Failed to delete user');
+              setError(err instanceof Error ? err.message : t('userMgmt.deleteFailed'));
             }
           },
         },
@@ -110,9 +110,9 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
 
   /* ── Subtitle reflects active filters ── */
   const subtitleParts: string[] = [];
-  if (roleFilter !== 'ALL') subtitleParts.push(`${filteredUsers.length} ${roleFilter.toLowerCase()}s`);
-  else subtitleParts.push(`${activeCount} active of ${users.length} users`);
-  if (searchQuery.trim()) subtitleParts.push(`matching "${searchQuery.trim()}"`);
+  if (roleFilter !== 'ALL') subtitleParts.push(`${filteredUsers.length} ${t(`roles.${roleFilter}`)}s`);
+  else subtitleParts.push(t('userMgmt.activeOfTotal', { active: activeCount, total: users.length }));
+  if (searchQuery.trim()) subtitleParts.push(t('userMgmt.matching', { query: searchQuery.trim() }));
 
   return (
     <ScrollView className="flex-1 p-4">
@@ -159,7 +159,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
               const count = roleCounts[role] ?? 0;
               const palette = ROLE_COLORS[role] ?? ROLE_COLORS.ALL!;
               const RoleIcon = role === 'ALL' ? Users : (ROLE_ICON[role] ?? Wrench);
-              const label = role === 'ALL' ? t('userMgmt.allUsers') : t(`roles.${role}`) + 's';
+              const label = role === 'ALL' ? t('userMgmt.allUsers') : t(`roles.${role}`);
 
               return (
                 <Pressable
@@ -244,7 +244,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
           {(roleFilter !== 'ALL' || searchQuery.trim()) && (
             <View className="flex-row items-center justify-between mb-2 px-1">
               <Text className="text-xs text-gray-400 dark:text-gray-500">
-                Showing {filteredUsers.length} of {users.length} users
+                {t('userMgmt.showingOf', { count: filteredUsers.length, total: users.length })}
               </Text>
               <Pressable
                 onPress={() => { setRoleFilter('ALL'); setSearchQuery(''); }}

@@ -40,7 +40,10 @@
     "create": "Crear",
     "dismiss": "Descartar",
     "units": "Unidades",
-    "target": "Objetivo"
+    "target": "Objetivo",
+    "user": "Usuario",
+    "records": "registros",
+    "system": "Sistema"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -140,7 +143,31 @@
     "tapToDismiss": "Toque para cerrar",
     "operationPermissions": "Permisos de operación",
     "enforcementRules": "Reglas de aplicación",
-    "serverSideInfo": "Estas configuraciones se aplican del lado del servidor por el API Gateway. Cuando se bloquea una operación, los usuarios verán un error de cumplimiento. Los cambios se aplican inmediatamente a todos los usuarios de este inquilino."
+    "serverSideInfo": "Estas configuraciones se aplican del lado del servidor por el API Gateway. Cuando se bloquea una operación, los usuarios verán un error de cumplimiento. Los cambios se aplican inmediatamente a todos los usuarios de este inquilino.",
+    "standardLabel": "Estándar",
+    "standardDesc": "Cumplimiento básico con registros de operaciones estándar",
+    "auditLabel": "Auditoría",
+    "auditDesc": "Registro mejorado con seguimiento de acciones del usuario",
+    "validationLabel": "Validación",
+    "validationDesc": "Validación estricta con aprobaciones obligatorias",
+    "traceabilityLabel": "Trazabilidad completa",
+    "traceabilityDesc": "Pista de auditoría completa con control documental",
+    "allowCreate": "Permitir creación",
+    "allowCreateDesc": "Los usuarios pueden crear nuevos registros",
+    "allowEdit": "Permitir edición",
+    "allowEditDesc": "Los usuarios pueden modificar registros existentes",
+    "allowDelete": "Permitir eliminación",
+    "allowDeleteDesc": "Los usuarios pueden eliminar registros",
+    "allowExport": "Permitir exportación",
+    "allowExportDesc": "Los usuarios pueden exportar datos",
+    "allowConfig": "Permitir cambios de configuración",
+    "allowConfigDesc": "Los usuarios pueden modificar la configuración del sistema",
+    "requireConfirmation": "Requerir confirmación",
+    "requireConfirmationDesc": "Mostrar diálogo de confirmación antes de acciones críticas",
+    "requireReason": "Requerir motivo",
+    "requireReasonDesc": "Requerir un motivo para todas las modificaciones",
+    "updateModeFailed": "Error al actualizar el modo de cumplimiento",
+    "updateSettingFailed": "Error al actualizar la configuración"
   },
   "backup": {
     "subtitle": "Sus datos siempre son suyos. Exporte, respalde o sincronice con Google Drive en cualquier momento.",
@@ -167,7 +194,20 @@
     "noBackupsDesc": "Cree su primer respaldo usando las opciones anteriores",
     "localExport": "Exportación local",
     "googleDrive": "Google Drive",
-    "viewInDrive": "Ver en Drive"
+    "viewInDrive": "Ver en Drive",
+    "exportCreated": "Archivo de exportación creado y descargado",
+    "exportFailed": "Error al crear la exportación",
+    "cloudBackupCreated": "Respaldo en la nube creado exitosamente",
+    "cloudBackupFailed": "Error al crear el respaldo en la nube",
+    "gdriveConnected": "Google Drive conectado exitosamente",
+    "gdriveNotConfigured": "La integración con Google Drive no está configurada",
+    "gdriveConnectFailed": "Error al conectar con Google Drive",
+    "gdriveBackupDone": "Respaldo guardado en Google Drive",
+    "gdriveBackupFailed": "Error al respaldar en Google Drive",
+    "gdriveDisconnected": "Google Drive desconectado",
+    "disconnectFailed": "Error al desconectar Google Drive",
+    "backupDeleted": "Respaldo eliminado",
+    "deleteFailed": "Error al eliminar el respaldo"
   },
   "trial": {
     "expiresToday": "La prueba expira hoy",
@@ -202,7 +242,11 @@
     "threeMonths": "3 meses de planes",
     "threeUsers": "3 usuarios",
     "creating": "Creando...",
-    "generate": "Generar"
+    "generate": "Generar",
+    "machineDetails": "2 CNC, Torno, Prensa, Ensamblaje",
+    "shiftDetails": "Mañana, Tarde, Noche",
+    "planDetails": "Últimos 2 meses + mes próximo",
+    "userDetails": "2 Operadores + 1 Supervisor (contraseña: Test@1234)"
   },
   "userMgmt": {
     "title": "Gestión de usuarios",
@@ -215,7 +259,11 @@
     "noUsers": "No se encontraron usuarios",
     "noMatch": "Ningún usuario coincide",
     "noRoleYet": "Aún no hay {{role}}",
-    "clearFilters": "Limpiar filtros"
+    "clearFilters": "Limpiar filtros",
+    "deleteFailed": "Error al eliminar el usuario",
+    "activeOfTotal": "{{active}} activos de {{total}} usuarios",
+    "matching": "que coinciden con \"{{query}}\"",
+    "showingOf": "Mostrando {{count}} de {{total}} usuarios"
   },
   "userForm": {
     "editUser": "Editar usuario",
@@ -248,7 +296,22 @@
     "updating": "Actualizando…",
     "creating": "Creando…",
     "updateUser": "Actualizar usuario",
-    "createUserBtn": "Crear usuario"
+    "createUserBtn": "Crear usuario",
+    "roleAdmin": "Administrador",
+    "roleAdminDesc": "Acceso completo a todas las funciones y configuraciones",
+    "roleSupervisor": "Supervisor",
+    "roleSupervisorDesc": "Puede gestionar la producción y ver informes",
+    "roleOperator": "Operador",
+    "roleOperatorDesc": "Puede registrar datos de producción",
+    "strengthWeak": "Débil",
+    "strengthFair": "Regular",
+    "strengthGood": "Buena",
+    "strengthStrong": "Fuerte",
+    "weakHint": "Agregue números y caracteres especiales",
+    "fairHint": "Agregue más variedad para una contraseña más fuerte",
+    "userNotFound": "Usuario no encontrado",
+    "loadFailed": "Error al cargar el usuario",
+    "saveFailed": "Error al guardar el usuario"
   },
   "admin": {
     "title": "Panel de administración",
@@ -300,7 +363,8 @@
     "shiftReport": "Informe por turno",
     "downtimeReport": "Informe de tiempo de inactividad",
     "efficiencyReport": "Informe de eficiencia / OEE",
-    "summaryReport": "Informe resumen"
+    "summaryReport": "Informe resumen",
+    "pageOf": "Página {{page}} de {{total}}"
   },
   "dashboard": {
     "title": "Panel de control",

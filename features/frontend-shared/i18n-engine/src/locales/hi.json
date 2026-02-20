@@ -40,7 +40,10 @@
     "create": "बनाएं",
     "dismiss": "खारिज",
     "units": "इकाइयां",
-    "target": "लक्ष्य"
+    "target": "लक्ष्य",
+    "user": "उपयोगकर्ता",
+    "records": "रिकॉर्ड",
+    "system": "सिस्टम"
   },
   "auth": {
     "signIn": "साइन इन",
@@ -140,7 +143,31 @@
     "tapToDismiss": "खारिज करने के लिए टैप करें",
     "operationPermissions": "ऑपरेशन अनुमतियां",
     "enforcementRules": "प्रवर्तन नियम",
-    "serverSideInfo": "ये सेटिंग्स API गेटवे द्वारा सर्वर-साइड लागू की जाती हैं। जब कोई ऑपरेशन अवरुद्ध होता है, तो उपयोगकर्ताओं को अनुपालन त्रुटि दिखाई देगी। परिवर्तन इस टेनेंट के सभी उपयोगकर्ताओं पर तुरंत लागू होते हैं।"
+    "serverSideInfo": "ये सेटिंग्स API गेटवे द्वारा सर्वर-साइड लागू की जाती हैं। जब कोई ऑपरेशन अवरुद्ध होता है, तो उपयोगकर्ताओं को अनुपालन त्रुटि दिखाई देगी। परिवर्तन इस टेनेंट के सभी उपयोगकर्ताओं पर तुरंत लागू होते हैं।",
+    "standardLabel": "मानक",
+    "standardDesc": "मानक ऑपरेशन लॉग के साथ बुनियादी अनुपालन",
+    "auditLabel": "ऑडिट",
+    "auditDesc": "उपयोगकर्ता कार्रवाई ट्रैकिंग के साथ उन्नत लॉगिंग",
+    "validationLabel": "सत्यापन",
+    "validationDesc": "अनिवार्य अनुमोदन के साथ सख्त सत्यापन",
+    "traceabilityLabel": "पूर्ण ट्रेसबिलिटी",
+    "traceabilityDesc": "दस्तावेज़ नियंत्रण के साथ पूर्ण ऑडिट ट्रेल",
+    "allowCreate": "बनाने की अनुमति दें",
+    "allowCreateDesc": "उपयोगकर्ता नए रिकॉर्ड बना सकते हैं",
+    "allowEdit": "संपादन की अनुमति दें",
+    "allowEditDesc": "उपयोगकर्ता मौजूदा रिकॉर्ड संशोधित कर सकते हैं",
+    "allowDelete": "हटाने की अनुमति दें",
+    "allowDeleteDesc": "उपयोगकर्ता रिकॉर्ड हटा सकते हैं",
+    "allowExport": "निर्यात की अनुमति दें",
+    "allowExportDesc": "उपयोगकर्ता डेटा निर्यात कर सकते हैं",
+    "allowConfig": "कॉन्फ़िगरेशन बदलने की अनुमति दें",
+    "allowConfigDesc": "उपयोगकर्ता सिस्टम सेटिंग्स बदल सकते हैं",
+    "requireConfirmation": "पुष्टि आवश्यक",
+    "requireConfirmationDesc": "महत्वपूर्ण कार्यों से पहले पुष्टि संवाद दिखाएं",
+    "requireReason": "कारण आवश्यक",
+    "requireReasonDesc": "सभी संशोधनों के लिए कारण आवश्यक",
+    "updateModeFailed": "अनुपालन मोड अपडेट करने में विफल",
+    "updateSettingFailed": "सेटिंग अपडेट करने में विफल"
   },
   "backup": {
     "subtitle": "आपका डेटा हमेशा आपका है। कभी भी निर्यात, बैकअप या Google Drive में सिंक करें।",
@@ -167,7 +194,20 @@
     "noBackupsDesc": "ऊपर दिए गए विकल्पों का उपयोग करके अपना पहला बैकअप बनाएं",
     "localExport": "लोकल निर्यात",
     "googleDrive": "Google Drive",
-    "viewInDrive": "Drive में देखें"
+    "viewInDrive": "Drive में देखें",
+    "exportCreated": "निर्यात फ़ाइल बनाई और डाउनलोड की गई",
+    "exportFailed": "निर्यात बनाने में विफल",
+    "cloudBackupCreated": "क्लाउड बैकअप सफलतापूर्वक बनाया गया",
+    "cloudBackupFailed": "क्लाउड बैकअप बनाने में विफल",
+    "gdriveConnected": "Google Drive सफलतापूर्वक कनेक्ट हुआ",
+    "gdriveNotConfigured": "Google Drive एकीकरण कॉन्फ़िगर नहीं है",
+    "gdriveConnectFailed": "Google Drive से कनेक्ट करने में विफल",
+    "gdriveBackupDone": "Google Drive में बैकअप सहेजा गया",
+    "gdriveBackupFailed": "Google Drive में बैकअप करने में विफल",
+    "gdriveDisconnected": "Google Drive डिस्कनेक्ट हो गया",
+    "disconnectFailed": "Google Drive डिस्कनेक्ट करने में विफल",
+    "backupDeleted": "बैकअप हटाया गया",
+    "deleteFailed": "बैकअप हटाने में विफल"
   },
   "trial": {
     "expiresToday": "ट्रायल आज समाप्त हो रहा है",
@@ -202,7 +242,11 @@
     "threeMonths": "3 महीने की योजनाएं",
     "threeUsers": "3 उपयोगकर्ता",
     "creating": "बनाया जा रहा है...",
-    "generate": "जनरेट करें"
+    "generate": "जनरेट करें",
+    "machineDetails": "2 CNC, लेथ, प्रेस, असेंबली",
+    "shiftDetails": "सुबह, दोपहर, रात",
+    "planDetails": "पिछले 2 महीने + आगामी महीना",
+    "userDetails": "2 ऑपरेटर + 1 पर्यवेक्षक (पासवर्ड: Test@1234)"
   },
   "userMgmt": {
     "title": "उपयोगकर्ता प्रबंधन",
@@ -215,7 +259,11 @@
     "noUsers": "कोई उपयोगकर्ता नहीं मिला",
     "noMatch": "कोई उपयोगकर्ता मेल नहीं खाता",
     "noRoleYet": "अभी तक कोई {{role}} नहीं",
-    "clearFilters": "फ़िल्टर साफ़ करें"
+    "clearFilters": "फ़िल्टर साफ़ करें",
+    "deleteFailed": "उपयोगकर्ता हटाने में विफल",
+    "activeOfTotal": "{{total}} में से {{active}} सक्रिय",
+    "matching": "\"{{query}}\" से मेल खाते",
+    "showingOf": "{{total}} में से {{count}} दिखा रहे हैं"
   },
   "userForm": {
     "editUser": "उपयोगकर्ता संपादित करें",
@@ -248,7 +296,22 @@
     "updating": "अपडेट हो रहा है…",
     "creating": "बनाया जा रहा है…",
     "updateUser": "उपयोगकर्ता अपडेट करें",
-    "createUserBtn": "उपयोगकर्ता बनाएं"
+    "createUserBtn": "उपयोगकर्ता बनाएं",
+    "roleAdmin": "व्यवस्थापक",
+    "roleAdminDesc": "सभी सुविधाओं और सेटिंग्स तक पूर्ण पहुंच",
+    "roleSupervisor": "पर्यवेक्षक",
+    "roleSupervisorDesc": "उत्पादन प्रबंधन और रिपोर्ट देख सकते हैं",
+    "roleOperator": "ऑपरेटर",
+    "roleOperatorDesc": "उत्पादन डेटा लॉग कर सकते हैं",
+    "strengthWeak": "कमजोर",
+    "strengthFair": "ठीक",
+    "strengthGood": "अच्छा",
+    "strengthStrong": "मजबूत",
+    "weakHint": "संख्याएं और विशेष अक्षर जोड़ें",
+    "fairHint": "मजबूत पासवर्ड के लिए और विविधता जोड़ें",
+    "userNotFound": "उपयोगकर्ता नहीं मिला",
+    "loadFailed": "उपयोगकर्ता लोड करने में विफल",
+    "saveFailed": "उपयोगकर्ता सहेजने में विफल"
   },
   "admin": {
     "title": "एडमिन पैनल",
@@ -300,7 +363,8 @@
     "shiftReport": "शिफ्ट-वार रिपोर्ट",
     "downtimeReport": "डाउनटाइम रिपोर्ट",
     "efficiencyReport": "दक्षता / OEE रिपोर्ट",
-    "summaryReport": "सारांश रिपोर्ट"
+    "summaryReport": "सारांश रिपोर्ट",
+    "pageOf": "पृष्ठ {{page}} / {{total}}"
   },
   "dashboard": {
     "title": "डैशबोर्ड",

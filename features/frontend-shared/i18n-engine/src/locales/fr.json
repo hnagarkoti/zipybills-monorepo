@@ -40,7 +40,10 @@
     "create": "Créer",
     "dismiss": "Fermer",
     "units": "Unités",
-    "target": "Objectif"
+    "target": "Objectif",
+    "user": "Utilisateur",
+    "records": "enregistrements",
+    "system": "Système"
   },
   "auth": {
     "signIn": "Connexion",
@@ -140,7 +143,31 @@
     "tapToDismiss": "Appuyez pour fermer",
     "operationPermissions": "Permissions d'opération",
     "enforcementRules": "Règles d'application",
-    "serverSideInfo": "Ces paramètres sont appliqués côté serveur par la passerelle API. Lorsqu'une opération est bloquée, les utilisateurs verront une erreur de conformité. Les modifications s'appliquent immédiatement à tous les utilisateurs de ce locataire."
+    "serverSideInfo": "Ces paramètres sont appliqués côté serveur par la passerelle API. Lorsqu'une opération est bloquée, les utilisateurs verront une erreur de conformité. Les modifications s'appliquent immédiatement à tous les utilisateurs de ce locataire.",
+    "standardLabel": "Standard",
+    "standardDesc": "Conformité de base avec journaux d'opérations standard",
+    "auditLabel": "Audit",
+    "auditDesc": "Journalisation améliorée avec suivi des actions utilisateur",
+    "validationLabel": "Validation",
+    "validationDesc": "Validation stricte avec approbations obligatoires",
+    "traceabilityLabel": "Traçabilité complète",
+    "traceabilityDesc": "Piste d'audit complète avec contrôle documentaire",
+    "allowCreate": "Autoriser la création",
+    "allowCreateDesc": "Les utilisateurs peuvent créer de nouveaux enregistrements",
+    "allowEdit": "Autoriser la modification",
+    "allowEditDesc": "Les utilisateurs peuvent modifier les enregistrements existants",
+    "allowDelete": "Autoriser la suppression",
+    "allowDeleteDesc": "Les utilisateurs peuvent supprimer des enregistrements",
+    "allowExport": "Autoriser l'export",
+    "allowExportDesc": "Les utilisateurs peuvent exporter les données",
+    "allowConfig": "Autoriser les modifications de configuration",
+    "allowConfigDesc": "Les utilisateurs peuvent modifier les paramètres système",
+    "requireConfirmation": "Exiger une confirmation",
+    "requireConfirmationDesc": "Afficher un dialogue de confirmation avant les actions critiques",
+    "requireReason": "Exiger un motif",
+    "requireReasonDesc": "Exiger un motif pour toutes les modifications",
+    "updateModeFailed": "Échec de la mise à jour du mode de conformité",
+    "updateSettingFailed": "Échec de la mise à jour du paramètre"
   },
   "backup": {
     "subtitle": "Vos données vous appartiennent toujours. Exportez, sauvegardez ou synchronisez vers Google Drive à tout moment.",
@@ -167,7 +194,20 @@
     "noBackupsDesc": "Créez votre première sauvegarde en utilisant les options ci-dessus",
     "localExport": "Export local",
     "googleDrive": "Google Drive",
-    "viewInDrive": "Voir dans Drive"
+    "viewInDrive": "Voir dans Drive",
+    "exportCreated": "Fichier d'export créé et téléchargé",
+    "exportFailed": "Échec de la création de l'export",
+    "cloudBackupCreated": "Sauvegarde cloud créée avec succès",
+    "cloudBackupFailed": "Échec de la création de la sauvegarde cloud",
+    "gdriveConnected": "Google Drive connecté avec succès",
+    "gdriveNotConfigured": "L'intégration Google Drive n'est pas configurée",
+    "gdriveConnectFailed": "Échec de la connexion à Google Drive",
+    "gdriveBackupDone": "Sauvegarde enregistrée sur Google Drive",
+    "gdriveBackupFailed": "Échec de la sauvegarde sur Google Drive",
+    "gdriveDisconnected": "Google Drive déconnecté",
+    "disconnectFailed": "Échec de la déconnexion de Google Drive",
+    "backupDeleted": "Sauvegarde supprimée",
+    "deleteFailed": "Échec de la suppression de la sauvegarde"
   },
   "trial": {
     "expiresToday": "L'essai expire aujourd'hui",
@@ -202,7 +242,11 @@
     "threeMonths": "3 mois de plans",
     "threeUsers": "3 utilisateurs",
     "creating": "Création en cours...",
-    "generate": "Générer"
+    "generate": "Générer",
+    "machineDetails": "2 CNC, Tour, Presse, Assemblage",
+    "shiftDetails": "Matin, Après-midi, Nuit",
+    "planDetails": "2 derniers mois + mois à venir",
+    "userDetails": "2 Opérateurs + 1 Superviseur (mot de passe : Test@1234)"
   },
   "userMgmt": {
     "title": "Gestion des utilisateurs",
@@ -215,7 +259,11 @@
     "noUsers": "Aucun utilisateur trouvé",
     "noMatch": "Aucun utilisateur ne correspond",
     "noRoleYet": "Pas encore de {{role}}",
-    "clearFilters": "Effacer les filtres"
+    "clearFilters": "Effacer les filtres",
+    "deleteFailed": "Échec de la suppression de l'utilisateur",
+    "activeOfTotal": "{{active}} actifs sur {{total}} utilisateurs",
+    "matching": "correspondant à \"{{query}}\"",
+    "showingOf": "Affichage de {{count}} sur {{total}} utilisateurs"
   },
   "userForm": {
     "editUser": "Modifier l'utilisateur",
@@ -248,7 +296,22 @@
     "updating": "Mise à jour…",
     "creating": "Création…",
     "updateUser": "Mettre à jour l'utilisateur",
-    "createUserBtn": "Créer l'utilisateur"
+    "createUserBtn": "Créer l'utilisateur",
+    "roleAdmin": "Administrateur",
+    "roleAdminDesc": "Accès complet à toutes les fonctionnalités et paramètres",
+    "roleSupervisor": "Superviseur",
+    "roleSupervisorDesc": "Peut gérer la production et consulter les rapports",
+    "roleOperator": "Opérateur",
+    "roleOperatorDesc": "Peut saisir les données de production",
+    "strengthWeak": "Faible",
+    "strengthFair": "Moyen",
+    "strengthGood": "Bon",
+    "strengthStrong": "Fort",
+    "weakHint": "Ajoutez des chiffres et des caractères spéciaux",
+    "fairHint": "Ajoutez plus de variété pour un mot de passe plus fort",
+    "userNotFound": "Utilisateur introuvable",
+    "loadFailed": "Échec du chargement de l'utilisateur",
+    "saveFailed": "Échec de l'enregistrement de l'utilisateur"
   },
   "admin": {
     "title": "Panneau d'administration",
@@ -300,7 +363,8 @@
     "shiftReport": "Rapport par équipe",
     "downtimeReport": "Rapport de temps d'arrêt",
     "efficiencyReport": "Rapport d'efficacité / OEE",
-    "summaryReport": "Rapport de synthèse"
+    "summaryReport": "Rapport de synthèse",
+    "pageOf": "Page {{page}} sur {{total}}"
   },
   "dashboard": {
     "title": "Tableau de bord",

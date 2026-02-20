@@ -43,8 +43,8 @@ interface TabConfig {
 const TABS: TabConfig[] = [
   {
     id: 'appearance',
-    label: 'Appearance',
-    description: 'Theme, colors and display',
+    label: 'settings.appearance',
+    description: 'settings.appearanceDesc',
     icon: <Palette size={20} />,
     path: '/settings/appearance',
     color: '#8B5CF6',
@@ -52,8 +52,8 @@ const TABS: TabConfig[] = [
   },
   {
     id: 'language',
-    label: 'Language',
-    description: 'App language and region',
+    label: 'settings.language',
+    description: 'settings.languageDesc',
     icon: <Globe size={20} />,
     path: '/settings/language',
     color: '#3B82F6',
@@ -61,8 +61,8 @@ const TABS: TabConfig[] = [
   },
   {
     id: 'compliance',
-    label: 'Compliance',
-    description: 'Audit, validation and traceability',
+    label: 'settings.compliance',
+    description: 'settings.complianceDesc',
     icon: <Shield size={20} />,
     path: '/settings/compliance',
     minRole: ['ADMIN', 'SUPERVISOR'],
@@ -71,8 +71,8 @@ const TABS: TabConfig[] = [
   },
   {
     id: 'backup',
-    label: 'Backup & Data',
-    description: 'Export, restore and manage data',
+    label: 'settings.backup',
+    description: 'settings.backupDesc',
     icon: <HardDrive size={20} />,
     path: '/settings/backup',
     minRole: ['ADMIN'],
@@ -94,6 +94,7 @@ export function getVisibleTabs(userRole: string): TabConfig[] {
 function SidebarTab({ tab, isActive, onPress, isLast }: {
   tab: TabConfig; isActive: boolean; onPress: () => void; isLast: boolean;
 }) {
+  const { t } = useLocale();
   return (
     <Pressable
       onPress={onPress}
@@ -109,10 +110,10 @@ function SidebarTab({ tab, isActive, onPress, isLast }: {
       </View>
       <View className="flex-1">
         <Text className={`text-sm font-semibold ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
-          {tab.label}
+          {t(tab.label)}
         </Text>
         <Text className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5" numberOfLines={1}>
-          {tab.description}
+          {t(tab.description)}
         </Text>
       </View>
     </Pressable>
@@ -122,6 +123,7 @@ function SidebarTab({ tab, isActive, onPress, isLast }: {
 // ─── Profile Card ─────────────────────────────
 
 function ProfileCard({ compact }: { compact?: boolean }) {
+  const { t } = useLocale();
   const { user } = useAuthStore();
   const userRole = user?.role ?? 'OPERATOR';
 
@@ -134,7 +136,7 @@ function ProfileCard({ compact }: { compact?: boolean }) {
           </View>
           <View className="flex-1">
             <Text className="text-sm font-bold text-gray-900 dark:text-gray-100" numberOfLines={1}>
-              {user?.full_name || user?.username || 'User'}
+              {user?.full_name || user?.username || t('common.user')}
             </Text>
             <View className="flex-row items-center gap-2 mt-0.5">
               <View className="bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">
@@ -157,7 +159,7 @@ function ProfileCard({ compact }: { compact?: boolean }) {
         </View>
         <View className="flex-1">
           <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">
-            {user?.full_name || user?.username || 'User'}
+            {user?.full_name || user?.username || t('common.user')}
           </Text>
           <View className="flex-row items-center gap-2 mt-0.5">
             <View className="bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">
@@ -287,6 +289,7 @@ export function SettingsPage({
 }) {
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
+  const { t } = useLocale();
   const { user } = useAuthStore();
   const userRole = user?.role ?? 'OPERATOR';
   const visibleTabs = getVisibleTabs(userRole);
@@ -303,7 +306,7 @@ export function SettingsPage({
   // ─── MOBILE: Settings list ─────────────────
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-950">
-      <PageHeader title="Settings" subtitle="Manage your preferences" />
+      <PageHeader title={t('settings.title')} subtitle={t('settings.subtitle')} />
 
       <ScrollView
         className="flex-1 px-4"
@@ -334,10 +337,10 @@ export function SettingsPage({
 
               <View className="flex-1">
                 <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                  {tab.label}
+                  {t(tab.label)}
                 </Text>
                 <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  {tab.description}
+                  {t(tab.description)}
                 </Text>
               </View>
 

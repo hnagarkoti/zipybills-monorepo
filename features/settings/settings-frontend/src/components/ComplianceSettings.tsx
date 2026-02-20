@@ -51,8 +51,8 @@ const ICON_SIZE = 20;
 const MODE_OPTIONS: ModeOption[] = [
   {
     id: 'standard',
-    label: 'Standard',
-    description: 'Normal operation – no restrictions',
+    label: 'compliance.standardLabel',
+    description: 'compliance.standardDesc',
     icon: <Shield size={ICON_SIZE} color="#6B7280" />,
     color: '#6B7280',
     accentBg: 'bg-gray-50 dark:bg-gray-800',
@@ -60,8 +60,8 @@ const MODE_OPTIONS: ModeOption[] = [
   },
   {
     id: 'audit-mode',
-    label: 'Audit Mode',
-    description: 'Restricts destructive actions for audits',
+    label: 'compliance.auditLabel',
+    description: 'compliance.auditDesc',
     icon: <Search size={ICON_SIZE} color="#D97706" />,
     color: '#D97706',
     accentBg: 'bg-amber-50 dark:bg-amber-900/30',
@@ -69,8 +69,8 @@ const MODE_OPTIONS: ModeOption[] = [
   },
   {
     id: 'validation-mode',
-    label: 'Validation Mode',
-    description: 'Full read-only for regulated inspections',
+    label: 'compliance.validationLabel',
+    description: 'compliance.validationDesc',
     icon: <FileCheck size={ICON_SIZE} color="#2563EB" />,
     color: '#2563EB',
     accentBg: 'bg-blue-50 dark:bg-blue-900/30',
@@ -78,8 +78,8 @@ const MODE_OPTIONS: ModeOption[] = [
   },
   {
     id: 'traceability-mode',
-    label: 'Traceability Mode',
-    description: 'Every action requires justification',
+    label: 'compliance.traceabilityLabel',
+    description: 'compliance.traceabilityDesc',
     icon: <ShieldCheck size={ICON_SIZE} color="#16A34A" />,
     color: '#16A34A',
     accentBg: 'bg-green-50 dark:bg-green-900/30',
@@ -88,23 +88,23 @@ const MODE_OPTIONS: ModeOption[] = [
 ];
 
 const PERMISSION_TOGGLES: PermToggle[] = [
-  { key: 'can_create', label: 'Allow Create', description: 'Users can create new records' },
-  { key: 'can_edit', label: 'Allow Edit', description: 'Users can edit existing records' },
-  { key: 'can_delete', label: 'Allow Delete', description: 'Users can delete records' },
-  { key: 'can_export', label: 'Allow Export', description: 'Users can export data' },
-  { key: 'can_modify_config', label: 'Allow Config Changes', description: 'Users can modify settings' },
+  { key: 'can_create', label: 'compliance.allowCreate', description: 'compliance.allowCreateDesc' },
+  { key: 'can_edit', label: 'compliance.allowEdit', description: 'compliance.allowEditDesc' },
+  { key: 'can_delete', label: 'compliance.allowDelete', description: 'compliance.allowDeleteDesc' },
+  { key: 'can_export', label: 'compliance.allowExport', description: 'compliance.allowExportDesc' },
+  { key: 'can_modify_config', label: 'compliance.allowConfig', description: 'compliance.allowConfigDesc' },
 ];
 
 const ENFORCEMENT_TOGGLES: PermToggle[] = [
   {
     key: 'requires_confirmation',
-    label: 'Require Confirmation',
-    description: 'Show confirmation dialog before every mutation',
+    label: 'compliance.requireConfirmation',
+    description: 'compliance.requireConfirmationDesc',
   },
   {
     key: 'requires_reason',
-    label: 'Require Reason',
-    description: 'Require a written reason for every mutation',
+    label: 'compliance.requireReason',
+    description: 'compliance.requireReasonDesc',
   },
 ];
 
@@ -192,7 +192,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
         // Force re-fetch to guarantee UI shows fresh server state
         await fetchSettings(true);
       } catch (err: any) {
-        setSaveError(err?.message || 'Failed to update compliance mode');
+        setSaveError(err?.message || t('compliance.updateModeFailed'));
       } finally {
         setSaving(false);
       }
@@ -209,7 +209,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
         await updateSettings({ [key]: value });
         await fetchSettings(true);
       } catch (err: any) {
-        setSaveError(err?.message || 'Failed to update setting');
+        setSaveError(err?.message || t('compliance.updateSettingFailed'));
       } finally {
         setSaving(false);
       }
@@ -262,7 +262,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
           />
           <View className="ml-3 flex-1">
             <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {MODE_OPTIONS.find((m) => m.id === activeMode)?.label} {t('compliance.isActive')}
+              {t(MODE_OPTIONS.find((m) => m.id === activeMode)?.label ?? '')} {t('compliance.isActive')}
             </Text>
             {settings.activated_at && (
               <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -317,10 +317,10 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
                       isActive ? 'text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'
                     }`}
                   >
-                    {option.label}
+                    {t(option.label)}
                   </Text>
                   <Text className="text-xs text-gray-500 dark:text-gray-400">
-                    {option.description}
+                    {t(option.description)}
                   </Text>
                 </View>
                 {isActive && <View className="w-3 h-3 rounded-full bg-primary-500" />}
@@ -350,11 +350,11 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
                   <XCircle size={14} color="#EF4444" />
                 )}
                 <Text className="text-sm font-medium text-gray-800 dark:text-gray-200 ml-2">
-                  {toggle.label}
+                  {t(toggle.label)}
                 </Text>
               </View>
               <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 ml-6">
-                {toggle.description}
+                {t(toggle.description)}
               </Text>
             </View>
             <Switch
@@ -388,11 +388,11 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
                   <Shield size={14} color="#9CA3AF" />
                 )}
                 <Text className="text-sm font-medium text-gray-800 dark:text-gray-200 ml-2">
-                  {toggle.label}
+                  {t(toggle.label)}
                 </Text>
               </View>
               <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 ml-6">
-                {toggle.description}
+                {t(toggle.description)}
               </Text>
             </View>
             <Switch

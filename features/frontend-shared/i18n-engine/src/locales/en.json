@@ -40,7 +40,10 @@
     "create": "Create",
     "dismiss": "Dismiss",
     "units": "units",
-    "target": "Target"
+    "target": "Target",
+    "user": "User",
+    "records": "records",
+    "system": "System"
   },
   "auth": {
     "signIn": "Sign In",
@@ -140,7 +143,31 @@
     "tapToDismiss": "Tap to dismiss",
     "operationPermissions": "Operation Permissions",
     "enforcementRules": "Enforcement Rules",
-    "serverSideInfo": "These settings are enforced server-side by the API gateway. When an operation is blocked, users will see a compliance error. Changes are applied immediately to all users in this tenant."
+    "serverSideInfo": "These settings are enforced server-side by the API gateway. When an operation is blocked, users will see a compliance error. Changes are applied immediately to all users in this tenant.",
+    "standardLabel": "Standard",
+    "standardDesc": "Basic compliance with standard operation logs",
+    "auditLabel": "Audit",
+    "auditDesc": "Enhanced logging with user action tracking",
+    "validationLabel": "Validation",
+    "validationDesc": "Strict validation with mandatory approvals",
+    "traceabilityLabel": "Full Traceability",
+    "traceabilityDesc": "Complete audit trail with document control",
+    "allowCreate": "Allow Create Operations",
+    "allowCreateDesc": "Users can create new records",
+    "allowEdit": "Allow Edit Operations",
+    "allowEditDesc": "Users can modify existing records",
+    "allowDelete": "Allow Delete Operations",
+    "allowDeleteDesc": "Users can remove records",
+    "allowExport": "Allow Export",
+    "allowExportDesc": "Users can export data",
+    "allowConfig": "Allow Configuration Changes",
+    "allowConfigDesc": "Users can modify system settings",
+    "requireConfirmation": "Require Confirmation",
+    "requireConfirmationDesc": "Show confirmation dialog before critical actions",
+    "requireReason": "Require Reason",
+    "requireReasonDesc": "Require a reason for all modifications",
+    "updateModeFailed": "Failed to update compliance mode",
+    "updateSettingFailed": "Failed to update setting"
   },
   "backup": {
     "subtitle": "Your data is always yours. Export, back up, or sync to Google Drive anytime.",
@@ -167,7 +194,20 @@
     "noBackupsDesc": "Create your first backup using the options above",
     "localExport": "Local Export",
     "googleDrive": "Google Drive",
-    "viewInDrive": "View in Drive"
+    "viewInDrive": "View in Drive",
+    "exportCreated": "Export file created and downloaded",
+    "exportFailed": "Failed to create export",
+    "cloudBackupCreated": "Cloud backup created successfully",
+    "cloudBackupFailed": "Failed to create cloud backup",
+    "gdriveConnected": "Google Drive connected successfully",
+    "gdriveNotConfigured": "Google Drive integration not configured",
+    "gdriveConnectFailed": "Failed to connect to Google Drive",
+    "gdriveBackupDone": "Backup saved to Google Drive",
+    "gdriveBackupFailed": "Failed to backup to Google Drive",
+    "gdriveDisconnected": "Google Drive disconnected",
+    "disconnectFailed": "Failed to disconnect Google Drive",
+    "backupDeleted": "Backup deleted",
+    "deleteFailed": "Failed to delete backup"
   },
   "trial": {
     "expiresToday": "Trial expires today",
@@ -202,7 +242,11 @@
     "threeMonths": "3 Months of Plans",
     "threeUsers": "3 Users",
     "creating": "Creating...",
-    "generate": "Generate"
+    "generate": "Generate",
+    "machineDetails": "2 CNC, Lathe, Press, Assembly",
+    "shiftDetails": "Morning, Afternoon, Night",
+    "planDetails": "Past 2 months + upcoming month",
+    "userDetails": "2 Operators + 1 Supervisor (password: Test@1234)"
   },
   "userMgmt": {
     "title": "User Management",
@@ -215,7 +259,11 @@
     "noUsers": "No users found",
     "noMatch": "No users matching",
     "noRoleYet": "No {{role}}s yet",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "deleteFailed": "Failed to delete user",
+    "activeOfTotal": "{{active}} active of {{total}} users",
+    "matching": "matching \"{{query}}\"",
+    "showingOf": "Showing {{count}} of {{total}} users"
   },
   "userForm": {
     "editUser": "Edit User",
@@ -248,7 +296,22 @@
     "updating": "Updating…",
     "creating": "Creating…",
     "updateUser": "Update User",
-    "createUserBtn": "Create User"
+    "createUserBtn": "Create User",
+    "roleAdmin": "Admin",
+    "roleAdminDesc": "Full access to all features and settings",
+    "roleSupervisor": "Supervisor",
+    "roleSupervisorDesc": "Can manage production and view reports",
+    "roleOperator": "Operator",
+    "roleOperatorDesc": "Can log production data",
+    "strengthWeak": "Weak",
+    "strengthFair": "Fair",
+    "strengthGood": "Good",
+    "strengthStrong": "Strong",
+    "weakHint": "Add numbers and special characters",
+    "fairHint": "Add more variety for a stronger password",
+    "userNotFound": "User not found",
+    "loadFailed": "Failed to load user",
+    "saveFailed": "Failed to save user"
   },
   "admin": {
     "title": "Admin Panel",
@@ -300,7 +363,8 @@
     "shiftReport": "Shift-wise Report",
     "downtimeReport": "Downtime Report",
     "efficiencyReport": "Efficiency / OEE Report",
-    "summaryReport": "Summary Report"
+    "summaryReport": "Summary Report",
+    "pageOf": "Page {{page}} of {{total}}"
   },
   "dashboard": {
     "title": "Dashboard",

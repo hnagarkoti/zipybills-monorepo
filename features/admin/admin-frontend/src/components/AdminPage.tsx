@@ -46,11 +46,11 @@ import {
 type AdminTab = 'overview' | 'audit' | 'backups' | 'license' | 'export';
 
 const TABS: { id: AdminTab; label: string; icon: React.ReactNode }[] = [
-  { id: 'overview', label: 'System', icon: <Server size={16} color={colors.blue[500]} /> },
-  { id: 'audit', label: 'Audit Logs', icon: <FileText size={16} color={colors.amber[500]} /> },
-  { id: 'backups', label: 'Backups', icon: <Database size={16} color={colors.emerald[500]} /> },
-  { id: 'license', label: 'License', icon: <Key size={16} color={colors.purple[500]} /> },
-  { id: 'export', label: 'Export', icon: <Download size={16} color={colors.blue[400]} /> },
+  { id: 'overview', label: 'admin.system', icon: <Server size={16} color={colors.blue[500]} /> },
+  { id: 'audit', label: 'admin.auditLogs', icon: <FileText size={16} color={colors.amber[500]} /> },
+  { id: 'backups', label: 'admin.backups', icon: <Database size={16} color={colors.emerald[500]} /> },
+  { id: 'license', label: 'admin.license', icon: <Key size={16} color={colors.purple[500]} /> },
+  { id: 'export', label: 'admin.export', icon: <Download size={16} color={colors.blue[400]} /> },
 ];
 
 // ─── Main Page ────────────────────────────────
@@ -103,7 +103,7 @@ export function AdminPage() {
                     : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
-                {TABS_LABELS[tab.id] ?? tab.label}
+                {TABS_LABELS[tab.id] ?? t(tab.label)}
               </Text>
             </Pressable>
           ))}
@@ -254,7 +254,7 @@ function AuditLogsTab() {
                 <Text className="text-white text-sm font-medium">{t('admin.previous')}</Text>
               </Pressable>
               <Text className="text-gray-600 dark:text-gray-400 text-sm">
-                Page {page} of {data.pagination.totalPages}
+                {t('admin.pageOf', { page, total: data.pagination.totalPages })}
               </Text>
               <Pressable
                 onPress={() => setPage((p) => Math.min(data.pagination.totalPages, p + 1))}
@@ -561,7 +561,7 @@ function AuditLogRow({ log }: { log: AuditLog }) {
       </View>
       <View className="flex-row items-center">
         <Text className="text-sm text-gray-700 dark:text-gray-300">
-          {log.full_name || log.username || 'System'}
+          {log.full_name || log.username || t('common.system')}
         </Text>
         {log.entity_type && (
           <Text className="text-xs text-gray-400 ml-2">

@@ -67,8 +67,8 @@ interface RoleMeta {
 const ROLE_META: RoleMeta[] = [
   {
     role: 'ADMIN',
-    label: 'Admin',
-    description: 'Full system access — manage users, settings, and all features',
+    label: 'userForm.roleAdmin',
+    description: 'userForm.roleAdminDesc',
     icon: ShieldCheck,
     accentBg: 'bg-blue-50',
     accentBgDark: 'bg-blue-900/20',
@@ -80,8 +80,8 @@ const ROLE_META: RoleMeta[] = [
   },
   {
     role: 'SUPERVISOR',
-    label: 'Supervisor',
-    description: 'Manage teams, shifts & production workflows',
+    label: 'userForm.roleSupervisor',
+    description: 'userForm.roleSupervisorDesc',
     icon: ClipboardCheck,
     accentBg: 'bg-amber-50',
     accentBgDark: 'bg-amber-900/20',
@@ -93,8 +93,8 @@ const ROLE_META: RoleMeta[] = [
   },
   {
     role: 'OPERATOR',
-    label: 'Operator',
-    description: 'Production floor — log output, record downtime',
+    label: 'userForm.roleOperator',
+    description: 'userForm.roleOperatorDesc',
     icon: Wrench,
     accentBg: 'bg-emerald-50',
     accentBgDark: 'bg-emerald-900/20',
@@ -119,10 +119,10 @@ function getPasswordStrength(pw: string): { label: string; strength: Strength; p
   if (/[0-9]/.test(pw)) score++;
   if (/[^A-Za-z0-9]/.test(pw)) score++;
 
-  if (score <= 1) return { label: 'Weak', strength: 'weak', pct: 20 };
-  if (score === 2) return { label: 'Fair', strength: 'fair', pct: 45 };
-  if (score === 3) return { label: 'Good', strength: 'good', pct: 70 };
-  return { label: 'Strong', strength: 'strong', pct: 100 };
+  if (score <= 1) return { label: 'userForm.strengthWeak', strength: 'weak', pct: 20 };
+  if (score === 2) return { label: 'userForm.strengthFair', strength: 'fair', pct: 45 };
+  if (score === 3) return { label: 'userForm.strengthGood', strength: 'good', pct: 70 };
+  return { label: 'userForm.strengthStrong', strength: 'strong', pct: 100 };
 }
 
 const STRENGTH_COLOR: Record<Strength, string> = {
@@ -158,7 +158,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         const users = await fetchUsers();
         const target = users.find((u) => u.user_id === userId);
         if (cancelled) return;
-        if (!target) { setError('User not found'); setLoading(false); return; }
+        if (!target) { setError(t('userForm.userNotFound')); setLoading(false); return; }
         setOriginalUser(target);
         setForm({
           full_name: target.full_name,
@@ -168,7 +168,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
           is_active: target.is_active,
         });
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load user');
+        if (!cancelled) setError(err instanceof Error ? err.message : t('userForm.loadFailed'));
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -214,7 +214,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
       }
       onBack();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save user');
+      setError(err instanceof Error ? err.message : t('userForm.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -372,9 +372,9 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
                   className="text-xs mt-1 font-medium"
                   style={{ color: STRENGTH_COLOR[pwStrength.strength] }}
                 >
-                  {pwStrength.label}
-                  {pwStrength.strength === 'weak' && ' — use 8+ chars with mixed case & numbers'}
-                  {pwStrength.strength === 'fair' && ' — add uppercase or special characters'}
+                  {t(pwStrength.label)}
+                  {pwStrength.strength === 'weak' && ` ${t('userForm.weakHint')}`}
+                  {pwStrength.strength === 'fair' && ` ${t('userForm.fairHint')}`}
                 </Text>
               </View>
             )}
@@ -432,10 +432,10 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
                           : 'text-gray-700 dark:text-gray-300'
                       }`}
                     >
-                      {meta.label}
+                      {t(meta.label)}
                     </Text>
                     <Text className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-4">
-                      {meta.description}
+                      {t(meta.description)}
                     </Text>
                   </View>
 
