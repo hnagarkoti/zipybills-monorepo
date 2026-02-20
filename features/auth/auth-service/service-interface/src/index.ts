@@ -26,6 +26,8 @@ export type SafeUser = Omit<User, 'password_hash'>;
 export interface LoginRequest {
   username: string;
   password: string;
+  /** Workspace slug — required for SaaS multi-tenant login */
+  tenant_slug: string;
 }
 
 export interface LoginResponse {
@@ -51,7 +53,7 @@ export interface UpdateUserRequest {
 
 export class AuthApi extends BaseApi {
   async login(req: LoginRequest): Promise<LoginResponse> {
-    return this.request<LoginResponse>('/api/auth/login', {
+    return this.request<LoginResponse>('/api/v1/saas/login', {
       method: 'POST',
       body: JSON.stringify(req),
     });

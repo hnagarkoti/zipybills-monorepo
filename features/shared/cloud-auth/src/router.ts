@@ -26,6 +26,9 @@ cloudAuthRouter.post('/saas/login', async (req: Request, res: Response) => {
     if (!username || !password) {
       return res.status(400).json({ success: false, error: 'Username and password are required' });
     }
+    if (!tenant_slug) {
+      return res.status(400).json({ success: false, error: 'Workspace ID (tenant_slug) is required' });
+    }
 
     const result = await saasLogin({ username, password, tenant_slug });
 
@@ -99,11 +102,30 @@ cloudAuthRouter.post('/saas/check-slug', async (req: Request, res: Response) => 
 
 cloudAuthRouter.post('/saas/check-username', async (req: Request, res: Response) => {
   try {
-    const { username } = req.body;
+    const { username, tenant_slug } = req.body;
     if (!username) return res.status(400).json({ error: 'username is required' });
 
-    const existing = await query(`SELECT user_id FROM users WHERE username = $1`, [username]);
-    res.json({ available: existing.rows.length === 0, username });
+    let available: boolean;
+    if (tenant_slug) {
+      // Scope check to the specified tenant (correct SaaS behaviour)
+      const existing = await query(
+        `SELECT u.user_id FROM users u
+         JOIN tenant_users tu ON tu.user_id = u.user_id
+         JOIN tenants t ON t.tenant_id = tu.tenant_id
+         WHERE u.username = $1 AND t.tenant_slug = $2 AND u.deleted_at IS NULL`,
+        [username, tenant_slug],
+      );
+      available = existing.rows.length === 0;
+    } else {
+      // No tenant context at signup time — slug hasn't been chosen yet, check globally
+      const existing = await query(
+        `SELECT user_id FROM users WHERE username = $1 AND deleted_at IS NULL`,
+        [username],
+      );
+      available = existing.rows.length === 0;
+    }
+
+    res.json({ available, username });
   } catch (error) {
     res.status(500).json({ error: 'Failed to check username availability' });
   }

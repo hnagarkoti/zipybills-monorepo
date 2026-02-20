@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import {
-  Building2, User, Lock, Mail, ArrowRight, CheckCircle2,
+  Building2, User, Lock, Mail, Phone, ArrowRight, CheckCircle2,
   XCircle, Loader2, Eye, EyeOff, Sparkles, Shield, Zap,
 } from 'lucide-react';
 
@@ -25,6 +25,7 @@ export default function SignupPage() {
     admin_full_name: '',
     admin_username: '',
     admin_email: '',
+    admin_phone: '',
     admin_password: '',
     confirm_password: '',
   });
@@ -102,6 +103,7 @@ export default function SignupPage() {
           admin_username: form.admin_username.trim(),
           admin_password: form.admin_password,
           admin_email: form.admin_email.trim() || undefined,
+          admin_phone: form.admin_phone.trim() || undefined,
           plan_code: 'FREE', // Default free trial
         }),
       });
@@ -230,15 +232,12 @@ export default function SignupPage() {
                       />
                     </div>
 
-                    {/* Slug */}
+                    {/* Slug / Workspace ID */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Workspace URL *
+                        Workspace ID *
                       </label>
                       <div className="flex items-center gap-0">
-                        <span className="px-3 py-3 rounded-l-xl bg-gray-100 border border-r-0 border-gray-200 text-xs text-gray-500 whitespace-nowrap">
-                          factoryos.in/
-                        </span>
                         <input
                           type="text"
                           required
@@ -247,10 +246,13 @@ export default function SignupPage() {
                             setSlugManual(true);
                             setForm({ ...form, slug: slugify(e.target.value) });
                           }}
-                          className="flex-1 px-3 py-3 rounded-r-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
                           placeholder="acme-manufacturing"
                         />
                       </div>
+                      <p className="mt-1 text-xs text-gray-400">
+                        This is your company&apos;s unique login ID — e.g. <code className="bg-gray-100 px-1 rounded">acme-manufacturing</code>. Lowercase letters, numbers, and hyphens only.
+                      </p>
                     </div>
 
                     <hr className="border-gray-100" />
@@ -286,6 +288,23 @@ export default function SignupPage() {
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
                         placeholder="rajesh@acme.com (optional)"
                       />
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        <span className="flex items-center gap-1.5">
+                          <Phone className="w-3.5 h-3.5" /> Phone Number
+                        </span>
+                      </label>
+                      <input
+                        type="tel"
+                        value={form.admin_phone}
+                        onChange={(e) => setForm({ ...form, admin_phone: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm"
+                        placeholder="+91 98765 43210 (optional)"
+                      />
+                      <p className="text-xs text-gray-400 mt-1">Used only for onboarding support. Never shared.</p>
                     </div>
 
                     {/* Username */}

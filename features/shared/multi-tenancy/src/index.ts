@@ -159,6 +159,8 @@ export async function initializeMultiTenancySchema(): Promise<void> {
     { name: 'is_active', def: 'BOOLEAN DEFAULT true' },
     { name: 'expires_at', def: 'TIMESTAMPTZ' },
     { name: 'locale', def: "VARCHAR(10) DEFAULT 'en'" },
+    { name: 'contact_email', def: 'VARCHAR(255)' },
+    { name: 'contact_phone', def: 'VARCHAR(50)' },
   ]) {
     await query(`
       DO $$ BEGIN
@@ -279,6 +281,22 @@ export async function initializeMultiTenancySchema(): Promise<void> {
         ALTER TABLE tenants ADD COLUMN is_platform_admin BOOLEAN DEFAULT false;
       END IF;
     END $$;
+  `);
+
+  // ─── Per-Tenant Username Uniqueness ───────────────────
+  // Drop the old global UNIQUE(username) constraint so two different tenants
+  // can both have a user named "admin". Replace with a per-tenant unique index
+  // that only applies to non-deleted rows (soft-delete friendly).
+  await query(`
+    DO $$ BEGIN
+      ALTER TABLE users DROP CONSTRAINT IF EXISTS users_username_key;
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END $$;
+  `);
+  await query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_users_tenant_username
+      ON users(tenant_id, username)
+      WHERE deleted_at IS NULL;
   `);
 
   console.log('[Multi-Tenancy] ✅ Schema initialized');
@@ -467,6 +485,8 @@ export async function provisionTenant(
   domain?: string,
   slug?: string,
   trialDays?: number,
+  contactEmail?: string,
+  contactPhone?: string,
 ): Promise<{ tenant: Tenant; adminUserId: number }> {
   return transaction(async (client) => {
     // 1. Create tenant
@@ -479,8 +499,8 @@ export async function provisionTenant(
       : null;
 
     const tenantResult = await client.query<Tenant>(
-      `INSERT INTO tenants (tenant_slug, company_name, domain, plan, max_users, max_machines, status, trial_ends_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO tenants (tenant_slug, company_name, domain, plan, max_users, max_machines, status, trial_ends_at, contact_email, contact_phone)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
       [
         slug || generateSlug(companyName),
@@ -491,6 +511,8 @@ export async function provisionTenant(
         PLAN_LIMITS[plan].maxMachines,
         isTrial ? 'TRIAL' : 'ACTIVE',
         trialEndsAt,
+        contactEmail ?? null,
+        contactPhone ?? null,
       ],
     );
     const tenant = tenantResult.rows[0];

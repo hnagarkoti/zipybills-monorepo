@@ -39,6 +39,8 @@ import {
   Download,
   FileSpreadsheet,
   Timer,
+  Phone,
+  Mail,
 } from 'lucide-react-native';
 
 /* ─── Types ──────────────────────────────── */
@@ -58,6 +60,8 @@ interface Tenant {
   user_count: string;
   machine_count: string;
   last_activity: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
 }
 
 interface TenantDetail {
@@ -380,6 +384,33 @@ export default function TenantsPage() {
                 Trial ends in {daysUntilTrialEnd(detail.tenant.trial_ends_at)} days
                 ({new Date(detail.tenant.trial_ends_at).toLocaleDateString()})
               </Text>
+            </View>
+          )}
+
+          {/* Contact Info */}
+          {(detail.tenant.contact_email || detail.tenant.contact_phone) && (
+            <View className="bg-gray-50 rounded-lg p-4 mb-4 gap-2">
+              <Text className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Contact</Text>
+              {detail.tenant.contact_phone && (
+                <Pressable
+                  onPress={() => Linking.openURL(`tel:${detail.tenant.contact_phone}`)}
+                  className="flex-row items-center gap-2"
+                >
+                  <Phone size={15} color="#4f46e5" />
+                  <Text className="text-sm text-indigo-600 font-medium">{detail.tenant.contact_phone}</Text>
+                  <Text className="text-xs text-gray-400 ml-1">Tap to call</Text>
+                </Pressable>
+              )}
+              {detail.tenant.contact_email && (
+                <Pressable
+                  onPress={() => Linking.openURL(`mailto:${detail.tenant.contact_email}`)}
+                  className="flex-row items-center gap-2"
+                >
+                  <Mail size={15} color="#4f46e5" />
+                  <Text className="text-sm text-indigo-600 font-medium">{detail.tenant.contact_email}</Text>
+                  <Text className="text-xs text-gray-400 ml-1">Tap to email</Text>
+                </Pressable>
+              )}
             </View>
           )}
 

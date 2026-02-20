@@ -19,8 +19,8 @@ export const authApi = new AuthApi();
 
 // ─── Auth ────────────────────────────────────
 
-export async function login(username: string, password: string): Promise<LoginResponse> {
-  const data = await authApi.login({ username, password });
+export async function login(username: string, password: string, workspaceId: string): Promise<LoginResponse> {
+  const data = await authApi.login({ username, password, tenant_slug: workspaceId });
   if (data.token) setAuthToken(data.token);
   return data;
 }
