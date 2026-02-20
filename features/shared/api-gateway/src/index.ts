@@ -27,6 +27,7 @@ import rateLimit from 'express-rate-limit';
 
 // Schema & seed helpers
 import { initializeDatabase } from './schema.js';
+import { query as dbQuery } from '@zipybills/factory-database-config';
 import { authRouter, seedDefaultAdmin } from '@zipybills/factory-auth-service-runtime';
 import { machinesRouter } from '@zipybills/factory-machines-service-runtime';
 import { shiftsRouter, seedDefaultShifts } from '@zipybills/factory-shifts-service-runtime';
@@ -155,6 +156,60 @@ app.use('/api', apiVersionMiddleware());
 
 app.use('/api', healthRouter);       // /api/health, /api/health/live, /api/health/ready
 app.use('/api', metricsRouter);      // /api/metrics, /api/metrics/json
+
+// ─── Dev: Database Reset (protected by platform admin creds) ──
+
+app.post('/api/v1/dev/reset-db', async (req, res) => {
+  // Safety: block in production
+  if (process.env.NODE_ENV === 'production') {
+    res.status(403).json({ success: false, error: 'Database reset is disabled in production.' });
+    return;
+  }
+
+  const { username, password } = req.body || {};
+  const adminUser = process.env.PLATFORM_ADMIN_USERNAME || 'platform_admin';
+  const adminPass = process.env.PLATFORM_ADMIN_PASSWORD || 'admin123!';
+
+  if (!username || !password || username !== adminUser || password !== adminPass) {
+    res.status(401).json({ success: false, error: 'Invalid credentials. Provide platform admin username & password.' });
+    return;
+  }
+
+  try {
+    console.log('[FactoryOS] ⚠️  Database reset requested by platform admin...');
+
+    // Drop all tables by resetting the public schema
+    await dbQuery('DROP SCHEMA public CASCADE');
+    await dbQuery('CREATE SCHEMA public');
+    await dbQuery('GRANT ALL ON SCHEMA public TO PUBLIC');
+
+    // Re-initialize all schemas (order matters — base tables first)
+    await initializeDatabase();
+    await initializeLicenseSchema();
+    await initializePermissionsSchema();
+    await initBackupSchema();
+    await initializeMultiTenancySchema();
+    await initializeSubscriptionSchema();
+    await initializeSuperAdminSchema();
+    await initializeOfflineSyncSchema();
+    await initializeEnterpriseBackupSchema();
+    await initTenantBackupSchema();
+
+    // Re-seed
+    if (SAAS_MODE) {
+      await seedPlatformAdmin();
+    } else {
+      await seedDefaultAdmin();
+      await seedDefaultShifts();
+    }
+
+    console.log('[FactoryOS] ✅ Database reset complete — all schemas re-initialized and seeded.');
+    res.json({ success: true, message: 'Database wiped and re-initialized successfully.' });
+  } catch (err: any) {
+    console.error('[FactoryOS] ❌ Database reset failed:', err);
+    res.status(500).json({ success: false, error: 'Database reset failed.', details: err.message });
+  }
+});
 
 // ─── Public Feature Status (for frontend hydration) ─
 
@@ -473,6 +528,10 @@ async function startServer(): Promise<void> {
       console.log(`   Sync:       POST /api/v1/sync/push`);
       console.log(`   Health:     GET  /api/health`);
       console.log(`   Metrics:    GET  /api/metrics`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`   ─── Dev Tools ─────────────────────`);
+        console.log(`   Reset DB:   POST /api/v1/dev/reset-db`);
+      }
       console.log(`   ─────────────────────────────────────\n`);
     });
   } catch (err) {
