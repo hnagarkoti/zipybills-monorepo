@@ -347,6 +347,9 @@ importers:
       '@zipybills/factory-api-client':
         specifier: workspace:*
         version: link:../../shared/api-client
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine

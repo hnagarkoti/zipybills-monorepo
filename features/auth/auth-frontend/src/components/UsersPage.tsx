@@ -4,6 +4,7 @@ import { Users, ShieldCheck, ClipboardCheck, Wrench, Plus, Trash2, Key, Search, 
 import { fetchUsers, deleteUser, type User } from '../services/api';
 import { Badge, Alert, Avatar, EmptyState, PageHeader } from '@zipybills/ui-components';
 import { colors, machineStatusColors, useSemanticColors } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 const ROLES = ['ADMIN', 'SUPERVISOR', 'OPERATOR'] as const;
 type RoleFilter = 'ALL' | (typeof ROLES)[number];
@@ -36,6 +37,7 @@ export interface UsersPageProps {
 
 export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
   const sc = useSemanticColors();
+  const { t } = useLocale();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,12 +88,12 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
 
   const handleDelete = (u: User) => {
     RNAlert.alert(
-      'Delete User',
-      `Are you sure you want to delete "${u.full_name}"? This action cannot be undone.`,
+      t('userMgmt.deleteUser'),
+      `${t('userMgmt.deleteConfirm')} "${u.full_name}"? ${t('userMgmt.cannotUndone')}`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -115,7 +117,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
   return (
     <ScrollView className="flex-1 p-4">
       <PageHeader
-        title="User Management"
+        title={t('userMgmt.title')}
         subtitle={subtitleParts.join(' · ')}
         actions={
           <Pressable
@@ -123,7 +125,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
             className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center"
           >
             <Plus size={14} color={colors.white} />
-            <Text className="text-white font-medium text-sm ml-1">Add User</Text>
+            <Text className="text-white font-medium text-sm ml-1">{t('users.addUser')}</Text>
           </Pressable>
         }
       />
@@ -135,7 +137,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
           <Search size={16} color={sc.iconMuted ?? '#9ca3af'} />
           <TextInput
             className="flex-1 ml-2 py-2.5 text-sm text-gray-900 dark:text-gray-100"
-            placeholder="Search by name or username…"
+            placeholder={t('userMgmt.searchPlaceholder')}
             placeholderTextColor="#9ca3af"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -157,7 +159,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
               const count = roleCounts[role] ?? 0;
               const palette = ROLE_COLORS[role] ?? ROLE_COLORS.ALL!;
               const RoleIcon = role === 'ALL' ? Users : (ROLE_ICON[role] ?? Wrench);
-              const label = role === 'ALL' ? 'All Users' : role.charAt(0) + role.slice(1).toLowerCase() + 's';
+              const label = role === 'ALL' ? t('userMgmt.allUsers') : t(`roles.${role}`) + 's';
 
               return (
                 <Pressable
@@ -214,25 +216,25 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
 
       {/* Users List */}
       {loading ? (
-        <Text className="text-center text-gray-400 py-8">Loading users...</Text>
+        <Text className="text-center text-gray-400 py-8">{t('userMgmt.loading')}</Text>
       ) : filteredUsers.length === 0 ? (
         <View className="items-center py-12">
           <Users size={40} color={sc.iconMuted} />
           <Text className="text-gray-500 dark:text-gray-400 font-medium mt-3">
             {users.length === 0
-              ? 'No users found'
+              ? t('userMgmt.noUsers')
               : roleFilter !== 'ALL' && searchQuery.trim()
-                ? `No ${roleFilter.toLowerCase()}s matching "${searchQuery.trim()}"`
+                ? `${t('userMgmt.noMatch')} "${searchQuery.trim()}"`
                 : roleFilter !== 'ALL'
-                  ? `No ${roleFilter.toLowerCase()}s yet`
-                  : `No users matching "${searchQuery.trim()}"`}
+                  ? `${t('userMgmt.noRoleYet', { role: roleFilter.toLowerCase() })}`
+                  : `${t('userMgmt.noMatch')} "${searchQuery.trim()}"`}
           </Text>
           {(roleFilter !== 'ALL' || searchQuery.trim()) && users.length > 0 && (
             <Pressable
               onPress={() => { setRoleFilter('ALL'); setSearchQuery(''); }}
               className="mt-3 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800"
             >
-              <Text className="text-sm text-gray-600 dark:text-gray-400 font-medium">Clear filters</Text>
+              <Text className="text-sm text-gray-600 dark:text-gray-400 font-medium">{t('userMgmt.clearFilters')}</Text>
             </Pressable>
           )}
         </View>
@@ -248,7 +250,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
                 onPress={() => { setRoleFilter('ALL'); setSearchQuery(''); }}
                 hitSlop={8}
               >
-                <Text className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Clear filters</Text>
+                  <Text className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('userMgmt.clearFilters')}</Text>
               </Pressable>
             </View>
           )}
@@ -271,7 +273,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
                 </Pressable>
                 <Pressable onPress={() => onEditUser?.(u.user_id)} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg flex-row items-center gap-1" hitSlop={4}>
                   <Pencil size={12} color="#6b7280" />
-                  <Text className="text-xs text-gray-600 dark:text-gray-400">Edit</Text>
+                  <Text className="text-xs text-gray-600 dark:text-gray-400">{t('common.edit')}</Text>
                 </Pressable>
                 <Pressable onPress={() => handleDelete(u)} className="bg-red-50 dark:bg-red-900/20 px-2.5 py-1.5 rounded-lg" hitSlop={4}>
                   <Trash2 size={13} color="#dc2626" />

@@ -4,12 +4,14 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DashboardPage } from '@zipybills/factory-dashboard-frontend';
 import { useAuthStore } from '@zipybills/ui-store';
 import { apiFetch } from '@zipybills/factory-api-client';
+import { useLocale } from '@zipybills/i18n-engine';
 import { Clock, Users, Cog, AlertTriangle, ArrowUpCircle, Crown, Sparkles, CheckCircle2, Factory, ClipboardList, X, Copy } from 'lucide-react-native';
 
 /* ─── Trial / Usage Banner ──────────────────── */
 
 function TenantInfoBanner() {
   const user = useAuthStore((s) => s.user);
+  const { t } = useLocale();
   const [trialBannerDismissed, setTrialBannerDismissed] = useState(false);
 
   const { data: account } = useQuery({
@@ -45,13 +47,13 @@ function TenantInfoBanner() {
             </View>
             <Text className="text-white font-semibold text-xs">
               {trialDaysLeft === 0
-                ? 'Trial expires today'
-                : `${trialDaysLeft} day${trialDaysLeft !== 1 ? 's' : ''} left in trial`}
+                ? t('trial.expiresToday')
+                : `${trialDaysLeft} ${trialDaysLeft !== 1 ? t('trial.daysLeft') : t('trial.dayLeft')}`}
             </Text>
           </View>
           <View className="flex-row items-center gap-1.5 bg-white/20 px-2 py-1 rounded-md">
             <ArrowUpCircle size={12} color="#fff" />
-            <Text className="text-white text-[10px] font-bold">UPGRADE</Text>
+            <Text className="text-white text-[10px] font-bold">{t('trial.upgrade').toUpperCase()}</Text>
           </View>
         </Pressable>
       )}
@@ -89,15 +91,15 @@ function TenantInfoBanner() {
               }`}
             >
               {trialDaysLeft === 0
-                ? 'Trial expires today!'
-                : `${trialDaysLeft} day${trialDaysLeft !== 1 ? 's' : ''} left in your trial`}
+                ? t('trial.expiresTodayBang')
+                : `${trialDaysLeft} ${trialDaysLeft !== 1 ? t('trial.daysLeftInTrial') : t('trial.dayLeftInTrial')}`}
             </Text>
             <Text
               className={`text-xs mt-0.5 ${
                 trialDaysLeft <= 3 ? 'text-red-600' : trialDaysLeft <= 7 ? 'text-amber-600' : 'text-blue-600'
               }`}
             >
-              Upgrade to keep your data and unlock all features
+              {t('trial.upgradeDesc')}
             </Text>
           </View>
           <View className="flex-row items-center gap-2">
@@ -107,7 +109,7 @@ function TenantInfoBanner() {
               }`}
             >
               <ArrowUpCircle size={14} color="#fff" />
-              <Text className="text-xs font-semibold text-white">Upgrade</Text>
+              <Text className="text-xs font-semibold text-white">{t('trial.upgrade')}</Text>
             </Pressable>
             <Pressable
               onPress={() => setTrialBannerDismissed(true)}
@@ -138,7 +140,7 @@ function TenantInfoBanner() {
             <View className="flex-row items-center gap-1.5 flex-1">
               <Users size={14} color="#dc2626" />
               <Text className="text-xs text-red-600 font-semibold">
-                {a.current_users}/{a.max_users} users
+                {a.current_users}/{a.max_users} {t('trial.users')}
               </Text>
               {a.max_users > 0 && (
                 <View className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden max-w-[60px]">
@@ -159,7 +161,7 @@ function TenantInfoBanner() {
             <View className="flex-row items-center gap-1.5 flex-1">
               <Cog size={14} color="#dc2626" />
               <Text className="text-xs text-red-600 font-semibold">
-                {a.current_machines}/{a.max_machines} machines
+                {a.current_machines}/{a.max_machines} {t('trial.machines')}
               </Text>
               {a.max_machines > 0 && (
                 <View className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden max-w-[60px]">
@@ -195,6 +197,7 @@ export default function DashboardRoute() {
 function OnboardingBanner() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
+  const { t } = useLocale();
   const [seeding, setSeeding] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [result, setResult] = useState<{ created: Record<string, number>; credentials: Record<string, { username: string; password: string }> } | null>(null);
@@ -236,7 +239,7 @@ function OnboardingBanner() {
           <View className="bg-indigo-500 px-4 py-3 flex-row items-center justify-between">
             <View className="flex-row items-center">
               <Sparkles size={18} color="#fff" />
-              <Text className="text-white font-bold text-sm ml-2">Welcome! Get Started Quickly</Text>
+              <Text className="text-white font-bold text-sm ml-2">{t('onboarding.welcome')}</Text>
             </View>
             <Pressable onPress={() => setDismissed(true)} className="p-1">
               <X size={16} color="#c7d2fe" />
@@ -244,10 +247,10 @@ function OnboardingBanner() {
           </View>
           <View className="bg-indigo-50 dark:bg-indigo-900/20 p-4">
             <Text className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              Your factory is empty. Want us to set up sample data so you can explore all features right away?
+              {t('onboarding.emptyFactory')}
             </Text>
             <Text className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-              We'll create sample machines, shifts, operators, and 3 months of production plans with realistic data.
+              {t('onboarding.sampleDataDesc')}
             </Text>
             <View className="flex-row gap-3">
               <Pressable
@@ -255,13 +258,13 @@ function OnboardingBanner() {
                 className="bg-indigo-600 px-5 py-2.5 rounded-lg flex-row items-center flex-1 justify-center"
               >
                 <Sparkles size={14} color="#fff" />
-                <Text className="text-white font-semibold text-sm ml-1.5">Generate Sample Data</Text>
+                <Text className="text-white font-semibold text-sm ml-1.5">{t('onboarding.generateSample')}</Text>
               </Pressable>
               <Pressable
                 onPress={() => setDismissed(true)}
                 className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2.5 rounded-lg"
               >
-                <Text className="text-gray-600 dark:text-gray-400 text-sm font-medium">Skip</Text>
+                <Text className="text-gray-600 dark:text-gray-400 text-sm font-medium">{t('onboarding.skip')}</Text>
               </Pressable>
             </View>
           </View>
@@ -280,9 +283,9 @@ function OnboardingBanner() {
                     <View className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 items-center justify-center mb-3">
                       <CheckCircle2 size={32} color="#10b981" />
                     </View>
-                    <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">All Set!</Text>
+                    <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('onboarding.allSet')}</Text>
                     <Text className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
-                      Sample data has been created for your factory.
+                      {t('onboarding.sampleCreated')}
                     </Text>
                   </View>
 
@@ -290,24 +293,24 @@ function OnboardingBanner() {
                   <View className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-4 gap-2">
                     <View className="flex-row items-center gap-2">
                       <Factory size={14} color="#6b7280" />
-                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.machines} Machines</Text>
+                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.machines} {t('onboarding.machinesLabel')}</Text>
                     </View>
                     <View className="flex-row items-center gap-2">
                       <Clock size={14} color="#6b7280" />
-                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.shifts} Shifts</Text>
+                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.shifts} {t('onboarding.shiftsLabel')}</Text>
                     </View>
                     <View className="flex-row items-center gap-2">
                       <ClipboardList size={14} color="#6b7280" />
-                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.plans} Production Plans</Text>
+                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.plans} {t('onboarding.plansLabel')}</Text>
                     </View>
                     <View className="flex-row items-center gap-2">
                       <Users size={14} color="#6b7280" />
-                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.users} Users</Text>
+                      <Text className="text-sm text-gray-700 dark:text-gray-300">{result.created.users} {t('onboarding.usersLabel')}</Text>
                     </View>
                   </View>
 
                   {/* Credentials */}
-                  <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Test Credentials</Text>
+                  <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('onboarding.testCredentials')}</Text>
                   <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 gap-3 mb-4">
                     {Object.entries(result.credentials).map(([role, cred]) => (
                       <View key={role}>
@@ -323,7 +326,7 @@ function OnboardingBanner() {
                     onPress={() => { setShowModal(false); setDismissed(true); }}
                     className="bg-indigo-600 py-3 rounded-lg items-center"
                   >
-                    <Text className="text-white font-semibold">Start Exploring</Text>
+                    <Text className="text-white font-semibold">{t('onboarding.startExploring')}</Text>
                   </Pressable>
                 </View>
               </RNScrollView>
@@ -334,11 +337,11 @@ function OnboardingBanner() {
                   <View className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 items-center justify-center mb-3">
                     <Sparkles size={32} color="#6366f1" />
                   </View>
-                  <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">Generate Sample Data?</Text>
+                  <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('onboarding.generateQuestion')}</Text>
                 </View>
 
                 <Text className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4">
-                  This will create realistic factory data to help you explore all features:
+                  {t('onboarding.generateDesc')}
                 </Text>
 
                 <View className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-4 gap-2.5">
@@ -347,7 +350,7 @@ function OnboardingBanner() {
                       <Factory size={16} color="#3b82f6" />
                     </View>
                     <View>
-                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">5 Machines</Text>
+                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.fiveMachines')}</Text>
                       <Text className="text-xs text-gray-500">2 CNC, Lathe, Press, Assembly</Text>
                     </View>
                   </View>
@@ -356,7 +359,7 @@ function OnboardingBanner() {
                       <Clock size={16} color="#10b981" />
                     </View>
                     <View>
-                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">3 Shifts</Text>
+                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeShifts')}</Text>
                       <Text className="text-xs text-gray-500">Morning, Afternoon, Night</Text>
                     </View>
                   </View>
@@ -365,7 +368,7 @@ function OnboardingBanner() {
                       <ClipboardList size={16} color="#8b5cf6" />
                     </View>
                     <View>
-                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">3 Months of Plans</Text>
+                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeMonths')}</Text>
                       <Text className="text-xs text-gray-500">Past 2 months + upcoming month</Text>
                     </View>
                   </View>
@@ -374,7 +377,7 @@ function OnboardingBanner() {
                       <Users size={16} color="#f59e0b" />
                     </View>
                     <View>
-                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">3 Users</Text>
+                      <Text className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('onboarding.threeUsers')}</Text>
                       <Text className="text-xs text-gray-500">2 Operators + 1 Supervisor (password: Test@1234)</Text>
                     </View>
                   </View>
@@ -385,7 +388,7 @@ function OnboardingBanner() {
                     onPress={() => setShowModal(false)}
                     className="flex-1 bg-gray-100 dark:bg-gray-800 py-3 rounded-lg items-center"
                   >
-                    <Text className="text-gray-600 dark:text-gray-400 font-medium">Cancel</Text>
+                    <Text className="text-gray-600 dark:text-gray-400 font-medium">{t('common.cancel')}</Text>
                   </Pressable>
                   <Pressable
                     onPress={handleSeed}
@@ -395,12 +398,12 @@ function OnboardingBanner() {
                     {seeding ? (
                       <>
                         <ActivityIndicator size="small" color="#fff" />
-                        <Text className="text-white font-semibold">Creating...</Text>
+                        <Text className="text-white font-semibold">{t('onboarding.creating')}</Text>
                       </>
                     ) : (
                       <>
                         <Sparkles size={16} color="#fff" />
-                        <Text className="text-white font-semibold">Generate</Text>
+                        <Text className="text-white font-semibold">{t('onboarding.generate')}</Text>
                       </>
                     )}
                   </Pressable>

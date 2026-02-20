@@ -16,12 +16,9 @@ import {
   Shield, Search, FileCheck, ShieldCheck,
   ShieldAlert, Info, CheckCircle, XCircle,
 } from 'lucide-react-native';
-import {
-  useComplianceStore,
-  useCompliance,
-  type ComplianceSettings as ComplianceSettingsType,
-} from '@zipybills/ui-store';
+import { useComplianceStore, useCompliance, type ComplianceSettings as ComplianceSettingsType } from '@zipybills/ui-store';
 import { useTheme } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 // ─── Types ────────────────────────────────────
 
@@ -114,6 +111,7 @@ const ENFORCEMENT_TOGGLES: PermToggle[] = [
 // ─── Component ────────────────────────────────
 
 export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsProps) {
+  const { t } = useLocale();
   const { settings, isLoaded, isLoading, fetchSettings, updateSettings } = useComplianceStore();
   const { setComplianceMode } = useTheme();
   const [saving, setSaving] = useState(false);
@@ -223,7 +221,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
     return (
       <View className="flex-1 items-center justify-center py-12">
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text className="text-sm text-gray-500 mt-3">Loading compliance settings...</Text>
+        <Text className="text-sm text-gray-500 mt-3">{t('compliance.loading')}</Text>
       </View>
     );
   }
@@ -234,12 +232,11 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
     <View className="flex-1">
       {/* ─── Header ────────────────────────────── */}
       <Text className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
-        Compliance Mode
+        {t('compliance.title')}
       </Text>
       <Text className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Configure compliance enforcement. Changes are saved immediately and
-        enforced server-side for all users.
-        {!isAdmin && ' Only administrators can change compliance settings.'}
+        {t('compliance.subtitle')}
+        {!isAdmin && ` ${t('compliance.adminOnly')}`}
       </Text>
 
       {/* Active banner */}
@@ -265,11 +262,11 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
           />
           <View className="ml-3 flex-1">
             <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {MODE_OPTIONS.find((m) => m.id === activeMode)?.label} is Active
+              {MODE_OPTIONS.find((m) => m.id === activeMode)?.label} {t('compliance.isActive')}
             </Text>
             {settings.activated_at && (
               <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                Since {new Date(settings.activated_at).toLocaleString()}
+                {t('compliance.since')} {new Date(settings.activated_at).toLocaleString()}
               </Text>
             )}
           </View>
@@ -287,7 +284,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
           <Text className="ml-3 flex-1 text-sm text-red-700 dark:text-red-300">
             {saveError}
           </Text>
-          <Text className="text-xs text-red-400">Tap to dismiss</Text>
+          <Text className="text-xs text-red-400">{t('compliance.tapToDismiss')}</Text>
         </Pressable>
       )}
 
@@ -335,7 +332,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
 
       {/* ─── Permission Toggles ────────────────── */}
       <Text className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-        Operation Permissions
+        {t('compliance.operationPermissions')}
       </Text>
       <View className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 mb-4">
         {PERMISSION_TOGGLES.map((toggle, i) => (
@@ -373,7 +370,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
 
       {/* ─── Enforcement Toggles ───────────────── */}
       <Text className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-        Enforcement Rules
+        {t('compliance.enforcementRules')}
       </Text>
       <View className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 mb-4">
         {ENFORCEMENT_TOGGLES.map((toggle, i) => (
@@ -413,9 +410,7 @@ export function ComplianceSettings({ userRole = 'ADMIN' }: ComplianceSettingsPro
       <View className="flex-row items-start p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl">
         <Info size={16} color="#3B82F6" />
         <Text className="text-xs text-blue-700 dark:text-blue-300 ml-2 flex-1">
-          These settings are enforced server-side by the API gateway. When an
-          operation is blocked, users will see a compliance error. Changes are
-          applied immediately to all users in this tenant.
+          {t('compliance.serverSideInfo')}
         </Text>
       </View>
     </View>

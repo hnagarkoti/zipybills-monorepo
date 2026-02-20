@@ -17,6 +17,7 @@ import {
 import { fetchUsers, createUser, updateUser, type User } from '../services/api';
 import { Alert } from '@zipybills/ui-components';
 import { colors, useSemanticColors } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 /* ─── Types ──────────────────────────────────── */
 
@@ -135,6 +136,7 @@ const STRENGTH_COLOR: Record<Strength, string> = {
 
 export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
   const sc = useSemanticColors();
+  const { t } = useLocale();
   const isEdit = mode === 'edit';
 
   /* State */
@@ -180,10 +182,10 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
   /* Field-level validation */
   const validate = useCallback((): boolean => {
     const errs: Partial<Record<keyof FormState, string>> = {};
-    if (!form.full_name.trim()) errs.full_name = 'Full name is required';
-    if (!form.username.trim()) errs.username = 'Username is required';
-    if (!isEdit && !form.password) errs.password = 'Password is required for new users';
-    if (form.password && form.password.length < 4) errs.password = 'Password must be at least 4 characters';
+    if (!form.full_name.trim()) errs.full_name = t('userForm.nameRequired');
+    if (!form.username.trim()) errs.username = t('userForm.usernameRequired');
+    if (!isEdit && !form.password) errs.password = t('userForm.passwordRequired');
+    if (form.password && form.password.length < 4) errs.password = t('userForm.passwordMinLength');
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
   }, [form, isEdit]);
@@ -229,7 +231,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
     return (
       <View className="flex-1 items-center justify-center py-20">
         <ActivityIndicator size="large" color={colors.emerald[500]} />
-        <Text className="text-sm text-gray-400 mt-3">Loading user details…</Text>
+        <Text className="text-sm text-gray-400 mt-3">{t('userForm.loadingDetails')}</Text>
       </View>
     );
   }
@@ -253,7 +255,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         >
           <ArrowLeft size={18} color={colors.emerald[600]} />
           <Text className="text-sm font-medium text-emerald-600 dark:text-emerald-400 ml-1.5">
-            Back to Users
+            {t('userForm.backToUsers')}
           </Text>
         </Pressable>
 
@@ -266,12 +268,12 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
           </View>
           <View className="flex-1">
             <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">
-              {isEdit ? 'Edit User' : 'Create New User'}
+              {isEdit ? t('userForm.editUser') : t('userForm.createUser')}
             </Text>
             <Text className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
               {isEdit
-                ? `Update ${originalUser?.full_name ?? 'user'}'s profile and permissions`
-                : 'Set up a new team member account'}
+                ? `${t('userForm.updateProfile', { name: originalUser?.full_name ?? 'user' })}`
+                : t('userForm.setupAccount')}
             </Text>
           </View>
         </View>
@@ -284,43 +286,43 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         )}
 
         {/* ━━━ Section 1: Personal Information ━━━ */}
-        <SectionHeader label="Personal Information" />
+        <SectionHeader label={t('userForm.personalInfo')} />
 
         <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
           {/* Full Name */}
           <FormField
-            label="Full Name"
+            label={t('userForm.fullName')}
             required
             error={fieldErrors.full_name}
-            placeholder="e.g. Rajesh Kumar"
+            placeholder={t('userForm.fullNamePlaceholder')}
             value={form.full_name}
-            onChangeText={(t) => updateField('full_name', t)}
+            onChangeText={(v) => updateField('full_name', v)}
             autoCapitalize="words"
           />
 
           {/* Username */}
           <FormField
-            label="Username"
+            label={t('userForm.username')}
             required
             error={fieldErrors.username}
-            placeholder="e.g. rajesh.kumar"
+            placeholder={t('userForm.usernamePlaceholder')}
             value={form.username}
-            onChangeText={(t) => updateField('username', t)}
+            onChangeText={(v) => updateField('username', v)}
             autoCapitalize="none"
             editable={!isEdit}
-            hint={isEdit ? 'Username cannot be changed after creation' : undefined}
+            hint={isEdit ? t('userForm.usernameCannotChange') : undefined}
           />
         </View>
 
         {/* ━━━ Section 2: Security ━━━ */}
-        <SectionHeader label="Security" />
+        <SectionHeader label={t('userForm.security')} />
 
         <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
           {/* Password with toggle */}
           <View className="mb-1">
             <View className="flex-row items-center mb-1.5">
               <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                {isEdit ? 'New Password' : 'Password'}
+                {isEdit ? t('userForm.newPassword') : t('userForm.password')}
               </Text>
               {!isEdit && <Text className="text-xs text-red-500 ml-0.5">*</Text>}
             </View>
@@ -329,8 +331,8 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
               <TextInput
                 className="flex-1 px-3.5 py-3 text-sm text-gray-900 dark:text-gray-100"
                 value={form.password}
-                onChangeText={(t) => updateField('password', t)}
-                placeholder={isEdit ? 'Leave blank to keep current' : 'Enter a secure password'}
+                onChangeText={(v) => updateField('password', v)}
+                placeholder={isEdit ? t('userForm.leaveBlank') : t('userForm.enterPassword')}
                 placeholderTextColor="#9ca3af"
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
@@ -381,7 +383,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
               <View className="flex-row items-start mt-2">
                 <Info size={12} color="#9ca3af" style={{ marginTop: 1 }} />
                 <Text className="text-xs text-gray-400 ml-1.5">
-                  Only fill this if you want to reset the user's password
+                  {t('userForm.resetPasswordHint')}
                 </Text>
               </View>
             )}
@@ -389,11 +391,11 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         </View>
 
         {/* ━━━ Section 3: Role & Permissions ━━━ */}
-        <SectionHeader label="Role & Permissions" />
+        <SectionHeader label={t('userForm.rolePermissions')} />
 
         <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
           <Text className="text-xs text-gray-400 dark:text-gray-500 mb-3">
-            Choose the access level for this user
+            {t('userForm.chooseAccessLevel')}
           </Text>
 
           <View className="gap-3">
@@ -454,7 +456,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         {/* ━━━ Section 4: Account Status (edit only show, create always active) ━━━ */}
         {isEdit && (
           <>
-            <SectionHeader label="Account Status" />
+            <SectionHeader label={t('userForm.accountStatus')} />
 
             <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
               <Pressable
@@ -463,12 +465,12 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
               >
                 <View className="flex-1 mr-4">
                   <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {form.is_active ? 'Active' : 'Inactive'}
+                    {form.is_active ? t('common.active') : t('common.inactive')}
                   </Text>
                   <Text className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                     {form.is_active
-                      ? 'User can log in and access the system'
-                      : 'User is blocked from logging in'}
+                      ? t('userForm.activeDesc')
+                      : t('userForm.inactiveDesc')}
                   </Text>
                 </View>
 
@@ -499,8 +501,8 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
             {saving && <ActivityIndicator size="small" color="#fff" style={{ marginRight: 8 }} />}
             <Text className="text-white font-bold text-base">
               {saving
-                ? (isEdit ? 'Updating…' : 'Creating…')
-                : (isEdit ? 'Update User' : 'Create User')}
+                ? (isEdit ? t('userForm.updating') : t('userForm.creating'))
+                : (isEdit ? t('userForm.updateUser') : t('userForm.createUserBtn'))}
             </Text>
           </Pressable>
 
@@ -508,7 +510,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
             onPress={onBack}
             className="px-6 py-3.5 rounded-xl bg-gray-100 dark:bg-gray-800 items-center justify-center"
           >
-            <Text className="text-gray-600 dark:text-gray-400 font-semibold text-base">Cancel</Text>
+            <Text className="text-gray-600 dark:text-gray-400 font-semibold text-base">{t('common.cancel')}</Text>
           </Pressable>
         </View>
       </ScrollView>

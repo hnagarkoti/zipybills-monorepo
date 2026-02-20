@@ -10,6 +10,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Pressable, ActivityIndicator, ScrollView, Platform, Linking } from 'react-native';
 import { Download, Cloud, HardDrive, RefreshCw, Trash2, ExternalLink, Check, AlertCircle, Lock } from 'lucide-react-native';
+import { useLocale } from '@zipybills/i18n-engine';
 import {
   fetchBackups,
   fetchCapabilities,
@@ -105,16 +106,16 @@ function ActionCard({ icon, title, description, buttonLabel, onPress, loading, d
   );
 }
 
-function BackupRow({ backup, onDelete }: { backup: BackupItem; onDelete: (id: string) => void }) {
+function BackupRow({ backup, onDelete, t }: { backup: BackupItem; onDelete: (id: string) => void; t: (key: string) => string }) {
   const typeIcons: Record<string, React.ReactNode> = {
     export: <Download size={14} color={colors.primary} />,
     cloud: <Cloud size={14} color={colors.blue} />,
     gdrive: <HardDrive size={14} color={colors.purple} />,
   };
   const typeLabels: Record<string, string> = {
-    export: 'Local Export',
-    cloud: 'Cloud Backup',
-    gdrive: 'Google Drive',
+    export: t('backup.localExport'),
+    cloud: t('backup.cloudBackup'),
+    gdrive: t('backup.googleDrive'),
   };
   const statusColors: Record<string, string> = {
     completed: '#059669',
@@ -167,7 +168,7 @@ function BackupRow({ backup, onDelete }: { backup: BackupItem; onDelete: (id: st
             className="flex-row items-center gap-1 px-2 py-1.5 rounded-md bg-purple-50 dark:bg-purple-900/20"
           >
             <ExternalLink size={12} color={colors.purple} />
-            <Text className="text-xs font-medium" style={{ color: colors.purple }}>View in Drive</Text>
+            <Text className="text-xs font-medium" style={{ color: colors.purple }}>{t('backup.viewInDrive')}</Text>
           </Pressable>
         )}
 
@@ -182,6 +183,7 @@ function BackupRow({ backup, onDelete }: { backup: BackupItem; onDelete: (id: st
 // ─── Main Component ───────────────────────────
 
 export function BackupSettings() {
+  const { t } = useLocale();
   const [backups, setBackups] = useState<BackupItem[]>([]);
   const [capabilities, setCapabilities] = useState<BackupCapabilities | null>(null);
   const [loading, setLoading] = useState(true);
@@ -322,7 +324,7 @@ export function BackupSettings() {
     return (
       <View className="flex-1 items-center justify-center py-20">
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text className="text-sm text-gray-500 mt-3">Loading backup settings...</Text>
+        <Text className="text-sm text-gray-500 mt-3">{t('backup.loadingSettings')}</Text>
       </View>
     );
   }
@@ -351,14 +353,14 @@ export function BackupSettings() {
 
       {/* Plan badge */}
       <View className="flex-row items-center gap-2 mb-4">
-        <Text className="text-lg font-bold text-gray-900 dark:text-white">Backup & Data</Text>
+        <Text className="text-lg font-bold text-gray-900 dark:text-white">{t('settings.backup')}</Text>
         <View className="bg-emerald-100 px-2.5 py-0.5 rounded-full">
           <Text className="text-xs font-semibold text-emerald-700">{plan}</Text>
         </View>
       </View>
 
       <Text className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Your data is always yours. Export, back up, or sync to Google Drive anytime.
+        {t('backup.subtitle')}
       </Text>
 
       {/* ─── Action Cards ──────────────────── */}
@@ -366,9 +368,9 @@ export function BackupSettings() {
       {/* 1. Data Export (all plans) */}
       <ActionCard
         icon={<Download size={20} color={colors.primary} />}
-        title="Download Data Export"
-        description="Download all your data as a JSON file. Includes machines, shifts, users, production plans, and logs."
-        buttonLabel="Export & Download"
+        title={t('backup.downloadExport')}
+        description={t('backup.downloadExportDesc')}
+        buttonLabel={t('backup.exportDownload')}
         onPress={handleExport}
         loading={exporting}
         variant="primary"
@@ -377,16 +379,16 @@ export function BackupSettings() {
       {/* 2. Cloud Backup (paid plans only) */}
       <ActionCard
         icon={<Cloud size={20} color={colors.blue} />}
-        title="Cloud Backup"
+        title={t('backup.cloudBackup')}
         description={cap?.cloudBackup?.available
-          ? 'Create an encrypted server-side backup. Stored securely for 90 days with AES-256 encryption.'
-          : 'Encrypted cloud backups with 90-day retention. Upgrade to Starter or above to enable.'}
-        buttonLabel={cap?.cloudBackup?.available ? 'Create Cloud Backup' : 'Upgrade to Enable'}
+          ? t('backup.cloudBackupAvailableDesc')
+          : t('backup.cloudBackupLockedDesc')}
+        buttonLabel={cap?.cloudBackup?.available ? t('backup.createCloudBackup') : t('backup.upgradeToEnable')}
         onPress={cap?.cloudBackup?.available ? handleCloudBackup : () => {}}
         loading={cloudBacking}
         disabled={!cap?.cloudBackup?.available}
         variant="blue"
-        badge={!cap?.cloudBackup?.available ? 'Starter+' : undefined}
+        badge={!cap?.cloudBackup?.available ? t('backup.starterPlus') : undefined}
       />
 
       {/* 3. Google Drive (all plans) */}
@@ -396,11 +398,11 @@ export function BackupSettings() {
             <HardDrive size={20} color={colors.purple} />
           </View>
           <View className="flex-1">
-            <Text className="text-base font-semibold text-gray-900 dark:text-white">Google Drive Backup</Text>
+            <Text className="text-base font-semibold text-gray-900 dark:text-white">{t('backup.gdriveBackup')}</Text>
             <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               {gdriveConnected
-                ? `Connected as ${cap?.googleDrive?.email}. Back up directly to your personal Google Drive.`
-                : 'Connect your Google account to automatically back up data to your personal Drive.'}
+                ? `${t('backup.connectedAs')} ${cap?.googleDrive?.email}. ${t('backup.backupDirectly')}`
+                : t('backup.connectGdriveDesc')}
             </Text>
           </View>
         </View>
@@ -417,14 +419,14 @@ export function BackupSettings() {
                 {gdriveBacking ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
-                  <Text className="text-sm font-medium text-white">Backup to Drive</Text>
+                  <Text className="text-sm font-medium text-white">{t('backup.backupToDrive')}</Text>
                 )}
               </Pressable>
               <Pressable
                 onPress={handleGDriveDisconnect}
                 className="px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-700"
               >
-                <Text className="text-sm font-medium text-gray-600 dark:text-gray-300">Disconnect</Text>
+                <Text className="text-sm font-medium text-gray-600 dark:text-gray-300">{t('backup.disconnect')}</Text>
               </Pressable>
             </View>
 
@@ -441,7 +443,7 @@ export function BackupSettings() {
                 className="flex-row items-center justify-center gap-2 py-2 rounded-lg bg-purple-50 dark:bg-purple-900/20"
               >
                 <ExternalLink size={14} color={colors.purple} />
-                <Text className="text-sm font-medium" style={{ color: colors.purple }}>Open FactoryOS Backups Folder in Drive</Text>
+                <Text className="text-sm font-medium" style={{ color: colors.purple }}>{t('backup.openDriveFolder')}</Text>
               </Pressable>
             )}
           </View>
@@ -452,14 +454,14 @@ export function BackupSettings() {
             style={{ backgroundColor: colors.purple }}
           >
             <ExternalLink size={14} color="#fff" />
-            <Text className="text-sm font-medium text-white">Connect Google Drive</Text>
+            <Text className="text-sm font-medium text-white">{t('backup.connectGdrive')}</Text>
           </Pressable>
         )}
       </View>
 
       {/* ─── Backup History ────────────────── */}
       <View className="mt-2 mb-2 flex-row items-center justify-between">
-        <Text className="text-base font-semibold text-gray-900 dark:text-white">Backup History</Text>
+        <Text className="text-base font-semibold text-gray-900 dark:text-white">{t('backup.backupHistory')}</Text>
         <Pressable onPress={loadData} className="p-2 rounded-md bg-gray-100 dark:bg-gray-700">
           <RefreshCw size={14} color={colors.gray} />
         </Pressable>
@@ -468,13 +470,13 @@ export function BackupSettings() {
       {backups.length === 0 ? (
         <View className="bg-white dark:bg-gray-800 rounded-xl p-8 items-center border border-gray-200 dark:border-gray-700">
           <HardDrive size={32} color="#d1d5db" />
-          <Text className="text-sm text-gray-400 mt-3">No backups yet</Text>
-          <Text className="text-xs text-gray-400 mt-1">Create your first backup using the options above</Text>
+          <Text className="text-sm text-gray-400 mt-3">{t('backup.noBackups')}</Text>
+          <Text className="text-xs text-gray-400 mt-1">{t('backup.noBackupsDesc')}</Text>
         </View>
       ) : (
         <View className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           {backups.map((b) => (
-            <BackupRow key={b.id} backup={b} onDelete={handleDelete} />
+            <BackupRow key={b.id} backup={b} onDelete={handleDelete} t={t} />
           ))}
         </View>
       )}

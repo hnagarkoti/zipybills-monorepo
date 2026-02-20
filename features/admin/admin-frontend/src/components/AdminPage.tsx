@@ -26,6 +26,7 @@ import {
 } from 'lucide-react-native';
 import { colors, useSemanticColors } from '@zipybills/theme-engine';
 import { Loading } from '@zipybills/ui-components';
+import { useLocale } from '@zipybills/i18n-engine';
 import {
   fetchAdminDashboard,
   fetchAuditLogs,
@@ -57,6 +58,15 @@ const TABS: { id: AdminTab; label: string; icon: React.ReactNode }[] = [
 export function AdminPage() {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const sem = useSemanticColors();
+  const { t } = useLocale();
+
+  const TABS_LABELS: Record<AdminTab, string> = {
+    overview: t('admin.system'),
+    audit: t('admin.auditLogs'),
+    backups: t('admin.backups'),
+    license: t('admin.license'),
+    export: t('admin.export'),
+  };
 
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-950">
@@ -65,7 +75,7 @@ export function AdminPage() {
         <View className="flex-row items-center mb-3">
           <Shield size={22} color={colors.blue[600]} />
           <Text className="text-xl font-bold text-gray-900 dark:text-white ml-2">
-            Admin Panel
+            {t('admin.title')}
           </Text>
         </View>
 
@@ -93,7 +103,7 @@ export function AdminPage() {
                     : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
-                {tab.label}
+                {TABS_LABELS[tab.id] ?? tab.label}
               </Text>
             </Pressable>
           ))}
@@ -113,6 +123,7 @@ export function AdminPage() {
 // ─── System Overview Tab ──────────────────────
 
 function SystemOverviewTab() {
+  const { t } = useLocale();
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ['admin', 'dashboard'],
     queryFn: fetchAdminDashboard,
@@ -121,7 +132,7 @@ function SystemOverviewTab() {
   if (isLoading) return <Loading />;
 
   const d = data?.dashboard;
-  if (!d) return <Text className="p-4 text-gray-500">Failed to load dashboard</Text>;
+  if (!d) return <Text className="p-4 text-gray-500">{t('admin.failedToLoad')}</Text>;
 
   return (
     <ScrollView
@@ -130,48 +141,48 @@ function SystemOverviewTab() {
     >
       {/* Quick Stats */}
       <View className="flex-row flex-wrap gap-3 mb-4">
-        <StatCard icon={<Users size={18} color={colors.blue[500]} />} label="Users" value={String(d.users.total_users)} sub={`${d.users.active_users} active`} />
-        <StatCard icon={<Activity size={18} color={colors.amber[500]} />} label="Events (24h)" value={String(d.activity.events_24h)} />
-        <StatCard icon={<Server size={18} color={colors.purple[500]} />} label="Uptime" value={formatUptime(d.system.uptime)} />
+        <StatCard icon={<Users size={18} color={colors.blue[500]} />} label={t('admin.usersLabel')} value={String(d.users.total_users)} sub={`${d.users.active_users} ${t('common.active').toLowerCase()}`} />
+        <StatCard icon={<Activity size={18} color={colors.amber[500]} />} label={t('admin.events24h')} value={String(d.activity.events_24h)} />
+        <StatCard icon={<Server size={18} color={colors.purple[500]} />} label={t('admin.uptime')} value={formatUptime(d.system.uptime)} />
       </View>
 
       {/* Users Breakdown */}
-      <SectionCard title="Users">
-        <InfoRow label="Admins" value={String(d.users.admins)} />
-        <InfoRow label="Supervisors" value={String(d.users.supervisors)} />
-        <InfoRow label="Operators" value={String(d.users.operators)} />
-        <InfoRow label="Inactive" value={String(d.users.inactive_users)} accent />
+      <SectionCard title={t('admin.usersLabel')}>
+        <InfoRow label={t('roles.ADMIN') + 's'} value={String(d.users.admins)} />
+        <InfoRow label={t('roles.SUPERVISOR') + 's'} value={String(d.users.supervisors)} />
+        <InfoRow label={t('roles.OPERATOR') + 's'} value={String(d.users.operators)} />
+        <InfoRow label={t('common.inactive')} value={String(d.users.inactive_users)} accent />
       </SectionCard>
 
       {/* Machines */}
-      <SectionCard title="Machines">
-        <InfoRow label="Total" value={String(d.machines.total_machines)} />
-        <InfoRow label="Running" value={String(d.machines.running)} />
-        <InfoRow label="Idle" value={String(d.machines.idle)} />
-        <InfoRow label="Maintenance" value={String(d.machines.maintenance)} accent />
+      <SectionCard title={t('admin.machines')}>
+        <InfoRow label={t('common.total')} value={String(d.machines.total_machines)} />
+        <InfoRow label={t('machines.running')} value={String(d.machines.running)} />
+        <InfoRow label={t('machines.idle')} value={String(d.machines.idle)} />
+        <InfoRow label={t('machines.maintenance')} value={String(d.machines.maintenance)} accent />
       </SectionCard>
 
       {/* Production (7 day) */}
-      <SectionCard title="Production (7 days)">
-        <InfoRow label="Plans" value={String(d.production.total_plans)} />
-        <InfoRow label="Active" value={String(d.production.active_plans)} />
-        <InfoRow label="Completed" value={String(d.production.completed_plans)} />
-        <InfoRow label="Total Produced" value={String(d.production.total_produced)} />
+      <SectionCard title={t('admin.production7d')}>
+        <InfoRow label={t('admin.plans')} value={String(d.production.total_plans)} />
+        <InfoRow label={t('common.active')} value={String(d.production.active_plans)} />
+        <InfoRow label={t('admin.completed')} value={String(d.production.completed_plans)} />
+        <InfoRow label={t('admin.totalProduced')} value={String(d.production.total_produced)} />
       </SectionCard>
 
       {/* Feature Flags */}
-      <SectionCard title="Feature Flags">
+      <SectionCard title={t('admin.featureFlags')}>
         {d.featureFlags.length === 0 ? (
-          <Text className="text-gray-500 dark:text-gray-400 text-sm">No feature flags found</Text>
+          <Text className="text-gray-500 dark:text-gray-400 text-sm">{t('admin.noFeatureFlags')}</Text>
         ) : (
           d.featureFlags.map((flag) => <FeatureFlagRow key={flag.feature_id} flag={flag} />)
         )}
       </SectionCard>
 
       {/* System Info */}
-      <SectionCard title="System">
-        <InfoRow label="Node" value={d.system.nodeVersion} />
-        <InfoRow label="Platform" value={d.system.platform} />
+      <SectionCard title={t('admin.system')}>
+        <InfoRow label={t('admin.node')} value={d.system.nodeVersion} />
+        <InfoRow label={t('admin.platformLabel')} value={d.system.platform} />
       </SectionCard>
 
       <View className="h-8" />
@@ -182,6 +193,7 @@ function SystemOverviewTab() {
 // ─── Audit Logs Tab ───────────────────────────
 
 function AuditLogsTab() {
+  const { t } = useLocale();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
@@ -205,8 +217,8 @@ function AuditLogsTab() {
       {/* Stats row */}
       {stats && (
         <View className="flex-row flex-wrap gap-3 mb-4">
-          <StatCard icon={<FileText size={18} color={colors.blue[500]} />} label="Total Logs" value={String(stats.totalLogs)} />
-          <StatCard icon={<Clock size={18} color={colors.amber[500]} />} label="Today" value={String(stats.todayLogs)} />
+          <StatCard icon={<FileText size={18} color={colors.blue[500]} />} label={t('admin.totalLogs')} value={String(stats.totalLogs)} />
+          <StatCard icon={<Clock size={18} color={colors.amber[500]} />} label={t('admin.today')} value={String(stats.todayLogs)} />
         </View>
       )}
 
@@ -215,10 +227,10 @@ function AuditLogsTab() {
         <Search size={16} color={colors.gray[400]} />
         <TextInput
           className="flex-1 ml-2 text-sm text-gray-900 dark:text-white"
-          placeholder="Search audit logs..."
+          placeholder={t('admin.searchAuditLogs')}
           placeholderTextColor={colors.gray[400]}
           value={search}
-          onChangeText={(t) => { setSearch(t); setPage(1); }}
+          onChangeText={(v) => { setSearch(v); setPage(1); }}
         />
       </View>
 
@@ -239,7 +251,7 @@ function AuditLogsTab() {
                 disabled={page === 1}
                 className="px-4 py-2 bg-blue-500 rounded-lg disabled:opacity-40"
               >
-                <Text className="text-white text-sm font-medium">Previous</Text>
+                <Text className="text-white text-sm font-medium">{t('admin.previous')}</Text>
               </Pressable>
               <Text className="text-gray-600 dark:text-gray-400 text-sm">
                 Page {page} of {data.pagination.totalPages}
@@ -249,7 +261,7 @@ function AuditLogsTab() {
                 disabled={page === data.pagination.totalPages}
                 className="px-4 py-2 bg-blue-500 rounded-lg disabled:opacity-40"
               >
-                <Text className="text-white text-sm font-medium">Next</Text>
+                <Text className="text-white text-sm font-medium">{t('common.next')}</Text>
               </Pressable>
             </View>
           )}
@@ -264,6 +276,7 @@ function AuditLogsTab() {
 // ─── Backups Tab ──────────────────────────────
 
 function BackupsTab() {
+  const { t } = useLocale();
   const queryClient = useQueryClient();
   const [notes, setNotes] = useState('');
 
@@ -291,10 +304,10 @@ function BackupsTab() {
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
     >
       {/* Create Backup */}
-      <SectionCard title="Create Backup">
+      <SectionCard title={t('admin.createBackup')}>
         <TextInput
           className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white mb-3"
-          placeholder="Notes (optional)"
+          placeholder={t('admin.notesOptional')}
           placeholderTextColor={colors.gray[400]}
           value={notes}
           onChangeText={setNotes}
@@ -307,7 +320,7 @@ function BackupsTab() {
           {createMutation.isPending ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text className="text-white font-semibold text-sm">Create Backup Now</Text>
+            <Text className="text-white font-semibold text-sm">{t('admin.createBackupNow')}</Text>
           )}
         </Pressable>
         {createMutation.isError && (
@@ -316,16 +329,16 @@ function BackupsTab() {
           </Text>
         )}
         {createMutation.isSuccess && (
-          <Text className="text-emerald-500 text-xs mt-2">Backup created successfully!</Text>
+          <Text className="text-emerald-500 text-xs mt-2">{t('admin.backupSuccess')}</Text>
         )}
       </SectionCard>
 
       {/* Backup List */}
-      <SectionCard title="Backup History">
+      <SectionCard title={t('admin.backupHistory')}>
         {isLoading ? (
           <Loading />
         ) : data?.backups.length === 0 ? (
-          <Text className="text-gray-500 dark:text-gray-400 text-sm">No backups yet</Text>
+          <Text className="text-gray-500 dark:text-gray-400 text-sm">{t('admin.noBackups')}</Text>
         ) : (
           data?.backups.map((b) => (
             <View
@@ -383,6 +396,7 @@ function BackupsTab() {
 // ─── License Tab ──────────────────────────────
 
 function LicenseTab() {
+  const { t } = useLocale();
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ['admin', 'license'],
     queryFn: fetchLicenseStatus,
@@ -398,34 +412,34 @@ function LicenseTab() {
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
     >
       {!license ? (
-        <SectionCard title="License">
+        <SectionCard title={t('admin.license')}>
           <View className="items-center py-8">
             <Key size={40} color={colors.gray[300]} />
             <Text className="text-gray-500 dark:text-gray-400 mt-3 text-center">
-              No active license found.{'\n'}Contact your administrator to activate a license.
+              {t('admin.noLicense')}{'\n'}{t('admin.contactAdmin')}
             </Text>
           </View>
         </SectionCard>
       ) : (
         <>
-          <SectionCard title="License Information">
-            <InfoRow label="Status" value={license.status} accent={license.status !== 'ACTIVE'} />
-            <InfoRow label="Valid" value={license.valid ? 'Yes' : 'No'} accent={!license.valid} />
-            <InfoRow label="Tier" value={license.tier} />
-            <InfoRow label="Company" value={license.company} />
-            <InfoRow label="Machines" value={`${license.machinesUsed} / ${license.machinesAllowed === -1 ? '∞' : license.machinesAllowed}`} />
-            <InfoRow label="Users" value={`${license.usersActive} / ${license.usersAllowed === -1 ? '∞' : license.usersAllowed}`} />
-            <InfoRow label="Days Left" value={license.daysRemaining === -1 ? 'No expiry' : String(license.daysRemaining)} accent={license.daysRemaining >= 0 && license.daysRemaining <= 30} />
+          <SectionCard title={t('admin.licenseInfo')}>
+            <InfoRow label={t('admin.status')} value={license.status} accent={license.status !== 'ACTIVE'} />
+            <InfoRow label={t('admin.valid')} value={license.valid ? t('common.yes') : t('common.no')} accent={!license.valid} />
+            <InfoRow label={t('admin.tier')} value={license.tier} />
+            <InfoRow label={t('admin.company')} value={license.company} />
+            <InfoRow label={t('admin.machines')} value={`${license.machinesUsed} / ${license.machinesAllowed === -1 ? '∞' : license.machinesAllowed}`} />
+            <InfoRow label={t('admin.usersLabel')} value={`${license.usersActive} / ${license.usersAllowed === -1 ? '∞' : license.usersAllowed}`} />
+            <InfoRow label={t('admin.daysLeft')} value={license.daysRemaining === -1 ? t('admin.noExpiry') : String(license.daysRemaining)} accent={license.daysRemaining >= 0 && license.daysRemaining <= 30} />
           </SectionCard>
           {license.warnings.length > 0 && (
-            <SectionCard title="Warnings">
+            <SectionCard title={t('admin.warnings')}>
               {license.warnings.map((w, i) => (
                 <Text key={i} className="text-amber-600 dark:text-amber-400 text-sm py-1">{w}</Text>
               ))}
             </SectionCard>
           )}
           {license.features.length > 0 && (
-            <SectionCard title="Licensed Features">
+            <SectionCard title={t('admin.licensedFeatures')}>
               <Text className="text-gray-600 dark:text-gray-400 text-sm">{license.features.join(', ')}</Text>
             </SectionCard>
           )}
@@ -439,24 +453,25 @@ function LicenseTab() {
 // ─── Export Tab ────────────────────────────────
 
 function ExportTab() {
+  const { t } = useLocale();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
   const reports = [
-    { id: 'production', label: 'Production Report', icon: <ClipboardIcon /> },
-    { id: 'machine-wise', label: 'Machine-wise Report', icon: <HardDrive size={16} color={colors.blue[500]} /> },
-    { id: 'shift-wise', label: 'Shift-wise Report', icon: <Clock size={16} color={colors.amber[500]} /> },
-    { id: 'downtime', label: 'Downtime Report', icon: <Activity size={16} color={colors.red[500]} /> },
-    { id: 'efficiency', label: 'Efficiency / OEE Report', icon: <Activity size={16} color={colors.emerald[500]} /> },
-    { id: 'summary', label: 'Summary Report', icon: <FileText size={16} color={colors.purple[500]} /> },
+    { id: 'production', label: t('admin.productionReport'), icon: <ClipboardIcon /> },
+    { id: 'machine-wise', label: t('admin.machineReport'), icon: <HardDrive size={16} color={colors.blue[500]} /> },
+    { id: 'shift-wise', label: t('admin.shiftReport'), icon: <Clock size={16} color={colors.amber[500]} /> },
+    { id: 'downtime', label: t('admin.downtimeReport'), icon: <Activity size={16} color={colors.red[500]} /> },
+    { id: 'efficiency', label: t('admin.efficiencyReport'), icon: <Activity size={16} color={colors.emerald[500]} /> },
+    { id: 'summary', label: t('admin.summaryReport'), icon: <FileText size={16} color={colors.purple[500]} /> },
   ];
 
   return (
     <ScrollView className="flex-1 p-4">
-      <SectionCard title="Date Range">
+      <SectionCard title={t('admin.dateRange')}>
         <View className="flex-row gap-3 mb-1">
           <View className="flex-1">
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Start Date</Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('admin.startDate')}</Text>
             <TextInput
               className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white"
               placeholder="YYYY-MM-DD"
@@ -466,7 +481,7 @@ function ExportTab() {
             />
           </View>
           <View className="flex-1">
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">End Date</Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('admin.endDate')}</Text>
             <TextInput
               className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white"
               placeholder="YYYY-MM-DD"
@@ -478,7 +493,7 @@ function ExportTab() {
         </View>
       </SectionCard>
 
-      <SectionCard title="Available Reports">
+      <SectionCard title={t('admin.availableReports')}>
         {reports.map((report) => (
           <ExportReportRow
             key={report.id}

@@ -19,6 +19,7 @@ import {
   useAppliedLayers,
   type BaseThemeId,
 } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 // ─── Types ────────────────────────────────────
 
@@ -49,6 +50,7 @@ export function AppearanceSettings({
   tenantDefaultLabel = 'Tenant Default',
 }: AppearanceSettingsProps) {
   const { context, setBaseTheme } = useTheme();
+  const { t } = useLocale();
   const branding = useThemeBranding();
   const isDark = useIsDark();
   const appliedLayers = useAppliedLayers();
@@ -65,8 +67,8 @@ export function AppearanceSettings({
     () => [
       {
         id: 'light',
-        label: 'Light',
-        description: 'Clean and bright for daytime use',
+        label: t('appearance.light'),
+        description: t('appearance.lightDesc'),
         icon: <Sun size={22} />,
         previewBg: '#FFFFFF',
         previewFg: '#1F2937',
@@ -75,8 +77,8 @@ export function AppearanceSettings({
       },
       {
         id: 'dark',
-        label: 'Dark',
-        description: 'Easier on the eyes in low-light',
+        label: t('appearance.dark'),
+        description: t('appearance.darkDesc'),
         icon: <Moon size={22} />,
         previewBg: '#111827',
         previewFg: '#F9FAFB',
@@ -85,8 +87,8 @@ export function AppearanceSettings({
       },
       {
         id: 'system',
-        label: 'System',
-        description: 'Automatically matches your device',
+        label: t('appearance.system'),
+        description: t('appearance.systemDesc'),
         icon: <Monitor size={22} />,
         previewBg: 'linear', // sentinel — will render gradient
         previewFg: '#6B7280',
@@ -96,7 +98,7 @@ export function AppearanceSettings({
       {
         id: 'default',
         label: tenantDefaultLabel,
-        description: 'Theme set by your organization',
+        description: t('appearance.tenantDesc'),
         icon: <Palette size={22} />,
         previewBg: '#F0FDF4',
         previewFg: '#166534',
@@ -104,7 +106,7 @@ export function AppearanceSettings({
         baseTheme: null,
       },
     ],
-    [tenantDefaultLabel],
+    [tenantDefaultLabel, t],
   );
 
   const handleSelect = useCallback(
@@ -124,17 +126,17 @@ export function AppearanceSettings({
       {/* ─── Header ───────────────────────────── */}
       <View className="mb-6">
         <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">
-          Appearance
+          {t('settings.appearance')}
         </Text>
         <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Choose how FactoryOS looks on your device.
-          {!allowUserOverride && ' Theme selection is locked by your organization.'}
+          {t('appearance.chooseHow')}
+          {!allowUserOverride && ` ${t('appearance.locked')}`}
         </Text>
       </View>
 
       {/* ─── Theme Cards ─────────────────────── */}
       <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-        Theme
+        {t('appearance.themeSection')}
       </Text>
 
       <View className="flex-row flex-wrap gap-3 mb-8">
@@ -233,13 +235,13 @@ export function AppearanceSettings({
           }`}
         />
         <Text className="text-sm text-gray-600 dark:text-gray-400">
-          Currently using{' '}
+          {t('appearance.currentlyUsing')}{' '}
           <Text className="font-semibold text-gray-900 dark:text-gray-100">
-            {isDark ? 'Dark' : 'Light'}
+            {isDark ? t('appearance.dark') : t('appearance.light')}
           </Text>{' '}
-          mode
+          {t('appearance.mode')}
           {appliedLayers.length > 1 &&
-            ` with ${appliedLayers.length} theme layers`}
+            ` ${t('appearance.withLayers', { count: String(appliedLayers.length) })}`}
         </Text>
       </View>
 
@@ -247,14 +249,14 @@ export function AppearanceSettings({
       {branding.name && branding.name !== 'FactoryOS' && (
         <View className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-            Organization Branding
+            {t('appearance.orgBranding')}
           </Text>
           <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
             {branding.name}
           </Text>
           {branding.poweredBy && (
             <Text className="text-xs text-gray-400 mt-1">
-              Powered by {branding.poweredBy}
+              {t('common.poweredBy').replace('Zipybills', branding.poweredBy ?? '')}
             </Text>
           )}
         </View>

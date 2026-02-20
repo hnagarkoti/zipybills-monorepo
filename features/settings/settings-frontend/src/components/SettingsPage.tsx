@@ -19,6 +19,7 @@ import {
 } from 'lucide-react-native';
 import { PageHeader } from '@zipybills/ui-components';
 import { useAuthStore } from '@zipybills/ui-store';
+import { useLocale } from '@zipybills/i18n-engine';
 
 // ─── Types ────────────────────────────────────
 
@@ -194,6 +195,7 @@ export function SettingsLayout({
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
   const { user } = useAuthStore();
+  const { t } = useLocale();
   const userRole = user?.role ?? 'OPERATOR';
   const visibleTabs = getVisibleTabs(userRole);
 
@@ -201,7 +203,7 @@ export function SettingsLayout({
   if (isDesktop) {
     return (
       <View className="flex-1 bg-gray-50 dark:bg-gray-950">
-        <PageHeader title="Settings" subtitle="Manage your preferences" />
+        <PageHeader title={t('settings.title')} subtitle={t('settings.subtitle')} />
 
         <View className="flex-1 flex-row px-6 pb-6" style={{ gap: 24 }}>
           {/* Left Sidebar */}
@@ -209,7 +211,7 @@ export function SettingsLayout({
             <ProfileCard compact />
 
             <Text className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2 px-1">
-              Preferences
+              {t('settings.preferences')}
             </Text>
             <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
               {visibleTabs.map((tab, index) => (
@@ -225,7 +227,7 @@ export function SettingsLayout({
 
             <View className="items-center mt-6">
               <Text className="text-[10px] text-gray-400 dark:text-gray-600">
-                FactoryOS v1.0.0
+                {t('common.appName')} v1.0.0
               </Text>
             </View>
           </View>
@@ -257,7 +259,7 @@ export function SettingsLayout({
             style={{ transform: [{ rotate: '180deg' }] }}
           />
           <Text className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            Settings
+            {t('settings.title')}
           </Text>
         </Pressable>
       </View>
@@ -311,7 +313,7 @@ export function SettingsPage({
         <ProfileCard />
 
         <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 px-1">
-          Preferences
+          {t('settings.preferences')}
         </Text>
 
         <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden mb-6">
@@ -346,7 +348,7 @@ export function SettingsPage({
 
         <View className="items-center mt-4 mb-8">
           <Text className="text-xs text-gray-400 dark:text-gray-600">
-            FactoryOS v1.0.0
+            {t('common.appName')} v1.0.0
           </Text>
         </View>
       </ScrollView>
