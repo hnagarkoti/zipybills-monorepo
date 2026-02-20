@@ -5,6 +5,7 @@ import { fetchShifts, createShift, updateShift, deleteShift, bulkCreateShifts, t
 import { StatusDot, PageHeader } from '@zipybills/ui-components';
 import { colors, useSemanticColors } from '@zipybills/theme-engine';
 import { useCompliance } from '@zipybills/ui-store';
+import { useLocale } from '@zipybills/i18n-engine';
 
 /* ─── Time Picker Component ──────────────────── */
 
@@ -81,6 +82,7 @@ interface ShiftFormModalProps {
 }
 
 function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: ShiftFormModalProps) {
+  const { t } = useLocale();
   const [form, setForm] = useState(initialData ?? { shift_name: '', start_time: '06:00', end_time: '14:00', is_active: true });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -105,14 +107,14 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
   ];
 
   const handleSave = async () => {
-    if (!form.shift_name.trim()) { showError('Shift name is required'); return; }
-    if (!form.start_time || !form.end_time) { showError('Start and end times are required'); return; }
+    if (!form.shift_name.trim()) { showError(t('shifts.shiftNameRequired')); return; }
+    if (!form.start_time || !form.end_time) { showError(t('shifts.timesRequired')); return; }
     setSaving(true);
     setError(null);
     try {
       await onSave(form);
     } catch (err) {
-      showError(err instanceof Error ? err.message : 'Failed to save');
+      showError(err instanceof Error ? err.message : t('shifts.failedToSave'));
     } finally {
       setSaving(false);
     }
@@ -126,7 +128,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
           <View className="bg-emerald-500 px-5 py-4 flex-row items-center justify-between">
             <View className="flex-row items-center">
               <Clock size={20} color="#fff" />
-              <Text className="text-white font-bold text-lg ml-2">{isEditing ? 'Edit Shift' : 'New Shift'}</Text>
+              <Text className="text-white font-bold text-lg ml-2">{isEditing ? t('shifts.editShift') : t('shifts.newShift')}</Text>
             </View>
             <Pressable onPress={onClose} className="p-1">
               <X size={20} color="#d1fae5" />
@@ -143,7 +145,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
             {/* Quick Presets */}
             {!isEditing && (
               <View className="mb-5">
-                <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">Quick Presets</Text>
+                <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">{t('shifts.quickPresets')}</Text>
                 <View className="flex-row gap-2">
                   {PRESETS.map((p) => (
                     <Pressable key={p.label} onPress={() => setForm({ ...form, shift_name: p.label, start_time: p.start, end_time: p.end })}
@@ -159,7 +161,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
 
             {/* Shift Name */}
             <View className="mb-4">
-              <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">Shift Name *</Text>
+              <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">{t('shifts.shiftName')} *</Text>
               <TextInput className="border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.shift_name} onChangeText={(t) => setForm({ ...form, shift_name: t })} placeholder="e.g., Morning" placeholderTextColor="#9ca3af" />
             </View>
 
@@ -178,15 +180,15 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
               <View className={`w-12 h-7 rounded-full justify-center px-0.5 ${form.is_active ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
                 <View className={`w-6 h-6 bg-white rounded-full shadow ${form.is_active ? 'self-end' : 'self-start'}`} />
               </View>
-              <Text className="text-sm text-gray-700 dark:text-gray-300 font-medium ml-3">{form.is_active ? 'Active' : 'Inactive'}</Text>
+              <Text className="text-sm text-gray-700 dark:text-gray-300 font-medium ml-3">{form.is_active ? t('common.active') : t('common.inactive')}</Text>
             </Pressable>
 
             {/* Preview */}
             <View className="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 border border-gray-200 dark:border-gray-700">
-              <Text className="text-xs text-gray-400 mb-1">Preview</Text>
+              <Text className="text-xs text-gray-400 mb-1">{t('common.preview')}</Text>
               <View className="flex-row items-center gap-2">
                 <View className={`w-2 h-2 rounded-full ${form.is_active ? 'bg-green-400' : 'bg-gray-400'}`} />
-                <Text className="text-sm font-semibold text-gray-800 dark:text-gray-200">{form.shift_name || 'Untitled'}</Text>
+                <Text className="text-sm font-semibold text-gray-800 dark:text-gray-200">{form.shift_name || t('common.untitled')}</Text>
                 <Text className="text-sm text-gray-500 dark:text-gray-400">{form.start_time || '--:--'} → {form.end_time || '--:--'}</Text>
               </View>
             </View>
@@ -195,10 +197,10 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
           {/* Footer */}
           <View className="px-5 py-4 border-t border-gray-200 dark:border-gray-700 flex-row gap-3">
             <Pressable onPress={onClose} className="flex-1 bg-gray-100 dark:bg-gray-800 py-3 rounded-xl items-center">
-              <Text className="text-gray-600 dark:text-gray-400 font-semibold">Cancel</Text>
+              <Text className="text-gray-600 dark:text-gray-400 font-semibold">{t('common.cancel')}</Text>
             </Pressable>
             <Pressable onPress={handleSave} disabled={saving} className={`flex-1 py-3 rounded-xl items-center ${saving ? 'bg-emerald-400' : 'bg-emerald-500'}`}>
-              {saving ? <ActivityIndicator size="small" color="#fff" /> : <Text className="text-white font-semibold">{isEditing ? 'Update Shift' : 'Create Shift'}</Text>}
+              {saving ? <ActivityIndicator size="small" color="#fff" /> : <Text className="text-white font-semibold">{isEditing ? t('shifts.updateShift') : t('shifts.createShift')}</Text>}
             </Pressable>
           </View>
         </View>
@@ -210,18 +212,19 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
 /* ─── Delete Confirmation Modal ──────────────── */
 
 function DeleteConfirmModal({ visible, shiftName, onConfirm, onCancel }: { visible: boolean; shiftName: string; onConfirm: () => void; onCancel: () => void }) {
+  const { t } = useLocale();
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View className="flex-1 bg-black/50 items-center justify-center p-6">
         <View className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-sm p-6 shadow-xl">
-          <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 text-center mb-2">Delete Shift?</Text>
-          <Text className="text-sm text-gray-500 dark:text-gray-400 text-center mb-5">Are you sure you want to delete "{shiftName}"? This cannot be undone.</Text>
+          <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 text-center mb-2">{t('shifts.deleteShift')}</Text>
+          <Text className="text-sm text-gray-500 dark:text-gray-400 text-center mb-5">{t('shifts.deleteConfirm')} "{shiftName}"? {t('shifts.cannotUndone')}</Text>
           <View className="flex-row gap-3">
             <Pressable onPress={onCancel} className="flex-1 bg-gray-100 dark:bg-gray-800 py-3 rounded-xl items-center">
-              <Text className="text-gray-600 dark:text-gray-400 font-semibold">Cancel</Text>
+              <Text className="text-gray-600 dark:text-gray-400 font-semibold">{t('common.cancel')}</Text>
             </Pressable>
             <Pressable onPress={onConfirm} className="flex-1 bg-red-500 py-3 rounded-xl items-center">
-              <Text className="text-white font-semibold">Delete</Text>
+              <Text className="text-white font-semibold">{t('common.delete')}</Text>
             </Pressable>
           </View>
         </View>
@@ -234,6 +237,7 @@ function DeleteConfirmModal({ visible, shiftName, onConfirm, onCancel }: { visib
 
 export function ShiftsPage() {
   const sc = useSemanticColors();
+  const { t } = useLocale();
   const { guardedMutate, guard } = useCompliance();
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
@@ -251,7 +255,7 @@ export function ShiftsPage() {
       setShifts(await fetchShifts());
       setError(null);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load');
+      setError(err instanceof Error ? err.message : t('shifts.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -281,7 +285,7 @@ export function ShiftsPage() {
         setDeleteTarget(null);
         loadData();
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to delete');
+        setError(err instanceof Error ? err.message : t('shifts.failedToDelete'));
         setDeleteTarget(null);
       }
     });
@@ -295,7 +299,7 @@ export function ShiftsPage() {
         await bulkCreateShifts(count);
         await loadData();
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to create shifts');
+        setError(err instanceof Error ? err.message : t('shifts.failedToCreateShifts'));
       } finally {
         setBulkLoading(null);
       }
@@ -305,12 +309,12 @@ export function ShiftsPage() {
   return (
     <ScrollView className="flex-1 p-4">
       <PageHeader
-        title="Shift Management"
-        subtitle={`${shifts.length} shifts configured`}
+        title={t('shifts.shiftManagement')}
+        subtitle={`${shifts.length} ${t('shifts.shiftsConfigured')}`}
         actions={
           <Pressable onPress={() => { setEditingShift(null); setShowFormModal(true); }} className="bg-emerald-500 px-4 py-2.5 rounded-lg flex-row items-center">
             <Plus size={14} color={colors.white} />
-            <Text className="text-white font-medium text-sm ml-1">Add Shift</Text>
+            <Text className="text-white font-medium text-sm ml-1">{t('shifts.addShift')}</Text>
           </Pressable>
         }
       />
@@ -320,20 +324,20 @@ export function ShiftsPage() {
           <View className="flex-row items-start justify-between">
             <View className="flex-1 mr-3">
               <Text className="text-sm font-medium text-amber-800 dark:text-amber-300">
-                {shifts.length === 0 ? 'Could not load shifts' : 'Something went wrong'}
+                {shifts.length === 0 ? t('shifts.couldNotLoad') : t('shifts.somethingWrong')}
               </Text>
               <Text className="text-xs text-amber-600 dark:text-amber-400 mt-1">{error}</Text>
               {shifts.length === 0 && (
-                <Text className="text-xs text-amber-500 dark:text-amber-400/70 mt-1">You can still set up shifts below, or try reloading.</Text>
+                <Text className="text-xs text-amber-500 dark:text-amber-400/70 mt-1">{t('shifts.canStillSetup')}</Text>
               )}
             </View>
             <View className="flex-row gap-2">
               <Pressable onPress={loadData} className="bg-amber-100 dark:bg-amber-800/40 px-3 py-1.5 rounded-lg flex-row items-center">
                 <RefreshCw size={12} color={colors.amber[700]} />
-                <Text className="text-xs font-medium text-amber-700 dark:text-amber-400 ml-1">Retry</Text>
+                <Text className="text-xs font-medium text-amber-700 dark:text-amber-400 ml-1">{t('common.retry')}</Text>
               </Pressable>
               <Pressable onPress={() => setError(null)} className="bg-amber-100 dark:bg-amber-800/40 px-3 py-1.5 rounded-lg">
-                <Text className="text-xs font-medium text-amber-700 dark:text-amber-400">Dismiss</Text>
+                <Text className="text-xs font-medium text-amber-700 dark:text-amber-400">{t('common.dismiss')}</Text>
               </Pressable>
             </View>
           </View>
@@ -341,7 +345,7 @@ export function ShiftsPage() {
       )}
 
       {loading ? (
-        <Text className="text-center text-gray-400 py-8">Loading shifts...</Text>
+        <Text className="text-center text-gray-400 py-8">{t('shifts.loadingShifts')}</Text>
       ) : shifts.length === 0 ? (
         <View className="py-4">
           <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-4">
@@ -349,8 +353,8 @@ export function ShiftsPage() {
               <View className="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-900/30 items-center justify-center mb-3">
                 <Clock size={28} color={colors.emerald[500]} />
               </View>
-              <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">Set Up Your Shifts</Text>
-              <Text className="text-sm text-gray-500 dark:text-gray-400 text-center">Choose a shift pattern to get started quickly, or add shifts manually.</Text>
+              <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">{t('shifts.setupShifts')}</Text>
+              <Text className="text-sm text-gray-500 dark:text-gray-400 text-center">{t('shifts.setupShiftsDesc')}</Text>
             </View>
 
             {/* 2-Shift */}
@@ -362,9 +366,9 @@ export function ShiftsPage() {
                     <View className="w-9 h-9 rounded-full bg-amber-100 dark:bg-amber-900/40 items-center justify-center"><Sun size={18} color={colors.amber[500]} /></View>
                     <View className="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-900/40 items-center justify-center -ml-2"><Moon size={18} color={colors.violet[500]} /></View>
                   </View>
-                  <View className="flex-1"><Text className="text-base font-semibold text-gray-900 dark:text-gray-100">2 Shifts</Text><Text className="text-xs text-gray-500 dark:text-gray-400">Day (06:00–18:00) · Night (18:00–06:00)</Text></View>
+                  <View className="flex-1"><Text className="text-base font-semibold text-gray-900 dark:text-gray-100">{t('shifts.twoShifts')}</Text><Text className="text-xs text-gray-500 dark:text-gray-400">{t('shifts.twoShiftsDesc')}</Text></View>
                 </View>
-                {bulkLoading === 2 ? <ActivityIndicator size="small" color={colors.emerald[500]} /> : <View className="bg-emerald-500 px-4 py-2 rounded-lg"><Text className="text-white text-sm font-medium">Create</Text></View>}
+                {bulkLoading === 2 ? <ActivityIndicator size="small" color={colors.emerald[500]} /> : <View className="bg-emerald-500 px-4 py-2 rounded-lg"><Text className="text-white text-sm font-medium">{t('common.create')}</Text></View>}
               </View>
             </Pressable>
 
@@ -378,19 +382,19 @@ export function ShiftsPage() {
                     <View className="w-9 h-9 rounded-full bg-amber-100 dark:bg-amber-900/40 items-center justify-center -ml-2"><Sun size={18} color={colors.amber[500]} /></View>
                     <View className="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-900/40 items-center justify-center -ml-2"><Moon size={18} color={colors.violet[500]} /></View>
                   </View>
-                  <View className="flex-1"><Text className="text-base font-semibold text-gray-900 dark:text-gray-100">3 Shifts</Text><Text className="text-xs text-gray-500 dark:text-gray-400">Morning · Afternoon · Night</Text></View>
+                  <View className="flex-1"><Text className="text-base font-semibold text-gray-900 dark:text-gray-100">{t('shifts.threeShifts')}</Text><Text className="text-xs text-gray-500 dark:text-gray-400">{t('shifts.threeShiftsDesc')}</Text></View>
                 </View>
-                {bulkLoading === 3 ? <ActivityIndicator size="small" color={colors.emerald[500]} /> : <View className="bg-emerald-500 px-4 py-2 rounded-lg"><Text className="text-white text-sm font-medium">Create</Text></View>}
+                {bulkLoading === 3 ? <ActivityIndicator size="small" color={colors.emerald[500]} /> : <View className="bg-emerald-500 px-4 py-2 rounded-lg"><Text className="text-white text-sm font-medium">{t('common.create')}</Text></View>}
               </View>
             </Pressable>
           </View>
-          <Text className="text-center text-xs text-gray-400 dark:text-gray-500">Or tap "Add Shift" above to create custom shifts individually.</Text>
+          <Text className="text-center text-xs text-gray-400 dark:text-gray-500">{t('shifts.orCustomShifts')}</Text>
         </View>
       ) : (
         <View>
           {/* 24-Hour Coverage bar */}
           <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-4">
-            <Text className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">24-Hour Coverage</Text>
+            <Text className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">{t('shifts.coverage24h')}</Text>
             <View className="h-8 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex-row">
               {shifts.filter((s) => s.is_active).map((s, idx) => {
                 const sh = Number(s.start_time.split(':')[0]) || 0;
@@ -423,10 +427,10 @@ export function ShiftsPage() {
                 </View>
                 <View className="flex-row gap-2">
                   <Pressable onPress={() => { setEditingShift(s); setShowFormModal(true); }} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
-                    <Text className="text-xs text-gray-600 dark:text-gray-400">Edit</Text>
+                    <Text className="text-xs text-gray-600 dark:text-gray-400">{t('common.edit')}</Text>
                   </Pressable>
                   <Pressable onPress={() => setDeleteTarget(s)} className="bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-lg">
-                    <Text className="text-xs text-red-600">Delete</Text>
+                    <Text className="text-xs text-red-600">{t('common.delete')}</Text>
                   </Pressable>
                 </View>
               </View>
@@ -434,7 +438,7 @@ export function ShiftsPage() {
                 <Clock size={12} color={sc.iconDefault} />
                 <Text className="text-sm text-gray-500 dark:text-gray-400 ml-1">{s.start_time} → {s.end_time}</Text>
               </View>
-              <Text className={`text-xs mt-1 ${s.is_active ? 'text-green-600' : 'text-gray-400'}`}>{s.is_active ? 'Active' : 'Inactive'}</Text>
+              <Text className={`text-xs mt-1 ${s.is_active ? 'text-green-600' : 'text-gray-400'}`}>{s.is_active ? t('common.active') : t('common.inactive')}</Text>
             </View>
           ))}
         </View>

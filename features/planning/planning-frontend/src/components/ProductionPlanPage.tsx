@@ -14,6 +14,7 @@ import {
 } from '@zipybills/ui-components';
 import { colors, statusColors, useSemanticColors } from '@zipybills/theme-engine';
 import { useCompliance } from '@zipybills/ui-store';
+import { useLocale } from '@zipybills/i18n-engine';
 import { downloadCSVTemplate, parseCSV, readFileAsText } from '../utils/csv-helpers';
 
 /* ─── Helpers ─────────────────────────────────── */
@@ -32,6 +33,7 @@ type CalendarView = 'strip' | 'month';
 
 export function ProductionPlanPage() {
   const sc = useSemanticColors();
+  const { t } = useLocale();
   const { guardedMutate, guard } = useCompliance();
   const [plans, setPlans] = useState<ProductionPlan[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
@@ -103,11 +105,11 @@ export function ProductionPlanPage() {
         });
         setShowForm(false);
         setForm({ machine_id: '', shift_id: '', product_name: '', product_code: '', target_quantity: '' });
-        setSuccess('Plan created successfully');
+        setSuccess(t('planning.planCreated'));
         loadData();
         setTimeout(() => setSuccess(null), 3000);
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to create plan');
+        setError(err instanceof Error ? err.message : t('planning.failedToCreate'));
       }
     });
   };
@@ -161,7 +163,7 @@ export function ProductionPlanPage() {
         await updatePlanStatus(planId, status);
         loadData();
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to update');
+        setError(err instanceof Error ? err.message : t('planning.failedToUpdate'));
       }
     });
   };
@@ -180,7 +182,7 @@ export function ProductionPlanPage() {
         setDuplicateTarget('');
         setTimeout(() => setSuccess(null), 4000);
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to duplicate plans');
+        setError(err instanceof Error ? err.message : t('planning.failedToDuplicate'));
       }
     });
   };
@@ -195,7 +197,7 @@ export function ProductionPlanPage() {
     <ScrollView className="flex-1 p-4">
       {/* Header with actions */}
       <PageHeader
-        title="Production Planning"
+        title={t('planning.title')}
         subtitle={`${plans.length} plan${plans.length !== 1 ? 's' : ''} for ${selectedDate}`}
         actions={
           <View className="flex-row gap-2">
@@ -204,14 +206,14 @@ export function ProductionPlanPage() {
               className="bg-gray-100 dark:bg-gray-800 px-3 py-2.5 rounded-lg flex-row items-center"
             >
               <Download size={14} color={sc.textPrimary} />
-              <Text className="text-gray-700 dark:text-gray-300 font-medium text-sm ml-1.5">Template</Text>
+              <Text className="text-gray-700 dark:text-gray-300 font-medium text-sm ml-1.5">{t('planning.template')}</Text>
             </Pressable>
             <Pressable
               onPress={() => { setShowImport(!showImport); setShowForm(false); setShowDuplicate(false); }}
               className="bg-blue-50 dark:bg-blue-900/20 px-3 py-2.5 rounded-lg flex-row items-center"
             >
               <Upload size={14} color={colors.blue[600]} />
-              <Text className="text-blue-700 dark:text-blue-400 font-medium text-sm ml-1.5">Import</Text>
+              <Text className="text-blue-700 dark:text-blue-400 font-medium text-sm ml-1.5">{t('common.import')}</Text>
             </Pressable>
             {plans.length > 0 && (
               <Pressable
@@ -219,7 +221,7 @@ export function ProductionPlanPage() {
                 className="bg-purple-50 dark:bg-purple-900/20 px-3 py-2.5 rounded-lg flex-row items-center"
               >
                 <Copy size={14} color={colors.violet[600]} />
-                <Text className="text-purple-700 dark:text-purple-400 font-medium text-sm ml-1.5">Duplicate</Text>
+                <Text className="text-purple-700 dark:text-purple-400 font-medium text-sm ml-1.5">{t('planning.duplicate')}</Text>
               </Pressable>
             )}
             <Pressable
@@ -234,7 +236,7 @@ export function ProductionPlanPage() {
               className={`px-4 py-2.5 rounded-lg flex-row items-center ${!loading && (machines.length === 0 || shifts.length === 0) ? 'bg-gray-400 dark:bg-gray-600' : 'bg-emerald-500'}`}
             >
               <Plus size={14} color={colors.white} />
-              <Text className="text-white font-medium text-sm ml-1">New Plan</Text>
+              <Text className="text-white font-medium text-sm ml-1">{t('planning.newPlan')}</Text>
             </Pressable>
           </View>
         }
@@ -249,7 +251,7 @@ export function ProductionPlanPage() {
           >
             <Calendar size={14} color={calendarView === 'strip' ? colors.emerald[600] : sc.iconDefault} />
             <Text className={`text-xs font-medium ml-1.5 ${calendarView === 'strip' ? 'text-emerald-700' : 'text-gray-500 dark:text-gray-400'}`}>
-              Week
+              {t('planning.week')}
             </Text>
           </Pressable>
           <Pressable
@@ -258,7 +260,7 @@ export function ProductionPlanPage() {
           >
             <CalendarDays size={14} color={calendarView === 'month' ? colors.emerald[600] : sc.iconDefault} />
             <Text className={`text-xs font-medium ml-1.5 ${calendarView === 'month' ? 'text-emerald-700' : 'text-gray-500 dark:text-gray-400'}`}>
-              Month
+              {t('planning.month')}
             </Text>
           </Pressable>
         </View>
@@ -283,9 +285,9 @@ export function ProductionPlanPage() {
       {/* Summary Stats */}
       {plans.length > 0 && (
         <View className="flex-row mb-4 gap-2">
-          <View className="flex-1"><StatCard label="Target" value={totalTarget} color="blue" /></View>
-          <View className="flex-1"><StatCard label="Produced" value={totalProduced} subtitle={`${efficiency}% efficiency`} color="green" /></View>
-          <View className="flex-1"><StatCard label="Rejected" value={totalRejected} subtitle={totalProduced > 0 ? `${Math.round((totalRejected / totalProduced) * 100)}% rate` : ''} color="red" /></View>
+          <View className="flex-1"><StatCard label={t('planning.target')} value={totalTarget} color="blue" /></View>
+          <View className="flex-1"><StatCard label={t('common.produced')} value={totalProduced} subtitle={`${efficiency}% ${t('common.efficiency')}`} color="green" /></View>
+          <View className="flex-1"><StatCard label={t('common.rejected')} value={totalRejected} subtitle={totalProduced > 0 ? `${Math.round((totalRejected / totalProduced) * 100)}% rate` : ''} color="red" /></View>
         </View>
       )}
 
@@ -300,9 +302,9 @@ export function ProductionPlanPage() {
             <View className="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/40 items-center justify-center mb-3">
               <ClipboardList size={28} color={colors.blue[500]} />
             </View>
-            <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">Setup Required</Text>
+            <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">{t('planning.setupRequired')}</Text>
             <Text className="text-sm text-gray-500 dark:text-gray-400 text-center">
-              Before creating production plans, set up machines and shifts for your factory.
+              {t('planning.setupRequiredDesc')}
             </Text>
           </View>
 
@@ -318,10 +320,10 @@ export function ProductionPlanPage() {
               </View>
               <View className="flex-1">
                 <Text className={`text-sm font-medium ${machines.length > 0 ? 'text-green-700 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'}`}>
-                  {machines.length > 0 ? `${machines.length} Machine${machines.length !== 1 ? 's' : ''} ready` : 'Add Machines'}
+                  {machines.length > 0 ? `${machines.length} ${t('planning.machinesReady')}` : t('planning.addMachines')}
                 </Text>
                 {machines.length === 0 && (
-                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Navigate to Machines page to add your factory machines</Text>
+                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('planning.addMachinesDesc')}</Text>
                 )}
               </View>
             </View>
@@ -337,17 +339,17 @@ export function ProductionPlanPage() {
               </View>
               <View className="flex-1">
                 <Text className={`text-sm font-medium ${shifts.length > 0 ? 'text-green-700 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'}`}>
-                  {shifts.length > 0 ? `${shifts.length} Shift${shifts.length !== 1 ? 's' : ''} ready` : 'Set Up Shifts'}
+                  {shifts.length > 0 ? `${shifts.length} ${t('planning.shiftsReady')}` : t('planning.setupShifts')}
                 </Text>
                 {shifts.length === 0 && (
-                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Navigate to Shifts page to configure your shift schedule</Text>
+                  <Text className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('planning.setupShiftsDesc')}</Text>
                 )}
               </View>
             </View>
           </View>
 
           <Text className="text-xs text-blue-600 dark:text-blue-400 text-center mt-4 font-medium">
-            Complete the steps above, then come back to create production plans.
+            {t('planning.completeSteps')}
           </Text>
         </View>
       )}
@@ -358,7 +360,7 @@ export function ProductionPlanPage() {
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-row items-center">
               <Copy size={18} color={colors.violet[600]} />
-              <Text className="text-lg font-semibold text-purple-900 dark:text-purple-200 ml-2">Duplicate Plans</Text>
+              <Text className="text-lg font-semibold text-purple-900 dark:text-purple-200 ml-2">{t('planning.duplicatePlans')}</Text>
             </View>
             <Pressable onPress={() => setShowDuplicate(false)}>
               <X size={18} color={sc.iconDefault} />
@@ -375,7 +377,7 @@ export function ProductionPlanPage() {
               const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
               return (
                 <Pressable key={offset} onPress={() => setDuplicateTarget(ds)} className={`flex-1 py-2 rounded-lg border items-center ${duplicateTarget === ds ? 'bg-purple-100 dark:bg-purple-800/30 border-purple-400' : 'bg-white dark:bg-gray-800 border-purple-200 dark:border-purple-700'}`}>
-                  <Text className="text-xs font-medium text-purple-700">{offset === 1 ? 'Next Day' : 'Next Week'}</Text>
+                  <Text className="text-xs font-medium text-purple-700">{offset === 1 ? t('planning.nextDay') : t('planning.nextWeek')}</Text>
                   <Text className="text-xs text-purple-500">{ds}</Text>
                 </Pressable>
               );
@@ -402,7 +404,7 @@ export function ProductionPlanPage() {
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-row items-center">
               <Upload size={18} color={colors.blue[600]} />
-              <Text className="text-lg font-semibold text-blue-900 dark:text-blue-200 ml-2">Import Plans from CSV</Text>
+              <Text className="text-lg font-semibold text-blue-900 dark:text-blue-200 ml-2">{t('planning.importCSV')}</Text>
             </View>
             <Pressable onPress={() => { setShowImport(false); setImportData(null); setImportErrors([]); }}>
               <X size={18} color={sc.iconDefault} />
@@ -419,7 +421,7 @@ export function ProductionPlanPage() {
               <Text className="text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">Step 1</Text>
               <Text className="text-xs text-gray-600 dark:text-gray-400">Download the CSV template</Text>
               <Pressable onPress={downloadCSVTemplate} className="bg-blue-100 dark:bg-blue-800/40 px-3 py-1.5 rounded-md mt-2 items-center">
-                <Text className="text-xs font-medium text-blue-700">Download Template</Text>
+                <Text className="text-xs font-medium text-blue-700">{t('planning.downloadTemplate')}</Text>
               </Pressable>
             </View>
             <View className="flex-1 bg-white dark:bg-gray-800 rounded-lg p-3 border border-blue-100 dark:border-blue-800">
@@ -512,12 +514,12 @@ export function ProductionPlanPage() {
       {showForm && (
         <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-4">
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-lg font-semibold text-gray-900 dark:text-gray-100">Create Plan for {selectedDate}</Text>
+            <Text className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('planning.createPlan')} — {selectedDate}</Text>
             <Pressable onPress={() => setShowForm(false)}>
               <X size={18} color={sc.iconDefault} />
             </Pressable>
           </View>
-          <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine *</Text>
+          <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.machine')} *</Text>
           {machines.length === 0 ? (
             <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
               <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No machines available</Text>
@@ -532,7 +534,7 @@ export function ProductionPlanPage() {
               ))}
             </View>
           )}
-          <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Shift *</Text>
+          <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.shift')} *</Text>
           {shifts.length === 0 ? (
             <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
               <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No shifts available</Text>
@@ -548,23 +550,23 @@ export function ProductionPlanPage() {
             </View>
           )}
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Product Name *</Text>
-            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.product_name} onChangeText={(t) => setForm({ ...form, product_name: t })} placeholder="e.g., Gear Shaft A-200" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.productName')} *</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.product_name} onChangeText={(v) => setForm({ ...form, product_name: v })} placeholder="e.g., Gear Shaft A-200" />
           </View>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Product Code</Text>
-            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.product_code} onChangeText={(t) => setForm({ ...form, product_code: t })} placeholder="e.g., GS-A200" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.productCode')}</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.product_code} onChangeText={(v) => setForm({ ...form, product_code: v })} placeholder="e.g., GS-A200" />
           </View>
           <View className="mb-3">
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Target Quantity *</Text>
-            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.target_quantity} onChangeText={(t) => setForm({ ...form, target_quantity: t })} placeholder="e.g., 500" keyboardType="numeric" />
+            <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.targetQuantity')} *</Text>
+            <TextInput className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm dark:bg-gray-800 dark:text-gray-100" value={form.target_quantity} onChangeText={(v) => setForm({ ...form, target_quantity: v })} placeholder="e.g., 500" keyboardType="numeric" />
           </View>
           <View className="flex-row gap-2">
             <Pressable onPress={handleCreate} disabled={machines.length === 0 || shifts.length === 0} className={`px-6 py-2.5 rounded-lg flex-1 items-center ${machines.length === 0 || shifts.length === 0 ? 'bg-gray-300 dark:bg-gray-700' : 'bg-emerald-500'}`}>
-              <Text className="text-white font-medium">Create Plan</Text>
+              <Text className="text-white font-medium">{t('planning.createPlan')}</Text>
             </Pressable>
             <Pressable onPress={() => setShowForm(false)} className="bg-gray-200 dark:bg-gray-700 px-6 py-2.5 rounded-lg">
-              <Text className="text-gray-700 dark:text-gray-300 font-medium">Cancel</Text>
+              <Text className="text-gray-700 dark:text-gray-300 font-medium">{t('common.cancel')}</Text>
             </Pressable>
           </View>
         </View>
@@ -573,13 +575,13 @@ export function ProductionPlanPage() {
       {/* ─── Plans List ───────────────────────────── */}
       {loading ? (
         <View className="items-center py-12">
-          <Text className="text-center text-gray-400">Loading plans...</Text>
+          <Text className="text-center text-gray-400">{t('planning.loadingPlans')}</Text>
         </View>
       ) : plans.length === 0 ? (
         <EmptyState
           icon={<ClipboardList size={40} color={sc.iconMuted} />}
-          title="No plans for this date"
-          description="Create a plan manually or import from a CSV template"
+          title={t('planning.noPlansForDate')}
+          description={t('planning.noPlansDesc')}
         />
       ) : (
         <View>
@@ -588,7 +590,7 @@ export function ProductionPlanPage() {
               {plans.length} Plan{plans.length !== 1 ? 's' : ''}
             </Text>
             <Text className="text-xs text-gray-400">
-              {plans.filter((p) => p.status === 'COMPLETED').length} completed
+              {plans.filter((p) => p.status === 'COMPLETED').length} {t('planning.completed')}
             </Text>
           </View>
 
@@ -639,7 +641,7 @@ export function ProductionPlanPage() {
                 {rejected > 0 && (
                   <View className="flex-row items-center mb-2 bg-red-50 dark:bg-red-900/20 rounded-md px-2 py-1">
                     <AlertTriangle size={10} color={statusColors.error} />
-                    <Text className="text-xs text-red-600 ml-1 font-medium">{rejected} rejected</Text>
+                    <Text className="text-xs text-red-600 ml-1 font-medium">{rejected} {t('common.rejected')}</Text>
                   </View>
                 )}
 
@@ -648,14 +650,14 @@ export function ProductionPlanPage() {
                   <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-800">
                     {p.status === 'PLANNED' && (
                       <Pressable onPress={() => handleStatusChange(p.plan_id, 'IN_PROGRESS')} className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 px-3 py-1.5 rounded-lg">
-                        <Text className="text-xs text-yellow-700 font-medium">▶ Start</Text>
+                        <Text className="text-xs text-yellow-700 font-medium">▶ {t('planning.start')}</Text>
                       </Pressable>
                     )}
                     <Pressable onPress={() => handleStatusChange(p.plan_id, 'COMPLETED')} className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 px-3 py-1.5 rounded-lg">
-                      <Text className="text-xs text-green-700 font-medium">✓ Complete</Text>
+                      <Text className="text-xs text-green-700 font-medium">✓ {t('planning.complete')}</Text>
                     </Pressable>
                     <Pressable onPress={() => handleStatusChange(p.plan_id, 'CANCELLED')} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-3 py-1.5 rounded-lg">
-                      <Text className="text-xs text-red-700 font-medium">✕ Cancel</Text>
+                      <Text className="text-xs text-red-700 font-medium">✕ {t('common.cancel')}</Text>
                     </Pressable>
                   </View>
                 )}

@@ -23,6 +23,7 @@ import { useAuthStore } from '@zipybills/ui-store';
 import { Avatar, ServerErrorPage } from '@zipybills/ui-components';
 import { useFeatureFlags } from '@zipybills/factory-feature-registry/react';
 import { colors } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 /* ─── Route definitions ───────────────────────── */
 
@@ -30,40 +31,37 @@ const ICON_SIZE = 18;
 
 interface RouteConfig {
   href: string;
-  label: string;
+  labelKey: string;
   icon: React.ReactNode;
   roles?: string[];
-  /** Feature ID for feature-flag gating. If set, route is hidden when feature UI is disabled. */
   featureId?: string;
-  /** Minimum plan required to access this feature (H3: plan UI gating) */
   minPlan?: string;
-  /** Nested child routes – rendered as dropdown in sidebar */
   children?: RouteConfig[];
 }
 
 const ROUTES: RouteConfig[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={ICON_SIZE} />, featureId: 'dashboard' },
+  { href: '/dashboard', labelKey: 'nav.dashboard', icon: <LayoutDashboard size={ICON_SIZE} />, featureId: 'dashboard' },
   {
-    href: '/plans', label: 'Planning', icon: <ClipboardList size={ICON_SIZE} />, featureId: 'planning',
+    href: '/plans', labelKey: 'nav.planning', icon: <ClipboardList size={ICON_SIZE} />, featureId: 'planning',
     children: [
-      { href: '/plans/operator', label: 'Operator Input', icon: <Pencil size={ICON_SIZE} />, featureId: 'planning' },
+      { href: '/plans/operator', labelKey: 'nav.operatorInput', icon: <Pencil size={ICON_SIZE} />, featureId: 'planning' },
     ],
   },
-  { href: '/machines', label: 'Machines', icon: <Factory size={ICON_SIZE} />, featureId: 'machines' },
-  { href: '/downtime', label: 'Downtime', icon: <AlertTriangle size={ICON_SIZE} />, featureId: 'downtime', minPlan: 'STARTER' },
-  { href: '/shifts', label: 'Shifts', icon: <Clock size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'shifts' },
-  { href: '/reports', label: 'Reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports', minPlan: 'STARTER' },
-  { href: '/users', label: 'Users', icon: <Users size={ICON_SIZE} />, roles: ['ADMIN'], featureId: 'auth' },
+  { href: '/machines', labelKey: 'nav.machines', icon: <Factory size={ICON_SIZE} />, featureId: 'machines' },
+  { href: '/downtime', labelKey: 'nav.downtime', icon: <AlertTriangle size={ICON_SIZE} />, featureId: 'downtime', minPlan: 'STARTER' },
+  { href: '/shifts', labelKey: 'nav.shifts', icon: <Clock size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'shifts' },
+  { href: '/reports', labelKey: 'nav.reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports', minPlan: 'STARTER' },
+  { href: '/users', labelKey: 'nav.users', icon: <Users size={ICON_SIZE} />, roles: ['ADMIN'], featureId: 'auth' },
   {
-    href: '/settings', label: 'Settings', icon: <Settings size={ICON_SIZE} />,
+    href: '/settings', labelKey: 'nav.settings', icon: <Settings size={ICON_SIZE} />,
     children: [
-      { href: '/settings/appearance', label: 'Appearance', icon: <Palette size={ICON_SIZE} /> },
-      { href: '/settings/language', label: 'Language', icon: <Globe size={ICON_SIZE} /> },
-      { href: '/settings/compliance', label: 'Compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'] },
-      { href: '/settings/backup', label: 'Backup & Data', icon: <HardDrive size={ICON_SIZE} />, roles: ['ADMIN'] },
+      { href: '/settings/appearance', labelKey: 'nav.appearance', icon: <Palette size={ICON_SIZE} /> },
+      { href: '/settings/language', labelKey: 'nav.language', icon: <Globe size={ICON_SIZE} /> },
+      { href: '/settings/compliance', labelKey: 'nav.compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'] },
+      { href: '/settings/backup', labelKey: 'nav.backupData', icon: <HardDrive size={ICON_SIZE} />, roles: ['ADMIN'] },
     ],
   },
-  { href: '/admin', label: 'Admin', icon: <ShieldCheck size={ICON_SIZE} />, roles: ['ADMIN'] },
+  { href: '/admin', labelKey: 'nav.admin', icon: <ShieldCheck size={ICON_SIZE} />, roles: ['ADMIN'] },
 ];
 
 /* ─── Expo Router ErrorBoundary ───────────────── */
@@ -86,6 +84,7 @@ export default function AppLayout() {
 
   /* Feature flags – must be called before any early return (Rules of Hooks) */
   const flags = useFeatureFlags();
+  const { t } = useLocale();
 
   /* Auth guard – redirect to login if not authenticated */
   if (!isAuthenticated || !user) {
@@ -123,7 +122,7 @@ export default function AppLayout() {
 
     const navItem: NavItem = {
       id: r.href,
-      label: r.label,
+      label: t(r.labelKey),
       icon: r.icon,
       isActive,
       onPress: () => router.push(r.href as never),
@@ -135,7 +134,7 @@ export default function AppLayout() {
       if (visibleChildren.length > 0) {
         navItem.children = visibleChildren.map((child) => ({
           id: child.href,
-          label: child.label,
+          label: t(child.labelKey),
           icon: child.icon,
           isActive: pathname === child.href,
           onPress: () => router.push(child.href as never),
@@ -163,14 +162,14 @@ export default function AppLayout() {
   );
   if (parentRoute) {
     breadcrumbs.push({
-      label: parentRoute.label,
+      label: t(parentRoute.labelKey),
       href: parentRoute.href,
       onPress: () => router.push(parentRoute.href as never),
     });
     // Check if we're on a child route
     const childRoute = parentRoute.children?.find((c) => pathname === c.href);
     if (childRoute) {
-      breadcrumbs.push({ label: childRoute.label });
+      breadcrumbs.push({ label: t(childRoute.labelKey) });
     }
   }
 
@@ -182,32 +181,32 @@ export default function AppLayout() {
   return (
     <AppShell
       navItems={navItems}
-      title={activeRoute?.label ?? 'FactoryOS'}
+      title={activeRoute ? t(activeRoute.labelKey) : 'FactoryOS'}
       breadcrumbs={breadcrumbs}
       brandName="FactoryOS"
       brandSubtitle={
         user.tenant_name
-          ? `${user.tenant_name} · ${user.full_name} · ${user.role}${user.plan ? ` (${user.plan})` : ''}`
-          : `${user.full_name} · ${user.role}`
+          ? `${user.tenant_name} · ${user.full_name} · ${t('roles.' + user.role) || user.role}${user.plan ? ` (${user.plan})` : ''}`
+          : `${user.full_name} · ${t('roles.' + user.role) || user.role}`
       }
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">
           <LogOut size={14} color={colors.gray[400]} />
-          <Text className="text-xs text-slate-400 ml-2">Sign Out</Text>
+          <Text className="text-xs text-slate-400 ml-2">{t('common.signOut')}</Text>
         </Pressable>
       }
       headerRight={
         <View className="flex-row items-center">
           <View className="mr-3 items-end">
             <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.full_name}</Text>
-            <Text className="text-xs text-gray-400">{user.role}</Text>
+            <Text className="text-xs text-gray-400">{t('roles.' + user.role) || user.role}</Text>
           </View>
           <Avatar name={user.full_name} size="sm" />
           <Pressable
             onPress={handleLogout}
             className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg ml-2"
           >
-            <Text className="text-xs text-gray-600 dark:text-gray-400">Sign Out</Text>
+            <Text className="text-xs text-gray-600 dark:text-gray-400">{t('common.signOut')}</Text>
           </Pressable>
         </View>
       }

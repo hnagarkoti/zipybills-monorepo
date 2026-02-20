@@ -7,6 +7,7 @@
   "exports": { ".": "./src/index.ts" },
   "peerDependencies": { "nativewind": "catalog:", "react": "catalog:", "react-native": "catalog:" },
   "dependencies": {
+    "@zipybills/i18n-engine": "workspace:*",
     "@zipybills/factory-api-client": "workspace:*",
     "@zipybills/factory-machines-service-interface": "workspace:*",
     "@zipybills/theme-engine": "workspace:*",

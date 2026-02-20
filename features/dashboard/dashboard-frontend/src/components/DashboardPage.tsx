@@ -11,6 +11,7 @@ import { fetchDashboard, type DashboardData, type MachineStatus, type PeriodStat
 import { Alert, Loading } from '@zipybills/ui-components';
 import { queryKeys } from '@zipybills/ui-query';
 import { colors, useSemanticColors } from '@zipybills/theme-engine';
+import { useLocale } from '@zipybills/i18n-engine';
 
 /* ─── Helpers ──────────────────────────────── */
 
@@ -60,7 +61,7 @@ function PulseDot({ color, size = 10 }: { color: string; size?: number }) {
 
 /* ─── Efficiency Ring (SVG-free circular gauge) */
 
-function EfficiencyRing({ value, size = 100 }: { value: number; size?: number }) {
+function EfficiencyRing({ value, size = 100, effLabel = 'efficiency' }: { value: number; size?: number; effLabel?: string }) {
   const clamped = Math.min(100, Math.max(0, value));
   const ringColor = clamped >= 80 ? '#10b981' : clamped >= 50 ? '#f59e0b' : '#ef4444';
   const bgColor = clamped >= 80 ? '#d1fae5' : clamped >= 50 ? '#fef3c7' : '#fee2e2';
@@ -110,7 +111,7 @@ function EfficiencyRing({ value, size = 100 }: { value: number; size?: number })
         >
           {displayValue}%
         </Text>
-        <Text style={{ fontSize: size * 0.1, color: '#9ca3af', fontWeight: '500', marginTop: -2 }}>efficiency</Text>
+        <Text style={{ fontSize: size * 0.1, color: '#9ca3af', fontWeight: '500', marginTop: -2 }}>{effLabel}</Text>
       </View>
     </View>
   );
@@ -263,6 +264,7 @@ function ComparisonStat({ label, today, yesterday, icon, accentColor }: {
 /* ─── Machine Card (Grid) ──────────────────── */
 
 function MachineCard({ machine }: { machine: MachineStatus }) {
+  const { t } = useLocale();
   const pct = machine.today_target > 0
     ? Math.min(100, Math.round((machine.today_produced / machine.today_target) * 100))
     : 0;
@@ -270,7 +272,7 @@ function MachineCard({ machine }: { machine: MachineStatus }) {
   const isMaintenance = machine.status === 'MAINTENANCE';
 
   const statusColor = isActive ? '#10b981' : isMaintenance ? '#f59e0b' : '#ef4444';
-  const statusLabel = isActive ? 'Running' : isMaintenance ? 'Maintenance' : 'Offline';
+  const statusLabel = isActive ? t('dashboard.running') : isMaintenance ? t('dashboard.maintenance') : t('dashboard.offline');
   const barColor = pct >= 90 ? '#10b981' : pct >= 60 ? '#3b82f6' : pct >= 30 ? '#f59e0b' : '#ef4444';
 
   return (
@@ -411,6 +413,7 @@ function BarTooltip({ shifts, dayTotal, dayTarget, dayEff }: {
 
 function ShiftHistoryChart({ history, isDesktop }: { history: ShiftHistoryDay[]; isDesktop: boolean }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const { t } = useLocale();
 
   // Group by date
   const byDate = useMemo(() => {
@@ -468,9 +471,9 @@ function ShiftHistoryChart({ history, isDesktop }: { history: ShiftHistoryDay[];
         <View className="w-14 h-14 rounded-2xl bg-gray-50 dark:bg-gray-800 items-center justify-center mb-3">
           <BarChart3 size={24} color="#9ca3af" />
         </View>
-        <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">No shift data yet</Text>
+        <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('dashboard.noShiftData')}</Text>
         <Text className="text-xs text-gray-400 dark:text-gray-500 text-center px-8">
-          Production data will appear here once shifts start recording output
+          {t('dashboard.noShiftDataDesc')}
         </Text>
       </View>
     );
@@ -491,7 +494,7 @@ function ShiftHistoryChart({ history, isDesktop }: { history: ShiftHistoryDay[];
         })}
         <View className="flex-row items-center gap-1.5">
           <View className="w-3 h-0.5 rounded" style={{ backgroundColor: '#9ca3af' }} />
-          <Text className="text-[11px] font-medium text-gray-400">Target</Text>
+          <Text className="text-[11px] font-medium text-gray-400">{t('common.target')}</Text>
         </View>
       </View>
 
@@ -664,20 +667,20 @@ function ShiftHistoryChart({ history, isDesktop }: { history: ShiftHistoryDay[];
           return (
             <>
               <View className="flex-1 items-center">
-                <Text className="text-[10px] text-gray-400 mb-0.5">Total Produced</Text>
+                <Text className="text-[10px] text-gray-400 mb-0.5">{t('dashboard.totalProduced')}</Text>
                 <Text className="text-sm font-bold text-gray-800 dark:text-gray-200">{formatNumber(weekTotal)}</Text>
               </View>
               <View className="flex-1 items-center">
-                <Text className="text-[10px] text-gray-400 mb-0.5">Total Target</Text>
+                <Text className="text-[10px] text-gray-400 mb-0.5">{t('dashboard.totalTarget')}</Text>
                 <Text className="text-sm font-bold text-gray-800 dark:text-gray-200">{formatNumber(weekTarget)}</Text>
               </View>
               <View className="flex-1 items-center">
-                <Text className="text-[10px] text-gray-400 mb-0.5">Avg Efficiency</Text>
+                <Text className="text-[10px] text-gray-400 mb-0.5">{t('dashboard.avgEfficiency')}</Text>
                 <Text className="text-sm font-bold" style={{ color: weekEff >= 80 ? '#10b981' : weekEff >= 50 ? '#f59e0b' : '#ef4444' }}>{weekEff}%</Text>
               </View>
               {weekRejected > 0 && (
                 <View className="flex-1 items-center">
-                  <Text className="text-[10px] text-gray-400 mb-0.5">Rejected</Text>
+                  <Text className="text-[10px] text-gray-400 mb-0.5">{t('common.rejected')}</Text>
                   <Text className="text-sm font-bold text-red-500">{formatNumber(weekRejected)}</Text>
                 </View>
               )}
@@ -791,6 +794,7 @@ function SectionHeader({ title, icon, count }: { title: string; icon: React.Reac
 
 export function DashboardPage() {
   const sc = useSemanticColors();
+  const { t } = useLocale();
   const { width: screenWidth } = useWindowDimensions();
   const isDesktop = screenWidth > 768;
   const { data, isLoading, error, refetch } = useQuery({
@@ -800,15 +804,15 @@ export function DashboardPage() {
   });
 
   if (isLoading && !data) {
-    return <Loading message="Loading dashboard..." />;
+    return <Loading message={t('dashboard.loadingDashboard')} />;
   }
 
   if (error && !data) {
     return (
       <View className="flex-1 items-center justify-center p-8">
-        <Alert variant="error" message={error instanceof Error ? error.message : 'Failed to load dashboard'} />
+        <Alert variant="error" message={error instanceof Error ? error.message : t('dashboard.failedToLoad')} />
         <Pressable onPress={() => refetch()} className="bg-indigo-600 px-6 py-3 rounded-xl mt-4">
-          <Text className="text-white font-semibold">Retry</Text>
+          <Text className="text-white font-semibold">{t('common.retry')}</Text>
         </Pressable>
       </View>
     );
@@ -830,17 +834,17 @@ export function DashboardPage() {
             {d.rejectionRate > 5 ? (
               <>
                 <AlertTriangle size={13} color="#ef4444" />
-                <Text className="text-xs font-semibold text-red-600 flex-1">High rejection rate: {d.rejectionRate}%</Text>
+                <Text className="text-xs font-semibold text-red-600 flex-1">{t('dashboard.highRejectionRate')} {d.rejectionRate}%</Text>
               </>
             ) : (
               <>
                 <CheckCircle size={13} color="#10b981" />
-                <Text className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex-1">Production running normally</Text>
+                <Text className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex-1">{t('dashboard.productionNormal')}</Text>
               </>
             )}
             <View className="flex-row items-center gap-1 bg-white/60 dark:bg-black/20 px-2 py-0.5 rounded-full">
               <Radio size={10} color="#6b7280" />
-              <Text className="text-[10px] font-bold text-gray-500">LIVE</Text>
+              <Text className="text-[10px] font-bold text-gray-500">{t('dashboard.live')}</Text>
             </View>
           </View>
 
@@ -848,23 +852,23 @@ export function DashboardPage() {
           <View className={`p-5 ${isDesktop ? 'p-6' : 'p-5'}`}>
             <View className={`${isDesktop ? 'flex-row items-center' : 'flex-row items-center'}`}>
               {/* Left: Efficiency ring — bigger on desktop */}
-              <EfficiencyRing value={d.efficiency} size={isDesktop ? 160 : 110} />
+              <EfficiencyRing value={d.efficiency} size={isDesktop ? 160 : 110} effLabel={t('common.efficiency')} />
 
               {/* Center: Key numbers */}
               <View className={`flex-1 ${isDesktop ? 'ml-8' : 'ml-5'} gap-3`}>
                 <View>
-                  <Text className="text-xs text-gray-400 font-medium">Today's Target</Text>
+                  <Text className="text-xs text-gray-400 font-medium">{t('dashboard.todayTarget')}</Text>
                   <View className="flex-row items-baseline gap-1.5">
                     <Text className={`${isDesktop ? 'text-4xl' : 'text-2xl'} font-extrabold text-gray-900 dark:text-gray-50`}>
                       {formatNumber(d.todayTarget)}
                     </Text>
-                    <Text className="text-xs text-gray-400">units</Text>
+                    <Text className="text-xs text-gray-400">{t('common.units')}</Text>
                   </View>
                 </View>
                 <View className="h-px bg-gray-100 dark:bg-gray-800" />
                 <View className="flex-row gap-4">
                   <View>
-                    <Text className="text-xs text-gray-400 font-medium">Produced</Text>
+                    <Text className="text-xs text-gray-400 font-medium">{t('common.produced')}</Text>
                     <Text className={`${isDesktop ? 'text-xl' : 'text-lg'} font-bold text-emerald-600`}>{formatNumber(d.todayProduced)}</Text>
                   </View>
                   <View>
@@ -872,7 +876,7 @@ export function DashboardPage() {
                     <Text className={`${isDesktop ? 'text-xl' : 'text-lg'} font-bold text-blue-600`}>{formatNumber(d.todayOk)}</Text>
                   </View>
                   <View>
-                    <Text className="text-xs text-gray-400 font-medium">Rejected</Text>
+                    <Text className="text-xs text-gray-400 font-medium">{t('common.rejected')}</Text>
                     <Text className={`${isDesktop ? 'text-xl' : 'text-lg'} font-bold ${d.todayRejected > 0 ? 'text-red-500' : 'text-gray-400'}`}>
                       {formatNumber(d.todayRejected)}
                     </Text>
@@ -883,7 +887,7 @@ export function DashboardPage() {
               {/* Right: Day-over-day quick comparison (desktop only) */}
               {isDesktop && d.yesterday && (
                 <View className="ml-8 gap-2 min-w-[200px]">
-                  <Text className="text-xs font-semibold text-gray-500 mb-1">vs Yesterday</Text>
+                  <Text className="text-xs font-semibold text-gray-500 mb-1">{t('dashboard.vsYesterday')}</Text>
                   {(() => {
                     const todayVal = d.todayProduced;
                     const yestVal = d.yesterday.produced;
@@ -892,7 +896,7 @@ export function DashboardPage() {
                     return (
                       <View className="flex-row items-center gap-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl px-3 py-2">
                         <Package size={14} color={isUp ? '#10b981' : diff < 0 ? '#ef4444' : '#9ca3af'} />
-                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">Production</Text>
+                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">{t('dashboard.production')}</Text>
                         <View className={`flex-row items-center gap-1 px-2 py-0.5 rounded-full ${isUp ? 'bg-emerald-50 dark:bg-emerald-950/30' : diff < 0 ? 'bg-red-50 dark:bg-red-950/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
                           {isUp ? <ArrowUpRight size={10} color="#10b981" /> : diff < 0 ? <ArrowDownRight size={10} color="#ef4444" /> : <Minus size={10} color="#9ca3af" />}
                           <Text className={`text-xs font-bold ${isUp ? 'text-emerald-600' : diff < 0 ? 'text-red-500' : 'text-gray-400'}`}>{Math.abs(diff)}%</Text>
@@ -908,7 +912,7 @@ export function DashboardPage() {
                     return (
                       <View className="flex-row items-center gap-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl px-3 py-2">
                         <XCircle size={14} color={isDown ? '#10b981' : diff > 0 ? '#ef4444' : '#9ca3af'} />
-                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">Rejection</Text>
+                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">{t('dashboard.rejection')}</Text>
                         <View className={`flex-row items-center gap-1 px-2 py-0.5 rounded-full ${isDown ? 'bg-emerald-50 dark:bg-emerald-950/30' : diff > 0 ? 'bg-red-50 dark:bg-red-950/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
                           {isDown ? <ArrowDownRight size={10} color="#10b981" /> : diff > 0 ? <ArrowUpRight size={10} color="#ef4444" /> : <Minus size={10} color="#9ca3af" />}
                           <Text className={`text-xs font-bold ${isDown ? 'text-emerald-600' : diff > 0 ? 'text-red-500' : 'text-gray-400'}`}>{Math.abs(diff)}%</Text>
@@ -924,7 +928,7 @@ export function DashboardPage() {
                     return (
                       <View className="flex-row items-center gap-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl px-3 py-2">
                         <Timer size={14} color={isDown ? '#10b981' : diff > 0 ? '#ef4444' : '#9ca3af'} />
-                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">Downtime</Text>
+                        <Text className="text-sm text-gray-600 dark:text-gray-300 flex-1">{t('dashboard.downtime')}</Text>
                         <View className={`flex-row items-center gap-1 px-2 py-0.5 rounded-full ${isDown ? 'bg-emerald-50 dark:bg-emerald-950/30' : diff > 0 ? 'bg-red-50 dark:bg-red-950/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
                           {isDown ? <ArrowDownRight size={10} color="#10b981" /> : diff > 0 ? <ArrowUpRight size={10} color="#ef4444" /> : <Minus size={10} color="#9ca3af" />}
                           <Text className={`text-xs font-bold ${isDown ? 'text-emerald-600' : diff > 0 ? 'text-red-500' : 'text-gray-400'}`}>{Math.abs(diff)}%</Text>
@@ -941,17 +945,17 @@ export function DashboardPage() {
           <View className="bg-gray-50 dark:bg-gray-800/50 px-5 py-3 flex-row items-center justify-between">
             <View className="flex-row items-center gap-1.5">
               <ClipboardList size={13} color="#6b7280" />
-              <Text className="text-xs text-gray-500 font-medium">{d.todayPlans} plans today</Text>
+              <Text className="text-xs text-gray-500 font-medium">{d.todayPlans} {t('dashboard.plansToday')}</Text>
             </View>
             <View className="w-px h-4 bg-gray-200 dark:bg-gray-700" />
             <View className="flex-row items-center gap-1.5">
               <Factory size={13} color="#6b7280" />
-              <Text className="text-xs text-gray-500 font-medium">{d.activeMachines}/{d.totalMachines} machines active</Text>
+              <Text className="text-xs text-gray-500 font-medium">{d.activeMachines}/{d.totalMachines} {t('dashboard.machinesActive')}</Text>
             </View>
             <View className="w-px h-4 bg-gray-200 dark:bg-gray-700" />
             <View className="flex-row items-center gap-1.5">
               <Timer size={13} color="#6b7280" />
-              <Text className="text-xs text-gray-500 font-medium">{d.todayDowntimeMin}m downtime</Text>
+              <Text className="text-xs text-gray-500 font-medium">{d.todayDowntimeMin}m {t('dashboard.downtime').toLowerCase()}</Text>
             </View>
           </View>
         </View>
@@ -980,13 +984,13 @@ export function DashboardPage() {
         {(d.lastWeek || d.lastMonth) && (
           <>
             <SectionHeader
-              title="Performance Trends"
+              title={t('dashboard.performanceTrends')}
               icon={<TrendingUp size={18} color={colors.blue[500]} />}
             />
             <View className={`${isDesktop ? 'flex-row' : 'flex-row flex-wrap'} gap-3 mb-1`}>
               {d.lastWeek && (
                 <TrendCard
-                  title="Last 7 Days"
+                  title={t('dashboard.last7Days')}
                   icon={<Calendar size={16} color="#6366f1" />}
                   period={d.lastWeek}
                   accentColor="#6366f1"
@@ -995,7 +999,7 @@ export function DashboardPage() {
               )}
               {d.lastMonth && (
                 <TrendCard
-                  title="Last 30 Days"
+                  title={t('dashboard.last30Days')}
                   icon={<BarChart3 size={16} color="#8b5cf6" />}
                   period={d.lastMonth}
                   accentColor="#8b5cf6"
@@ -1010,7 +1014,7 @@ export function DashboardPage() {
         {d.shiftSummary.length > 0 && (
           <>
             <SectionHeader
-              title="Shift Performance"
+              title={t('dashboard.shiftPerformance')}
               icon={<BarChart3 size={18} color={colors.violet[500]} />}
               count={d.shiftSummary.length}
             />
@@ -1046,14 +1050,14 @@ export function DashboardPage() {
         {d.topRejectionReasons && d.topRejectionReasons.length > 0 && (
           <>
             <SectionHeader
-              title="Top Rejection Reasons"
+              title={t('dashboard.topRejectionReasons')}
               icon={<AlertOctagon size={18} color="#ef4444" />}
               count={d.topRejectionReasons.length}
             />
             <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
               <View className="px-3 py-2 bg-red-50/50 dark:bg-red-950/20 border-b border-gray-100 dark:border-gray-800">
                 <Text className="text-[10px] font-medium text-gray-500">
-                  Based on production logs from the last 30 days
+                  {t('dashboard.rejectionReasonsDesc')}
                 </Text>
               </View>
               <View className="px-3 py-1">
@@ -1074,7 +1078,7 @@ export function DashboardPage() {
         {d.machineStatus.length > 0 && (
           <>
             <SectionHeader
-              title="Machine Utilization"
+              title={t('dashboard.machineUtilization')}
               icon={<Factory size={18} color={colors.blue[500]} />}
               count={d.machineStatus.length}
             />
@@ -1090,7 +1094,7 @@ export function DashboardPage() {
         {d.recentActivity.length > 0 && (
           <>
             <SectionHeader
-              title="Recent Activity"
+              title={t('dashboard.recentActivity')}
               icon={<Activity size={18} color={colors.violet[500]} />}
               count={d.recentActivity.length}
             />

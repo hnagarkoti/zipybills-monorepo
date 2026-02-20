@@ -575,6 +575,9 @@ importers:
       '@zipybills/factory-dashboard-service-interface':
         specifier: workspace:*
         version: link:../dashboard-service/service-interface
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine
@@ -1071,6 +1074,9 @@ importers:
       '@zipybills/factory-machines-service-interface':
         specifier: workspace:*
         version: link:../machines-service/service-interface
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine
@@ -1167,6 +1173,9 @@ importers:
       '@zipybills/factory-shifts-frontend':
         specifier: workspace:*
         version: link:../../shifts/shifts-frontend
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine
@@ -1254,6 +1263,9 @@ importers:
       '@zipybills/factory-reports-service-interface':
         specifier: workspace:*
         version: link:../reports-service/service-interface
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine
@@ -1983,6 +1995,9 @@ importers:
       '@zipybills/factory-shifts-service-interface':
         specifier: workspace:*
         version: link:../shifts-service/service-interface
+      '@zipybills/i18n-engine':
+        specifier: workspace:*
+        version: link:../../frontend-shared/i18n-engine
       '@zipybills/theme-engine':
         specifier: workspace:*
         version: link:../../frontend-shared/theme-engine
