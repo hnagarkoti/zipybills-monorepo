@@ -53,7 +53,7 @@ export interface UpdateUserRequest {
 
 export class AuthApi extends BaseApi {
   async login(req: LoginRequest): Promise<LoginResponse> {
-    return this.request<LoginResponse>('/api/v1/saas/login', {
+    return this.request<LoginResponse>('/api/saas/login', {
       method: 'POST',
       body: JSON.stringify(req),
     });
