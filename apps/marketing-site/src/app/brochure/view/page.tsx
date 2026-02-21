@@ -85,7 +85,8 @@ export default function BrochureViewPage() {
         </div>
 
         {/* ════ PAGE 2 — ABOUT ZIPYBILLS ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-blue-700 print:break-before-page">
+        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-blue-700 print:break-before-page">
+          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
           <SectionTag>Who We Are</SectionTag>
           <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-4 sm:mb-6">
             Built for Indian Manufacturing
@@ -113,38 +114,27 @@ export default function BrochureViewPage() {
               </div>
             ))}
           </div>
+          </div>
         </div>
 
-        {/* ════ PAGE 3 — 13 SOLUTIONS (part 1) ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-violet-600 print:break-before-page">
+        {/* ════ PAGE 3 — ALL 13 SOLUTIONS (combined) ════ */}
+        <div className="page py-10 sm:py-14 print:py-10 flex flex-col justify-center items-center border-t-4 border-violet-600 print:break-before-page">
+          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
           <SectionTag>Our Solutions</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-6 sm:mb-8">
             13 Modules. One Platform.
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            {SOLUTIONS.slice(0, 6).map((s, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {SOLUTIONS.map((s, i) => (
               <SolutionCard key={s.title} index={i + 1} {...s} />
             ))}
           </div>
-        </div>
-
-        {/* ════ PAGE 4 — 13 SOLUTIONS (part 2) ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-violet-600 print:break-before-page">
-          <SectionTag>Our Solutions (continued)</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
-            Covering Every Corner of Your Factory
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            {SOLUTIONS.slice(6).map((s, i) => (
-              <SolutionCard key={s.title} index={i + 7} {...s} />
-            ))}
           </div>
         </div>
 
-        {/* ════ PAGE 5 — KEY BENEFITS / WHY FACTORYOS ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-emerald-600 print:break-before-page">
+        {/* ════ PAGE 4 — KEY BENEFITS / WHY FACTORYOS ════ */}
+        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-emerald-600 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
           <SectionTag>Why FactoryOS</SectionTag>
           <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
             Results That Speak for Themselves
@@ -183,10 +173,10 @@ export default function BrochureViewPage() {
               </div>
             ))}
           </div>
-        </div>
+        </div></div>
 
-        {/* ════ PAGE 6 — INDUSTRIES SERVED ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-orange-500 print:break-before-page">
+        {/* ════ PAGE 5 — INDUSTRIES SERVED ════ */}
+        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-orange-500 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
           <SectionTag>Industries</SectionTag>
           <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
             Trusted Across Industries
@@ -222,10 +212,10 @@ export default function BrochureViewPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div></div>
 
-        {/* ════ PAGE 7 — PRICING OVERVIEW ════ */}
-        <div className="page px-6 sm:px-12 py-12 sm:py-16 print:py-12 print:px-14 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center border-t-4 border-blue-600 print:break-before-page">
+        {/* ════ PAGE 6 — PRICING OVERVIEW ════ */}
+        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-blue-600 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
           <SectionTag>Plans &amp; Pricing</SectionTag>
           <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
             Simple, Transparent Pricing
@@ -307,9 +297,9 @@ export default function BrochureViewPage() {
           </div>
 
           <p className="text-xs sm:text-sm text-gray-500 text-center">All plans include: free onboarding, data migration support, and 99.9% uptime SLA.</p>
-        </div>
+        </div></div>
 
-        {/* ════ PAGE 8 — CONTACT / BACK COVER ════ */}
+        {/* ════ PAGE 7 — CONTACT / BACK COVER ════ */}
         <div className="page relative flex flex-col items-center justify-center text-center px-6 sm:px-10 py-16 sm:py-20 print:py-0 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#4c1d95] text-white overflow-hidden print:break-before-page">
           <div className="absolute top-[-80px] left-[-80px] w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-[-60px] right-[-60px] w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-white/5 pointer-events-none" />
