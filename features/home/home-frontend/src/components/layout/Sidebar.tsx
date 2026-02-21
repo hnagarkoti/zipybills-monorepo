@@ -161,11 +161,14 @@ export function Sidebar({
             )}
           </View>
           {!collapsed && (
-            <Text className="text-lg font-bold text-emerald-400 ml-2.5">{title}</Text>
+            <Text className="text-lg font-bold text-emerald-400 ml-2.5" numberOfLines={1}>{title}</Text>
           )}
         </View>
         {!collapsed && subtitle && (
-          <Text className="text-xs text-slate-400 mt-2 ml-0.5" numberOfLines={1}>{subtitle}</Text>
+          <Text className="text-xs text-slate-400 mt-1.5 ml-0.5" numberOfLines={1}>{subtitle}</Text>
+        )}
+        {!collapsed && (
+          <Text className="text-[10px] text-slate-500 mt-1 ml-0.5">Powered by FactoryOS | Zipybills</Text>
         )}
       </View>
 

@@ -183,13 +183,9 @@ export default function AppLayout() {
       navItems={navItems}
       title={activeRoute ? t(activeRoute.labelKey) : 'FactoryOS'}
       breadcrumbs={breadcrumbs}
-      brandName="FactoryOS"
+      brandName={user.tenant_name || 'FactoryOS'}
       brandLogoUrl={user.tenant_logo_url}
-      brandSubtitle={
-        user.tenant_name
-          ? `${user.tenant_name} · ${user.full_name} · ${t('roles.' + user.role) || user.role}${user.plan ? ` (${user.plan})` : ''}`
-          : `${user.full_name} · ${t('roles.' + user.role) || user.role}`
-      }
+      brandSubtitle={`${user.full_name} · ${t('roles.' + user.role) || user.role}${user.plan ? ` (${user.plan})` : ''}`}
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">
           <LogOut size={14} color={colors.gray[400]} />

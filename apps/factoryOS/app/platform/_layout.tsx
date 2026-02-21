@@ -96,7 +96,7 @@ export default function PlatformLayout() {
       navItems={navItems}
       title={activeRoute ? t(activeRoute.labelKey) : t('platform.platformAdmin')}
       breadcrumbs={breadcrumbs}
-      brandName="FactoryOS"
+      brandName={user.tenant_name || 'FactoryOS'}
       brandLogoUrl={user.tenant_logo_url}
       brandSubtitle={t('platform.administration')}
       sidebarFooter={
