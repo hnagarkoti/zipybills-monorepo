@@ -58,17 +58,17 @@ export default function TermsPage() {
 
             {/* 4 */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">4. Free Trial & Subscription Plans</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-3">4. Free Pilot & Access</h2>
               <p className="text-gray-600 leading-relaxed mb-3">
-                We offer a 14-day free trial that includes access to core features. After the trial
-                period, you may choose a paid subscription plan to continue using the Service.
+                FactoryOS is currently offered as a <strong>free pilot</strong> to manufacturing businesses. There are no subscription fees, no credit card requirements, and no hidden charges during the pilot period. Our goal is to help factories digitise their operations and demonstrate real value before any commercial arrangement is discussed.
               </p>
               <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
-                <li>Trial accounts are limited to 2 machines and 3 users</li>
-                <li>Paid plans are billed monthly or annually as selected during purchase</li>
-                <li>You may upgrade or downgrade your plan at any time</li>
-                <li>If you do not upgrade after the trial, your account becomes read-only — no data is deleted</li>
-                <li>Refunds are provided on a case-by-case basis at the Company&apos;s discretion</li>
+                <li>Pilot access is provided at no cost for an agreed duration</li>
+                <li>All core FactoryOS modules are available during the pilot</li>
+                <li>We configure the platform specifically for your factory and workflows at no charge</li>
+                <li>At the end of the pilot, you may choose to continue — any commercial terms will be discussed and agreed separately</li>
+                <li>We reserve the right to introduce paid plans in the future; existing pilot customers will be given reasonable advance notice before any charges apply</li>
+                <li>Your data remains yours at all times and can be exported in full at any point</li>
               </ul>
             </section>
 
@@ -134,11 +134,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-bold text-gray-900 mb-3">9. Limitation of Liability</h2>
               <p className="text-gray-600 leading-relaxed">
-                To the maximum extent permitted by applicable law, Zipybills shall not be liable
-                for any indirect, incidental, special, consequential, or punitive damages resulting
-                from your use of or inability to use the Service. Our total liability for any claims
-                arising from the Service shall not exceed the amount paid by you in the 12 months
-                preceding the claim.
+                To the maximum extent permitted by applicable law, Zipybills shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the Service, including but not limited to loss of production data, revenue, or business opportunity. Since the Service is currently provided free of charge as a pilot, our total aggregate liability for any claims arising from or related to the Service shall not exceed ₹10,000 (Indian Rupees Ten Thousand) or the maximum amount permitted by applicable law, whichever is lower.
               </p>
             </section>
 

@@ -41,7 +41,7 @@ export default function PrivacyPage() {
                 <li>Company name and workspace URL (slug)</li>
                 <li>Administrator full name, username, and email address</li>
                 <li>Password (stored securely using industry-standard hashing)</li>
-                <li>Subscription plan and billing information</li>
+                <li>Factory details — number of machines, industry type, and operational scale (collected during onboarding to configure your pilot)</li>
               </ul>
 
               <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">2.2 Manufacturing Data</h3>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc list-inside text-gray-600 space-y-1.5 ml-2">
                 <li><strong>Service Delivery:</strong> To provide, maintain, and improve the FactoryOS platform</li>
-                <li><strong>Account Management:</strong> To create and manage your workspace, authenticate users, and process subscriptions</li>
+                <li><strong>Account Management:</strong> To create and manage your workspace, authenticate users, and configure your free pilot deployment</li>
                 <li><strong>Communication:</strong> To send important service updates, security alerts, and support responses</li>
                 <li><strong>Analytics:</strong> To understand how the Service is used and improve features (aggregated, anonymized data only)</li>
                 <li><strong>Security:</strong> To detect, prevent, and address technical issues and security threats</li>
