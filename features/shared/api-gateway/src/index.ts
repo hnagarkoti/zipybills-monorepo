@@ -21,6 +21,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import https from 'https';
+import http from 'http';
 import express, { Router } from 'express';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
@@ -503,6 +505,24 @@ async function startServer(): Promise<void> {
 
     const HOST = '0.0.0.0'; // Bind to all interfaces for cloud deployment
     app.listen(PORT, HOST, () => {
+      // ── Keep-alive ping (prevents Render free tier from spinning down) ──
+      // Render sets RENDER_EXTERNAL_URL automatically; falls back to localhost in dev.
+      const selfUrl = process.env.RENDER_EXTERNAL_URL
+        ? `${process.env.RENDER_EXTERNAL_URL}/api/health`
+        : `http://localhost:${PORT}/api/health`;
+      const pingInterval = 12 * 60 * 1000; // 12 minutes
+      setInterval(() => {
+        const client = selfUrl.startsWith('https') ? https : http;
+        client
+          .get(selfUrl, (res) => {
+            console.log(`[KeepAlive] 🏓 Self-ping → ${selfUrl} (${res.statusCode})`);
+            res.resume(); // consume response to free socket
+          })
+          .on('error', (err) => {
+            console.warn(`[KeepAlive] ⚠️  Self-ping failed: ${err.message}`);
+          });
+      }, pingInterval);
+      console.log(`[KeepAlive] ✅ Self-ping enabled every 12 min → ${selfUrl}`);
       console.log(`\n🏭 FactoryOS API Gateway running on http://${HOST}:${PORT}`);
       console.log(`   Features:   ${enabledCount}/${features.length} enabled`);
       console.log(`   Versions:   v1`);
