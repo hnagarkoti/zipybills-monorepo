@@ -14,7 +14,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#1a1a2e"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.zipybills.factoryos",
@@ -31,19 +33,27 @@
       },
       "package": "com.zipybills.factoryos",
       "versionCode": 1,
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
-    "plugins": ["expo-router", "expo-localization"],
+    "plugins": [
+      "expo-router",
+      "expo-localization"
+    ],
     "scheme": "factory-os",
     "web": {
       "bundler": "metro",
       "output": "single"
     },
+    "owner": "zipybills",
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "e5c4fef9-fc5d-4a78-a68b-d3ef201b5da9"
       }
-    },
-    "owner": "zipybills"
+    }
   }
 }
