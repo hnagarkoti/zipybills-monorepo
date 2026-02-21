@@ -26,6 +26,30 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   /* Refs for keyboard focus chain */
   const usernameRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
+  const containerRef = useRef<View>(null);
+
+  const scrollToInput = (inputRef: React.RefObject<TextInput>) => {
+    try {
+      const input = inputRef.current as any;
+      const container = containerRef.current as any;
+      const scroll = scrollRef.current as any;
+      if (!input || !container || !scroll || !input.measureLayout) return;
+      // measure input position relative to the scroll content container
+      input.measureLayout(
+        container,
+        (_x: number, y: number) => {
+          const offset = Math.max(y - 120, 0);
+          scroll.scrollTo({ y: offset, animated: true });
+        },
+        () => {
+          // ignore measurement errors
+        }
+      );
+    } catch (e) {
+      // swallow errors to avoid crashing the login flow
+    }
+  };
 
   const handleWorkspaceContinue = () => {
     const trimmed = workspaceId.trim().toLowerCase();
@@ -70,11 +94,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       className="flex-1"
     >
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         bounces={false}
         showsVerticalScrollIndicator={false}
       >
+      <View ref={containerRef} style={{ flex: 1 }}>
       <LinearGradient
         colors={['#0f172a', '#1e3a8a', '#1e1b4b']}
         start={{ x: 0, y: 0 }}
@@ -176,6 +202,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     autoFocus
                     returnKeyType="next"
                     onSubmitEditing={() => passwordRef.current?.focus()}
+                    onFocus={() => scrollToInput(usernameRef)}
                     blurOnSubmit={false}
                   />
                 </View>
@@ -193,6 +220,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     secureTextEntry
                     returnKeyType="go"
                     onSubmitEditing={handleLogin}
+                    onFocus={() => scrollToInput(passwordRef)}
                   />
                 </View>
 
@@ -218,6 +246,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </View>
         </View>
       </LinearGradient>
+      </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
