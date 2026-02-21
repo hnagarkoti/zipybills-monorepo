@@ -3,8 +3,12 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import {
   CheckCircle2, ArrowRight, Factory, Shield, Zap,
-  HardDrive, Headphones, Star, Crown, Sparkles, Rocket,
+  HardDrive, Headphones, Star, Crown, Sparkles, Rocket, Phone,
 } from 'lucide-react';
+import {
+  PHONE_PRIMARY, PHONE_ALTERNATE, PHONE_PRIMARY_TEL, PHONE_ALTERNATE_TEL,
+  BUSINESS_HOURS,
+} from '@/config/contact';
 
 /* ─── Env helpers (server component — read at build/render) ── */
 
@@ -347,6 +351,27 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-600 leading-relaxed">{faq.a}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Call Us ═══ */}
+      <section className="py-12 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl border border-brand-100 bg-brand-50/60">
+            <Phone className="w-5 h-5 text-brand-600 shrink-0" />
+            <div className="text-left">
+              <p className="text-sm font-semibold text-gray-900">
+                Call Us{' '}
+                <a href={`tel:${PHONE_PRIMARY_TEL}`} className="text-brand-600 hover:underline">{PHONE_PRIMARY}</a>
+                {PHONE_ALTERNATE && (
+                  <>
+                    {' '}/ <a href={`tel:${PHONE_ALTERNATE_TEL}`} className="text-brand-600 hover:underline">{PHONE_ALTERNATE}</a>
+                  </>
+                )}
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">{BUSINESS_HOURS}</p>
+            </div>
           </div>
         </div>
       </section>

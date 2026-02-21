@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SCHEMA_TELEPHONE } from '@/config/contact';
 import './globals.css';
 
 /* ─── SEO Metadata ─────────────────────────────────────────────────
@@ -78,7 +79,7 @@ const organizationSchema = {
   logo: 'https://factoryos.zipybills.com/logo.png',
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+91-98912-41863',
+    telephone: SCHEMA_TELEPHONE,
     contactType: 'customer service',
     areaServed: 'IN',
     availableLanguage: ['English', 'Hindi'],

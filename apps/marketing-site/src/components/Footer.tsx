@@ -1,5 +1,8 @@
 import Link from 'next/link';
-import { Factory, Mail, Phone, MapPin, Smartphone } from 'lucide-react';
+import { Factory, Mail, Phone, MapPin, Smartphone, Clock } from 'lucide-react';
+import {
+  PHONE_DISPLAY, PHONE_PRIMARY_TEL, CONTACT_EMAIL, BUSINESS_HOURS,
+} from '@/config/contact';
 
 export default function Footer() {
   return (
@@ -95,15 +98,19 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-brand-400 shrink-0" />
-                <a href="mailto:contact@factoryos.in" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  contact@factoryos.in
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  {CONTACT_EMAIL}
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-brand-400 shrink-0" />
-                <a href="tel:+919891241863" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  +91 98912 41863 / +91 98115 64873
+                <a href={`tel:${PHONE_PRIMARY_TEL}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  {PHONE_DISPLAY}
                 </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-brand-400 shrink-0" />
+                <span className="text-sm text-gray-400">{BUSINESS_HOURS}</span>
               </li>
             </ul>
           </div>
