@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const DOWNLOAD_LINKS = {
   android: {
     url: 'https://github.com/hnagarkoti/zipybills-monorepo/releases/latest/download/factoryos.apk',
-    available: false, // flip to true once you've uploaded your first build
+    available: true,
   },
   ios: {
     url: 'https://github.com/hnagarkoti/zipybills-monorepo/releases/latest/download/factoryos.ipa',
