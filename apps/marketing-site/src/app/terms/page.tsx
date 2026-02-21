@@ -13,7 +13,7 @@ export default function TermsPage() {
             <h1 className="mt-4 text-4xl font-extrabold text-gray-900">
               Terms of <span className="gradient-text">Service</span>
             </h1>
-            <p className="mt-4 text-gray-500">Last updated: January 2025</p>
+            <p className="mt-4 text-gray-500">Last updated: February 2026</p>
           </div>
 
           <div className="prose prose-gray max-w-none space-y-8">
@@ -158,9 +158,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-bold text-gray-900 mb-3">11. Changes to Terms</h2>
               <p className="text-gray-600 leading-relaxed">
-                We reserve the right to modify these Terms at any time. Material changes will be
-                communicated via email or a prominent notice on the Service. Your continued use
-                of the Service after changes constitutes acceptance of the updated Terms.
+                <strong>We reserve the right to modify, update, or replace these Terms of Service at any time, for any reason, at our sole discretion, with or without prior notice.</strong> Changes take effect immediately upon posting. We may — but are not obligated to — notify you of material changes via email or a notice on the platform. Your continued use of the Service after any changes are posted constitutes your unconditional acceptance of the revised Terms. If you do not agree with the updated Terms, you must discontinue use of the Service immediately.
               </p>
             </section>
 

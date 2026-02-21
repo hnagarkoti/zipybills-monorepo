@@ -13,7 +13,7 @@ export default function PrivacyPage() {
             <h1 className="mt-4 text-4xl font-extrabold text-gray-900">
               Privacy <span className="gradient-text">Policy</span>
             </h1>
-            <p className="mt-4 text-gray-500">Last updated: January 2025</p>
+            <p className="mt-4 text-gray-500">Last updated: February 2026</p>
           </div>
 
           <div className="prose prose-gray max-w-none space-y-8">
@@ -234,9 +234,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-xl font-bold text-gray-900 mb-3">13. Changes to This Policy</h2>
               <p className="text-gray-600 leading-relaxed">
-                We may update this Privacy Policy from time to time. Material changes will be
-                communicated via email or a prominent notice on the platform. We encourage you to
-                review this page periodically for the latest information on our privacy practices.
+                <strong>We reserve the right to update or replace this Privacy Policy at any time, at our sole discretion, with or without prior notice.</strong> Changes are effective immediately upon posting to this page. We may — but are not obligated to — notify you of material changes via email or an in-platform notice. We encourage you to review this page periodically. Your continued use of the Service after changes are posted constitutes your acceptance of the revised Privacy Policy.
               </p>
             </section>
 

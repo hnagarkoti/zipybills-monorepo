@@ -181,36 +181,17 @@ export default function BrochureViewPage() {
               ))}
             </div>
 
-            {/* Pricing */}
-            <SectionTag>Plans &amp; Pricing</SectionTag>
-            <h2 className="text-xl sm:text-2xl font-black text-gray-900 mt-2 mb-4">Simple, Transparent Pricing</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-              {[
-                { name: 'Starter', price: '₹9,999', period: '/mo', color: 'border-gray-200', badge: '', features: ['Up to 25 machines', '3 modules', 'Basic OEE dashboard', 'Email support', '14-day trial'] },
-                { name: 'Growth', price: '₹24,999', period: '/mo', color: 'border-blue-600', badge: 'Most Popular', features: ['Up to 150 machines', '8 modules', 'Real-time alerts', 'WhatsApp notifications', 'Priority support', '30-day trial'] },
-                { name: 'Enterprise', price: 'Custom', period: '', color: 'border-violet-600', badge: 'Full Platform', features: ['Unlimited machines', 'All 13 modules', 'On-premise option', 'Dedicated manager', '4-hour SLA', 'Custom integrations'] },
-              ].map((plan) => (
-                <div key={plan.name} className={`rounded-xl border-2 ${plan.color} p-4 flex flex-col`}>
-                  {plan.badge && <div className="text-[9px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 rounded-full px-2 py-0.5 self-start mb-2">{plan.badge}</div>}
-                  <div className="text-base font-black text-gray-900">{plan.name}</div>
-                  <div className="flex items-baseline gap-1 mt-1 mb-3">
-                    <span className="text-xl font-black text-gray-900">{plan.price}</span>
-                    <span className="text-gray-500 text-xs">{plan.period}</span>
-                  </div>
-                  <ul className="space-y-1.5 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-1.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-[11px] text-gray-700">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {/* Free Pilot CTA */}
+            <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 p-6 text-white text-center">
+              <div className="text-xl sm:text-2xl font-black mb-2">🚀 Free to Get Started</div>
+              <p className="text-sm text-blue-100 mb-4 max-w-xl mx-auto">No upfront cost. No per-seat surprises. We configure FactoryOS for your specific factory and workflows — you only commit when you&apos;re ready.</p>
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                {['Free pilot deployment', 'No credit card required', 'Dedicated onboarding'].map((item) => (
+                  <div key={item} className="bg-white/15 rounded-xl px-3 py-2 text-xs font-bold">✓ {item}</div>
+                ))}
+              </div>
+              <p className="text-xs text-blue-200">Reach us at <span className="font-semibold">contact@factoryos.in</span> to begin your free pilot today</p>
             </div>
-            <p className="text-[11px] text-gray-400 text-center">All plans include free onboarding, data migration support, and 99.9% uptime SLA.</p>
           </div>
         </div>
 
