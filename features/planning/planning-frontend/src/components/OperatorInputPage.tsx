@@ -429,7 +429,7 @@ function LogProductionModal({
               <View className="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+            <ScrollView showsVerticalScrollIndicator={false} bounces={false} keyboardShouldPersistTaps="handled">
               {/* ─── Plan Summary Header ─── */}
               <View className="px-5 pb-4 border-b border-gray-100 dark:border-gray-800">
                 <View className="flex-row items-start justify-between">

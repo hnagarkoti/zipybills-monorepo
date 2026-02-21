@@ -4,7 +4,7 @@
  * Shared by /users/add (create) and /users/:id (edit).
  * Sections: Personal Info, Security, Role & Permissions, Account Status.
  */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react';
 import {
   View, Text, ScrollView, Pressable, TextInput,
   KeyboardAvoidingView, Platform, ActivityIndicator,
@@ -148,6 +148,10 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [originalUser, setOriginalUser] = useState<User | null>(null);
 
+  /* Refs for keyboard focus chain */
+  const usernameRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+
   /* Load user data for edit mode */
   useEffect(() => {
     if (!isEdit || !userId) return;
@@ -240,12 +244,13 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
   return (
     <KeyboardAvoidingView
       className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
         className="flex-1"
         contentContainerClassName="p-4 pb-10 max-w-2xl w-full self-center"
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         {/* ── Back button ── */}
         <Pressable
@@ -298,10 +303,14 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
             value={form.full_name}
             onChangeText={(v) => updateField('full_name', v)}
             autoCapitalize="words"
+            returnKeyType="next"
+            onSubmitEditing={() => usernameRef.current?.focus()}
+            blurOnSubmit={false}
           />
 
           {/* Username */}
           <FormField
+            ref={usernameRef}
             label={t('userForm.username')}
             required
             error={fieldErrors.username}
@@ -311,6 +320,9 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
             autoCapitalize="none"
             editable={!isEdit}
             hint={isEdit ? t('userForm.usernameCannotChange') : undefined}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current?.focus()}
+            blurOnSubmit={false}
           />
         </View>
 
@@ -329,6 +341,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
 
             <View className="flex-row items-center border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/60 overflow-hidden">
               <TextInput
+                ref={passwordRef}
                 className="flex-1 px-3.5 py-3 text-sm text-gray-900 dark:text-gray-100"
                 value={form.password}
                 onChangeText={(v) => updateField('password', v)}
@@ -337,6 +350,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoCorrect={false}
+                returnKeyType="done"
               />
               <Pressable
                 onPress={() => setShowPassword(!showPassword)}
@@ -541,12 +555,19 @@ interface FormFieldProps {
   onChangeText: (text: string) => void;
   autoCapitalize?: 'none' | 'words' | 'sentences' | 'characters';
   editable?: boolean;
+  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
+  onSubmitEditing?: () => void;
+  blurOnSubmit?: boolean;
 }
 
-function FormField({
-  label, required, error, hint, placeholder, value,
-  onChangeText, autoCapitalize, editable = true,
-}: FormFieldProps) {
+const FormField = forwardRef<TextInput, FormFieldProps>(function FormField(
+  {
+    label, required, error, hint, placeholder, value,
+    onChangeText, autoCapitalize, editable = true,
+    returnKeyType, onSubmitEditing, blurOnSubmit,
+  },
+  ref,
+) {
   return (
     <View className="mb-4">
       <View className="flex-row items-center mb-1.5">
@@ -557,6 +578,7 @@ function FormField({
       </View>
 
       <TextInput
+        ref={ref}
         className={`border rounded-xl px-3.5 py-3 text-sm ${
           error
             ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'
@@ -569,6 +591,9 @@ function FormField({
         autoCapitalize={autoCapitalize}
         autoCorrect={false}
         editable={editable}
+        returnKeyType={returnKeyType}
+        onSubmitEditing={onSubmitEditing}
+        blurOnSubmit={blurOnSubmit}
       />
 
       {error && (
@@ -586,4 +611,4 @@ function FormField({
       )}
     </View>
   );
-}
+});

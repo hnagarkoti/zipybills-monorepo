@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@zipybills/factory-api-client';
@@ -123,7 +125,7 @@ export default function AnnouncementsPage() {
           <ActivityIndicator size="large" color="#4f46e5" />
         </View>
       ) : (
-        <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
+        <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }} keyboardShouldPersistTaps="handled">
           {announcements.map((a) => {
             const cfg = SEVERITY_CONFIG[a.severity] ?? SEVERITY_CONFIG.INFO;
             const isExpired = a.expires_at && new Date(a.expires_at) < new Date();
@@ -194,6 +196,10 @@ export default function AnnouncementsPage() {
 
       {/* Create Modal */}
       <Modal visible={showCreate} transparent animationType="fade">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          className="flex-1"
+        >
         <Pressable
           onPress={() => setShowCreate(false)}
           className="flex-1 bg-black/50 items-center justify-center"
@@ -214,6 +220,8 @@ export default function AnnouncementsPage() {
               value={title}
               onChangeText={setTitle}
               placeholderTextColor="#9ca3af"
+              returnKeyType="next"
+              blurOnSubmit={false}
             />
 
             {/* Message */}
@@ -286,6 +294,7 @@ export default function AnnouncementsPage() {
             </View>
           </Pressable>
         </Pressable>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

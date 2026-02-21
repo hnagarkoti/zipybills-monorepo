@@ -10,6 +10,8 @@ import {
   Modal,
   RefreshControl,
   Linking,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@zipybills/factory-api-client';
@@ -351,7 +353,7 @@ export default function TenantsPage() {
   // Detail drawer overlay
   if (selectedTenant && detail) {
     return (
-      <ScrollView className="flex-1 bg-gray-50 p-6">
+      <ScrollView className="flex-1 bg-gray-50 p-6" keyboardShouldPersistTaps="handled">
         {/* Header */}
         <View className="flex-row items-center justify-between mb-6">
           <Pressable onPress={() => setSelectedTenant(null)} className="flex-row items-center gap-2">
@@ -987,6 +989,10 @@ export default function TenantsPage() {
         animationType="fade"
         onRequestClose={() => setShowTrialModal(false)}
       >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          className="flex-1"
+        >
         <Pressable
           className="flex-1 bg-black/50 justify-center items-center px-6"
           onPress={() => setShowTrialModal(false)}
@@ -1092,6 +1098,7 @@ export default function TenantsPage() {
             </View>
           </Pressable>
         </Pressable>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Limits Editing Modal */}
@@ -1101,6 +1108,10 @@ export default function TenantsPage() {
         animationType="fade"
         onRequestClose={() => setShowLimitsModal(false)}
       >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          className="flex-1"
+        >
         <Pressable
           className="flex-1 bg-black/50 justify-center items-center px-6"
           onPress={() => setShowLimitsModal(false)}
@@ -1178,6 +1189,7 @@ export default function TenantsPage() {
             </View>
           </Pressable>
         </Pressable>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

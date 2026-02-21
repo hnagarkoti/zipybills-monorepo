@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Factory, ArrowLeft, Building2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { login as apiLogin } from '../services/api';
@@ -22,6 +22,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  /* Refs for keyboard focus chain */
+  const usernameRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
 
   const handleWorkspaceContinue = () => {
     const trimmed = workspaceId.trim().toLowerCase();
@@ -65,6 +69,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className="flex-1"
     >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
       <LinearGradient
         colors={['#0f172a', '#1e3a8a', '#1e1b4b']}
         start={{ x: 0, y: 0 }}
@@ -154,6 +164,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 <View className="mb-4">
                   <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">{t('auth.username').toUpperCase()}</Text>
                   <TextInput
+                    ref={usernameRef}
                     className="rounded-lg px-4 py-3 text-white text-sm"
                     style={{ backgroundColor: 'rgba(255,255,255,0.07)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                     value={username}
@@ -163,12 +174,16 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     autoCapitalize="none"
                     autoCorrect={false}
                     autoFocus
+                    returnKeyType="next"
+                    onSubmitEditing={() => passwordRef.current?.focus()}
+                    blurOnSubmit={false}
                   />
                 </View>
 
                 <View className="mb-6">
                   <Text className="text-xs text-blue-200/60 mb-1.5 font-medium tracking-wider">{t('auth.password').toUpperCase()}</Text>
                   <TextInput
+                    ref={passwordRef}
                     className="rounded-lg px-4 py-3 text-white text-sm"
                     style={{ backgroundColor: 'rgba(255,255,255,0.07)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                     value={password}
@@ -176,6 +191,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     placeholder={t('auth.passwordPlaceholder')}
                     placeholderTextColor="rgba(148,163,184,0.5)"
                     secureTextEntry
+                    returnKeyType="go"
                     onSubmitEditing={handleLogin}
                   />
                 </View>
@@ -202,6 +218,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </View>
         </View>
       </LinearGradient>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }

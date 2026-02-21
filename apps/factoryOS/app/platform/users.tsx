@@ -20,6 +20,7 @@ import {
   Modal,
   RefreshControl,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@zipybills/factory-api-client';
@@ -333,6 +334,7 @@ export default function PlatformUsersPage() {
     <ScrollView
       className="flex-1 bg-gray-50 dark:bg-gray-900"
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      keyboardShouldPersistTaps="handled"
     >
       <View className="p-4 md:p-6 max-w-7xl mx-auto w-full">
         {/* Header */}
@@ -617,6 +619,10 @@ export default function PlatformUsersPage() {
         animationType="fade"
         onRequestClose={() => setResetModal(null)}
       >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          className="flex-1"
+        >
         <View className="flex-1 bg-black/50 justify-center items-center px-6">
           <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-md">
             <View className="flex-row items-center justify-between mb-4">
@@ -643,6 +649,7 @@ export default function PlatformUsersPage() {
                   placeholder="Enter new password (min 6 chars)"
                   placeholderTextColor="#9ca3af"
                   secureTextEntry
+                  returnKeyType="done"
                 />
 
                 <View className="flex-row gap-3">
@@ -675,6 +682,7 @@ export default function PlatformUsersPage() {
             )}
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* ─── User Activity Modal ────────────── */}

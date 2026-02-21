@@ -1,7 +1,7 @@
 /**
  * Input – shadcn-rn pattern with NativeWind className
  */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { TextInput, View, Text, type TextInputProps } from 'react-native';
 import { cn } from './cn';
 
@@ -13,14 +13,17 @@ export interface InputProps extends TextInputProps {
   inputClassName?: string;
 }
 
-export function Input({
-  label,
-  error,
-  helperText,
-  className,
-  inputClassName,
-  ...props
-}: InputProps) {
+export const Input = forwardRef<TextInput, InputProps>(function Input(
+  {
+    label,
+    error,
+    helperText,
+    className,
+    inputClassName,
+    ...props
+  },
+  ref,
+) {
   return (
     <View className={cn('mb-3', className)}>
       {label && (
@@ -29,6 +32,7 @@ export function Input({
         </Text>
       )}
       <TextInput
+        ref={ref}
         className={cn(
           'border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800',
           error && 'border-red-500',
@@ -45,4 +49,4 @@ export function Input({
       )}
     </View>
   );
-}
+});
