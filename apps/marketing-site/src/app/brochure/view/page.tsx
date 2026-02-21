@@ -2,8 +2,6 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 export default function BrochureViewPage() {
   useEffect(() => {
@@ -12,11 +10,6 @@ export default function BrochureViewPage() {
 
   return (
     <>
-      {/* Site Navbar (hidden in print) */}
-      <div className="no-print">
-        <Navbar />
-      </div>
-
       {/* ── Print / Download bar (hidden on print) ── */}
       <div className="no-print sticky top-0 z-40 flex items-center justify-between gap-4 bg-gray-900/95 backdrop-blur-md text-white px-4 sm:px-6 py-3 text-sm border-b border-white/10">
         <Link href="/brochure" className="text-gray-300 hover:text-white transition-colors flex items-center gap-1.5">
@@ -231,11 +224,6 @@ export default function BrochureViewPage() {
           </div>
         </div>
 
-      </div>
-
-      {/* Site Footer (hidden in print) */}
-      <div className="no-print">
-        <Footer />
       </div>
 
       {/* ── Print styles injected via style tag ── */}
