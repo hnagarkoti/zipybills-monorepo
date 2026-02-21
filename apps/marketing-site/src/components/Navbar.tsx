@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Factory } from 'lucide-react';
+import { Menu, X, Factory, Smartphone } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About Us' },
   { href: '/solutions', label: 'Solutions' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/download', label: 'Download App' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -50,6 +51,13 @@ export default function Navbar() {
               className="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors"
             >
               Brochure
+            </Link>
+            <Link
+              href="/download"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-medium hover:border-brand-400 hover:text-brand-600 transition-all"
+            >
+              <Smartphone className="w-4 h-4" />
+              Download App
             </Link>
             <Link
               href="/signup"
