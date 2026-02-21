@@ -42,280 +42,192 @@ export default function BrochureViewPage() {
       <div className="brochure-root print:pt-0 bg-white min-h-screen font-sans text-gray-800">
 
         {/* ════ PAGE 1 — COVER ════ */}
-        <div className="page cover-page relative flex flex-col items-center justify-center text-center px-6 sm:px-10 py-16 sm:py-20 print:py-0 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#4c1d95] text-white overflow-hidden">
-          {/* decorative circles */}
+        <div className="page cover-page relative flex flex-col items-center justify-center text-center px-6 sm:px-10 py-12 print:py-0 print:min-h-[297mm] bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#4c1d95] text-white overflow-hidden">
           <div className="absolute top-[-80px] right-[-80px] w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-[-60px] left-[-60px] w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-white/5 pointer-events-none" />
-
           <div className="relative z-10 max-w-2xl mx-auto">
-            {/* Logo area */}
-            <div className="flex items-center justify-center gap-3 mb-8 sm:mb-12">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl sm:text-2xl font-black">Z</div>
-              <span className="text-xl sm:text-2xl font-black tracking-tight">Zipybills</span>
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl font-black">Z</div>
+              <span className="text-xl font-black tracking-tight">Zipybills</span>
             </div>
-
-            <div className="inline-block text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-blue-200 bg-white/10 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-6 sm:mb-8">
+            <div className="inline-block text-[10px] font-semibold tracking-widest uppercase text-blue-200 bg-white/10 rounded-full px-4 py-1.5 mb-6">
               Product Brochure · 2025
             </div>
-
-            <h1 className="text-4xl sm:text-6xl font-black leading-none mb-4">
+            <h1 className="text-5xl sm:text-7xl font-black leading-none mb-4">
               Factory<span className="text-blue-300">OS</span>
             </h1>
-            <p className="text-base sm:text-xl text-white/70 mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-lg text-white/70 mt-4 max-w-lg mx-auto leading-relaxed">
               Digitalise Your Factory Floor. Measure What Matters. Scale Without Limits.
             </p>
-
-            <div className="mt-10 sm:mt-14 grid grid-cols-3 gap-3 sm:gap-6 text-center">
+            <div className="mt-10 grid grid-cols-3 gap-4 text-center">
               {[
                 { value: '13+', label: 'Solution Modules' },
-                { value: '4+', label: 'Industries Targeted' },
+                { value: '4+', label: 'Industries Served' },
                 { value: 'IIoT', label: 'Hardware Ready' },
               ].map((s) => (
-                <div key={s.label} className="bg-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-5">
-                  <div className="text-xl sm:text-3xl font-black text-white">{s.value}</div>
-                  <div className="text-[10px] sm:text-xs text-white/60 mt-1">{s.label}</div>
+                <div key={s.label} className="bg-white/10 rounded-2xl p-4">
+                  <div className="text-2xl sm:text-3xl font-black text-white">{s.value}</div>
+                  <div className="text-[10px] text-white/60 mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-1 text-xs text-white/40">
+              <span>factoryos.zipybills.com</span>
+              <span>contact@factoryos.in</span>
+              <span>+91 98912 41863</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ════ PAGE 2 — ABOUT + INDUSTRIES ════ */}
+        <div className="page py-10 print:py-8 flex flex-col justify-center items-center border-t-4 border-blue-700 print:break-before-page print:min-h-[297mm]">
+          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-12">
+            {/* About */}
+            <SectionTag>Who We Are</SectionTag>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mt-2 mb-3">Built for Indian Manufacturing</h2>
+            <p className="text-sm text-gray-600 max-w-4xl leading-relaxed mb-5">
+              <strong className="text-gray-900">Zipybills</strong> builds <strong className="text-gray-900">FactoryOS</strong> — a unified platform bringing real-time visibility, quality control, and digital operations to factory floors of all sizes. From automotive ancillaries to FMCG lines, we help manufacturers reduce waste, eliminate paper, and compete globally.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+              {[
+                { icon: '🏭', title: 'Industry Focus', desc: 'Automotive, Electronics, FMCG, Pharma' },
+                { icon: '🇮🇳', title: 'Made for India', desc: 'Designed for Indian workflows & scale' },
+                { icon: '☁️', title: 'Cloud & On-Premise', desc: 'Zipybills cloud or your own servers' },
+                { icon: '🔌', title: 'IIoT Ready', desc: 'Connects to PLCs, sensors, MES/ERP' },
+              ].map((c) => (
+                <div key={c.title} className="flex flex-col gap-1 p-3 rounded-xl bg-gray-50 border border-gray-100">
+                  <span className="text-xl">{c.icon}</span>
+                  <div className="font-bold text-gray-900 text-xs">{c.title}</div>
+                  <div className="text-[11px] text-gray-500">{c.desc}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10 sm:mt-14 text-xs sm:text-sm text-white/40">
-              www.factoryos.zipybills.com · contact@factoryos.in · +91 98912 41863
-            </div>
-          </div>
-        </div>
-
-        {/* ════ PAGE 2 — ABOUT ZIPYBILLS ════ */}
-        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-blue-700 print:break-before-page">
-          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
-          <SectionTag>Who We Are</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-4 sm:mb-6">
-            Built for Indian Manufacturing
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-3xl leading-relaxed mb-4 sm:mb-8">
-            <strong className="text-gray-900">Zipybills</strong> is a manufacturing technology company headquartered in India. We build <strong className="text-gray-900">FactoryOS</strong> — a unified platform that brings real-time visibility, quality control, and digital operations to factory floors of all sizes.
-          </p>
-          <p className="text-sm sm:text-base text-gray-600 max-w-3xl leading-relaxed mb-8 sm:mb-10">
-            From automotive ancillaries and precision engineering shops to FMCG and electronics assembly lines, FactoryOS helps manufacturers reduce waste, eliminate paper-based processes, and compete in the global market.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-3xl">
-            {[
-              { icon: '🏭', title: 'Industry Focus', desc: 'Automotive, Electronics, FMCG, Precision Engineering, Pharma' },
-              { icon: '🇮🇳', title: 'Made for India', desc: 'Designed for Indian factory workflows, regulations, and scale' },
-              { icon: '☁️', title: 'Cloud & On-Premise', desc: 'Deploy on Zipybills cloud or your own private servers' },
-              { icon: '🔌', title: 'IIoT Ready', desc: 'Connects to PLCs, sensors, and existing MES/ERP systems' },
-            ].map((c) => (
-              <div key={c.title} className="flex gap-4 p-4 sm:p-5 rounded-xl bg-gray-50 border border-gray-100">
-                <span className="text-xl sm:text-2xl">{c.icon}</span>
-                <div>
-                  <div className="font-bold text-gray-900 text-sm">{c.title}</div>
-                  <div className="text-xs text-gray-500 mt-1">{c.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          </div>
-        </div>
-
-        {/* ════ PAGE 3 — ALL 13 SOLUTIONS (combined) ════ */}
-        <div className="page py-10 sm:py-14 print:py-10 flex flex-col justify-center items-center border-t-4 border-violet-600 print:break-before-page">
-          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
-          <SectionTag>Our Solutions</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-6 sm:mb-8">
-            13 Modules. One Platform.
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {SOLUTIONS.map((s, i) => (
-              <SolutionCard key={s.title} index={i + 1} {...s} />
-            ))}
-          </div>
-          </div>
-        </div>
-
-        {/* ════ PAGE 4 — KEY BENEFITS / WHY FACTORYOS ════ */}
-        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-emerald-600 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
-          <SectionTag>Why FactoryOS</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
-            Results That Speak for Themselves
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-            {[
-              { value: '30%', color: 'text-blue-600', label: 'Average OEE Improvement', desc: 'Achieved within 90 days of going live' },
-              { value: '60%', color: 'text-violet-600', label: 'Reduction in Paper Reports', desc: 'Fully digital operations, zero lost data' },
-              { value: '4×', color: 'text-emerald-600', label: 'Faster Defect Detection', desc: 'Real-time alerts vs end-of-shift reports' },
-            ].map((m) => (
-              <div key={m.label} className="rounded-2xl bg-gray-50 border border-gray-100 p-5 sm:p-6 text-center">
-                <div className={`text-4xl sm:text-5xl font-black ${m.color}`}>{m.value}</div>
-                <div className="font-bold text-gray-900 text-sm mt-2">{m.label}</div>
-                <div className="text-xs text-gray-500 mt-1">{m.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {[
-              'No-code configuration — go live in days, not months',
-              'Multi-tenant: manage multiple factories from one dashboard',
-              'Role-based access for operators, supervisors & management',
-              'Offline-first mobile app — works without internet on the floor',
-              'Real-time alerts via WhatsApp, email and in-app notifications',
-              'Dedicated onboarding and support team for every customer',
-              'Full data ownership — export everything at any time',
-              'SOC 2 aligned security with AES-256 encryption at rest',
-            ].map((b) => (
-              <div key={b} className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-sm text-gray-700">{b}</span>
-              </div>
-            ))}
-          </div>
-        </div></div>
-
-        {/* ════ PAGE 5 — INDUSTRIES SERVED ════ */}
-        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-orange-500 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
-          <SectionTag>Industries</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
-            Trusted Across Industries
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-12">
-            {[
-              { icon: '🚗', name: 'Automotive & Ancillary', desc: 'Traceability, CTQ, APQP-aligned quality checksheets' },
-              { icon: '⚙️', name: 'Precision Engineering', desc: 'Tool management, downtime logs, dimension tracking' },
-              { icon: '💊', name: 'Pharmaceuticals', desc: 'Batch traceability, GMP checksheets, audit trails' },
-              { icon: '📱', name: 'Electronics Assembly', desc: 'Guided assembly, defect capture, work instructions' },
-              { icon: '🍪', name: 'FMCG & Packaging', desc: 'Line speed monitoring, waste tracking, OEE reports' },
-              { icon: '🔩', name: 'Metal Fabrication', desc: 'Energy monitoring, machine uptime, production logs' },
-            ].map((ind) => (
-              <div key={ind.name} className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-gray-50">
-                <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">{ind.icon}</div>
-                <div className="font-bold text-gray-900 text-sm">{ind.name}</div>
-                <div className="text-xs text-gray-500 mt-1 leading-relaxed">{ind.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 p-6 sm:p-8 text-white">
-            <h3 className="text-lg sm:text-xl font-black mb-2">Deployment Options</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-4">
-              <div>
-                <div className="font-bold">☁️ Cloud (SaaS)</div>
-                <div className="text-sm text-white/80 mt-1">Get started in minutes. Hosted on secure Indian cloud infrastructure. Auto-updates, zero maintenance.</div>
-              </div>
-              <div>
-                <div className="font-bold">🏢 On-Premise</div>
-                <div className="text-sm text-white/80 mt-1">Deploy on your own servers within your factory network. Full data sovereignty, no external dependencies.</div>
-              </div>
-            </div>
-          </div>
-        </div></div>
-
-        {/* ════ PAGE 6 — PRICING OVERVIEW ════ */}
-        <div className="page py-12 sm:py-16 print:py-12 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] flex flex-col justify-center items-center border-t-4 border-blue-600 print:break-before-page"><div className="w-full max-w-5xl px-6 sm:px-10 print:px-14">
-          <SectionTag>Plans &amp; Pricing</SectionTag>
-          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 mt-3 mb-8 sm:mb-10">
-            Simple, Transparent Pricing
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
-            {[
-              {
-                name: 'Starter',
-                price: '₹9,999',
-                period: '/month',
-                color: 'border-gray-200',
-                badge: '',
-                features: [
-                  'Up to 25 machines',
-                  '3 FactoryOS modules',
-                  'Basic OEE dashboard',
-                  'Email support',
-                  '14-day free trial',
-                ],
-              },
-              {
-                name: 'Growth',
-                price: '₹24,999',
-                period: '/month',
-                color: 'border-blue-600',
-                badge: 'Most Popular',
-                features: [
-                  'Up to 150 machines',
-                  '8 FactoryOS modules',
-                  'Real-time alerts',
-                  'WhatsApp notifications',
-                  'Priority support',
-                  '30-day free trial',
-                ],
-              },
-              {
-                name: 'Enterprise',
-                price: 'Custom',
-                period: '',
-                color: 'border-violet-600',
-                badge: 'Full Platform',
-                features: [
-                  'Unlimited machines',
-                  'All 13 modules',
-                  'On-premise option',
-                  'Dedicated success manager',
-                  '4-hour SLA support',
-                  'Custom integrations',
-                ],
-              },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-2xl border-2 ${plan.color} p-5 sm:p-6 flex flex-col`}
-              >
-                {plan.badge && (
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 rounded-full px-3 py-1 self-start mb-3">
-                    {plan.badge}
+            {/* Industries */}
+            <SectionTag>Industries Served</SectionTag>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mt-2 mb-4">Trusted Across Sectors</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              {[
+                { icon: '🚗', name: 'Automotive & Ancillary', desc: 'Traceability, CTQ, APQP quality checksheets' },
+                { icon: '⚙️', name: 'Precision Engineering', desc: 'Tool management, downtime, dimension tracking' },
+                { icon: '💊', name: 'Pharmaceuticals', desc: 'Batch traceability, GMP checksheets, audit trails' },
+                { icon: '📱', name: 'Electronics Assembly', desc: 'Guided assembly, defect capture, work instructions' },
+                { icon: '🍪', name: 'FMCG & Packaging', desc: 'Line speed monitoring, waste tracking, OEE' },
+                { icon: '🔩', name: 'Metal Fabrication', desc: 'Energy monitoring, machine uptime, production logs' },
+              ].map((ind) => (
+                <div key={ind.name} className="p-3 rounded-xl border border-gray-100 bg-gray-50 flex gap-3 items-start">
+                  <span className="text-xl shrink-0">{ind.icon}</span>
+                  <div>
+                    <div className="font-bold text-gray-900 text-xs">{ind.name}</div>
+                    <div className="text-[11px] text-gray-500 mt-0.5">{ind.desc}</div>
                   </div>
-                )}
-                <div className="text-lg font-black text-gray-900">{plan.name}</div>
-                <div className="flex items-baseline gap-1 mt-2 mb-4 sm:mb-5">
-                  <span className="text-2xl sm:text-3xl font-black text-gray-900">{plan.price}</span>
-                  <span className="text-gray-500 text-sm">{plan.period}</span>
                 </div>
-                <ul className="space-y-2 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <svg className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-xs text-gray-700">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 p-4 text-white grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><div className="font-bold text-sm">☁️ Cloud (SaaS)</div><div className="text-xs text-white/80 mt-1">Start in minutes. Secure Indian cloud. Auto-updates, zero maintenance.</div></div>
+              <div><div className="font-bold text-sm">🏢 On-Premise</div><div className="text-xs text-white/80 mt-1">Deploy on your own servers. Full data sovereignty, no external dependencies.</div></div>
+            </div>
           </div>
+        </div>
 
-          <p className="text-xs sm:text-sm text-gray-500 text-center">All plans include: free onboarding, data migration support, and 99.9% uptime SLA.</p>
-        </div></div>
+        {/* ════ PAGE 3 — 13 SOLUTIONS ════ */}
+        <div className="page py-8 print:py-6 flex flex-col justify-center items-center border-t-4 border-violet-600 print:break-before-page print:min-h-[297mm]">
+          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-12">
+            <SectionTag>Our Solutions</SectionTag>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mt-2 mb-5">13 Modules. One Platform.</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {SOLUTIONS.map((s, i) => (
+                <SolutionCard key={s.title} index={i + 1} {...s} />
+              ))}
+            </div>
+          </div>
+        </div>
 
-        {/* ════ PAGE 7 — CONTACT / BACK COVER ════ */}
-        <div className="page relative flex flex-col items-center justify-center text-center px-6 sm:px-10 py-16 sm:py-20 print:py-0 min-h-[80vh] sm:min-h-screen print:min-h-[297mm] bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#4c1d95] text-white overflow-hidden print:break-before-page">
+        {/* ════ PAGE 4 — WHY FACTORYOS + PRICING ════ */}
+        <div className="page py-8 print:py-6 flex flex-col justify-center items-center border-t-4 border-emerald-600 print:break-before-page print:min-h-[297mm]">
+          <div className="w-full max-w-5xl px-6 sm:px-10 print:px-12">
+            {/* Why FactoryOS */}
+            <SectionTag>Why FactoryOS</SectionTag>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mt-2 mb-4">Results That Speak for Themselves</h2>
+            <div className="grid grid-cols-3 gap-3 mb-5">
+              {[
+                { value: '30%', color: 'text-blue-600', label: 'OEE Improvement', desc: 'Within 90 days of go-live' },
+                { value: '60%', color: 'text-violet-600', label: 'Less Paper Reports', desc: 'Fully digital operations' },
+                { value: '4×', color: 'text-emerald-600', label: 'Faster Defect Detection', desc: 'Real-time vs end-of-shift' },
+              ].map((m) => (
+                <div key={m.label} className="rounded-xl bg-gray-50 border border-gray-100 p-4 text-center">
+                  <div className={`text-3xl sm:text-4xl font-black ${m.color}`}>{m.value}</div>
+                  <div className="font-bold text-gray-900 text-xs mt-1">{m.label}</div>
+                  <div className="text-[11px] text-gray-500 mt-0.5">{m.desc}</div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-2 mb-7">
+              {[
+                'No-code config — go live in days, not months',
+                'Offline-first mobile app — works without internet',
+                'Role-based access for operators, supervisors & management',
+                'Real-time alerts via WhatsApp, email & in-app',
+                'Full data ownership — export everything anytime',
+                'SOC 2 aligned security, AES-256 encryption at rest',
+              ].map((b) => (
+                <div key={b} className="flex items-start gap-2">
+                  <svg className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-xs text-gray-700">{b}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Pricing */}
+            <SectionTag>Plans &amp; Pricing</SectionTag>
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 mt-2 mb-4">Simple, Transparent Pricing</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+              {[
+                { name: 'Starter', price: '₹9,999', period: '/mo', color: 'border-gray-200', badge: '', features: ['Up to 25 machines', '3 modules', 'Basic OEE dashboard', 'Email support', '14-day trial'] },
+                { name: 'Growth', price: '₹24,999', period: '/mo', color: 'border-blue-600', badge: 'Most Popular', features: ['Up to 150 machines', '8 modules', 'Real-time alerts', 'WhatsApp notifications', 'Priority support', '30-day trial'] },
+                { name: 'Enterprise', price: 'Custom', period: '', color: 'border-violet-600', badge: 'Full Platform', features: ['Unlimited machines', 'All 13 modules', 'On-premise option', 'Dedicated manager', '4-hour SLA', 'Custom integrations'] },
+              ].map((plan) => (
+                <div key={plan.name} className={`rounded-xl border-2 ${plan.color} p-4 flex flex-col`}>
+                  {plan.badge && <div className="text-[9px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 rounded-full px-2 py-0.5 self-start mb-2">{plan.badge}</div>}
+                  <div className="text-base font-black text-gray-900">{plan.name}</div>
+                  <div className="flex items-baseline gap-1 mt-1 mb-3">
+                    <span className="text-xl font-black text-gray-900">{plan.price}</span>
+                    <span className="text-gray-500 text-xs">{plan.period}</span>
+                  </div>
+                  <ul className="space-y-1.5 flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-[11px] text-gray-700">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-gray-400 text-center">All plans include free onboarding, data migration support, and 99.9% uptime SLA.</p>
+          </div>
+        </div>
+
+        {/* ════ PAGE 5 — CONTACT / BACK COVER ════ */}
+        <div className="page relative flex flex-col items-center justify-center text-center px-6 sm:px-10 py-16 print:py-0 print:min-h-[297mm] bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#4c1d95] text-white overflow-hidden print:break-before-page">
           <div className="absolute top-[-80px] left-[-80px] w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-[-60px] right-[-60px] w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-white/5 pointer-events-none" />
-
           <div className="relative z-10 max-w-xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-8 sm:mb-10">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl sm:text-2xl font-black">Z</div>
-              <span className="text-xl sm:text-2xl font-black tracking-tight">Zipybills</span>
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl font-black">Z</div>
+              <span className="text-xl font-black tracking-tight">Zipybills</span>
             </div>
-
-            <h2 className="text-2xl sm:text-4xl font-black mb-4 sm:mb-6">Ready to Digitise Your Factory?</h2>
-            <p className="text-white/70 text-base sm:text-lg mb-8 sm:mb-12 leading-relaxed">
+            <h2 className="text-3xl sm:text-4xl font-black mb-4">Ready to Digitise Your Factory?</h2>
+            <p className="text-white/70 text-base mb-10 leading-relaxed">
               Start your free 14-day trial or book a personalised demo. Our team will onboard your first factory in under 5 minutes.
             </p>
-
-            <div className="grid grid-cols-1 gap-3 sm:gap-4 text-left max-w-xs mx-auto">
+            <div className="grid grid-cols-1 gap-3 text-left max-w-xs mx-auto">
               {[
                 { icon: '🌐', label: 'Website', value: 'factoryos.zipybills.com' },
                 { icon: '📧', label: 'Email', value: 'contact@factoryos.in' },
@@ -323,17 +235,16 @@ export default function BrochureViewPage() {
                 { icon: '📱', label: 'Alternate Phone', value: '+91 98115 64873' },
                 { icon: '🇮🇳', label: 'Location', value: 'India' },
               ].map((c) => (
-                <div key={c.label} className="flex items-center gap-3 sm:gap-4 bg-white/10 rounded-xl px-4 sm:px-5 py-2.5 sm:py-3">
-                  <span className="text-lg sm:text-xl">{c.icon}</span>
+                <div key={c.label} className="flex items-center gap-4 bg-white/10 rounded-xl px-4 py-2.5">
+                  <span className="text-lg">{c.icon}</span>
                   <div>
-                    <div className="text-[10px] sm:text-xs text-white/50">{c.label}</div>
-                    <div className="text-xs sm:text-sm font-semibold text-white">{c.value}</div>
+                    <div className="text-[10px] text-white/50">{c.label}</div>
+                    <div className="text-xs font-semibold text-white">{c.value}</div>
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="mt-10 sm:mt-14 text-xs text-white/30">
+            <div className="mt-10 text-xs text-white/30">
               © 2025 Zipybills. All rights reserved. FactoryOS is a registered product of Zipybills.
             </div>
           </div>
@@ -360,7 +271,6 @@ export default function BrochureViewPage() {
     </>
   );
 }
-
 /* ── Sub-components ── */
 
 function SectionTag({ children }: { children: React.ReactNode }) {
