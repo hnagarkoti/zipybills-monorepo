@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, Modal, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, Modal, ActivityIndicator, Animated, KeyboardAvoidingView, Platform } from 'react-native';
 import { Factory, FolderOpen, Settings, Plus, Search, X, Eye, Wrench, CheckCircle2, AlertTriangle } from 'lucide-react-native';
 import { fetchMachines, createMachine, updateMachine, deleteMachine, type Machine } from '../services/api';
 import { Badge, PageHeader } from '@zipybills/ui-components';
@@ -65,6 +65,10 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
 
   return (
     <Modal visible={visible} transparent animationType="fade">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
       <View className="flex-1 bg-black/50 items-center justify-center p-4">
         <View className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl">
           {/* Header */}
@@ -78,7 +82,7 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
             </Pressable>
           </View>
 
-          <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 480 }}>
+          <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 480 }} keyboardShouldPersistTaps="handled">
             {error && (
               <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
                 <Text className="text-sm text-red-600 dark:text-red-400">{error}</Text>
@@ -187,6 +191,7 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
           </View>
         </View>
       </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

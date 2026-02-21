@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, ActivityIndicator, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import { Clock, Plus, Sun, Moon, Sunrise, Sunset, RefreshCw, X, ChevronUp, ChevronDown } from 'lucide-react-native';
 import { fetchShifts, createShift, updateShift, deleteShift, bulkCreateShifts, type Shift } from '../services/api';
 import { StatusDot, PageHeader } from '@zipybills/ui-components';
@@ -122,6 +122,10 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
 
   return (
     <Modal visible={visible} transparent animationType="fade">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
       <View className="flex-1 bg-black/50 items-center justify-center p-4">
         <View className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl">
           {/* Header */}
@@ -135,7 +139,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
             </Pressable>
           </View>
 
-          <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 520 }}>
+          <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 520 }} keyboardShouldPersistTaps="handled">
             {error && (
               <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
                 <Text className="text-sm text-red-600 dark:text-red-400">{error}</Text>
@@ -205,6 +209,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
           </View>
         </View>
       </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

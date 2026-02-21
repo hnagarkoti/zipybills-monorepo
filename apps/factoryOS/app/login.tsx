@@ -1,12 +1,17 @@
 import React from 'react';
-import { useRouter } from 'expo-router';
+import { useRouter, Redirect } from 'expo-router';
 import { LoginPage } from '@zipybills/factory-auth-frontend';
 import { useAuthStore, type AuthUser } from '@zipybills/ui-store';
 import { apiFetch } from '@zipybills/factory-api-client';
 
 export default function LoginScreen() {
-  const { login, setTenantInfo } = useAuthStore();
+  const { login, setTenantInfo, isAuthenticated, user } = useAuthStore();
   const router = useRouter();
+
+  // If already authenticated, redirect to appropriate dashboard
+  if (isAuthenticated && user) {
+    return <Redirect href={user.is_platform_admin ? '/platform' : '/dashboard'} />;
+  }
 
   const handleLogin = async (user: AuthUser, token: string) => {
     // Store user + token in auth state

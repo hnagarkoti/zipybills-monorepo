@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import {
   Wrench, Hammer, RefreshCw, Package, Zap, Search, Pin,
   AlertTriangle, CheckCircle, CircleOff, Plus, Calendar,
@@ -89,7 +89,8 @@ export function DowntimePage() {
   const totalDowntimeToday = resolvedLogs.reduce((s, l) => s + (l.duration_min || 0), 0);
 
   return (
-    <ScrollView className="flex-1 p-4">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+    <ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
       <PageHeader
         title="Downtime Tracking"
         subtitle={`${activeLogs.length} active · ${resolvedLogs.length} resolved today`}
@@ -228,5 +229,6 @@ export function DowntimePage() {
       ) : null}
       <View className="h-8" />
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

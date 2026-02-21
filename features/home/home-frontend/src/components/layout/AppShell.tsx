@@ -76,6 +76,7 @@ export function AppShell({
                 title={brandName}
                 subtitle={brandSubtitle}
                 footer={sidebarFooter}
+                onNavigate={() => setMobileMenuOpen(false)}
               />
             </View>
           </View>

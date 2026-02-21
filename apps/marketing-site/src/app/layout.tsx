@@ -78,7 +78,7 @@ const organizationSchema = {
   logo: 'https://factoryos.zipybills.com/logo.png',
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+91-87919-92976',
+    telephone: '+91-98912-41863',
     contactType: 'customer service',
     areaServed: 'IN',
     availableLanguage: ['English', 'Hindi'],

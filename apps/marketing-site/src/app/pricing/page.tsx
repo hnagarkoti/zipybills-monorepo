@@ -432,7 +432,7 @@ export default function PricingPage() {
                 Claim Free 1-Year Access
               </Link>
               <a
-                href="https://wa.me/918791992976?text=Hi%2C%20I%20want%20to%20know%20more%20about%20FactoryOS%20pricing"
+                href="https://wa.me/919891241863?text=Hi%2C%20I%20want%20to%20know%20more%20about%20FactoryOS%20pricing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-all"

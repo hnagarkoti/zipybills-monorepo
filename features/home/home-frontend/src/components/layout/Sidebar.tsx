@@ -20,6 +20,8 @@ export interface SidebarProps {
   title?: string;
   subtitle?: string;
   footer?: React.ReactNode;
+  /** Called after any nav item is pressed (used to close mobile drawer) */
+  onNavigate?: () => void;
 }
 
 /* ─── Single nav row (icon + label) ────────────── */
@@ -60,7 +62,7 @@ function NavItemRow({ item, collapsed, indent = false }: { item: NavItem; collap
 
 /* ─── Nav entry: supports collapsible children ─── */
 
-function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
+function NavEntry({ item, collapsed, onNavigate }: { item: NavItem; collapsed: boolean; onNavigate?: () => void }) {
   const hasChildren = item.children && item.children.length > 0;
   const anyChildActive = hasChildren && item.children!.some((c) => c.isActive);
   // Auto-expand when a child is active
@@ -75,7 +77,10 @@ function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
     // Simple nav item – no dropdown
     return (
       <Pressable
-        onPress={item.onPress}
+        onPress={() => {
+          item.onPress?.();
+          onNavigate?.();
+        }}
         className={`mx-2 my-0.5 px-3 py-2.5 rounded-lg flex-row items-center ${
           item.isActive ? 'bg-emerald-600/20' : 'bg-transparent'
         }`}
@@ -110,7 +115,10 @@ function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
       {expanded && !collapsed && item.children!.map((child) => (
         <Pressable
           key={child.id}
-          onPress={child.onPress}
+          onPress={() => {
+            child.onPress?.();
+            onNavigate?.();
+          }}
           className={`mx-2 my-0.5 px-3 py-2 rounded-lg flex-row items-center ${
             child.isActive ? 'bg-emerald-600/20' : 'bg-transparent'
           }`}
@@ -129,6 +137,7 @@ export function Sidebar({
   title = 'FactoryOS',
   subtitle,
   footer,
+  onNavigate,
 }: SidebarProps) {
   return (
     <View
@@ -152,7 +161,7 @@ export function Sidebar({
       {/* Nav Items */}
       <ScrollView className="flex-1 py-2">
         {items.map((item) => (
-          <NavEntry key={item.id} item={item} collapsed={collapsed} />
+          <NavEntry key={item.id} item={item} collapsed={collapsed} onNavigate={onNavigate} />
         ))}
       </ScrollView>
 
