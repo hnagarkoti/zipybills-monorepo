@@ -84,6 +84,12 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '4000', 10);
 const SAAS_MODE = process.env.SAAS_MODE === 'true';
 
+// Trust the first hop from Render / any reverse proxy so that:
+//  - req.ip returns the real client IP (not the proxy IP)
+//  - express-rate-limit reads X-Forwarded-For correctly
+//  - secure cookies work over HTTPS behind the proxy
+app.set('trust proxy', 1);
+
 // CORS configuration - allow production domains
 const corsOptions = {
   origin: [
@@ -126,6 +132,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, error: 'Too many login attempts. Please try again in 15 minutes.', code: 'AUTH_RATE_LIMITED' },
   skipSuccessfulRequests: true,
+  validate: { xForwardedForHeader: false, ip: false, default: false },
 });
 
 // J4: Slug enumeration protection: 5 attempts per minute
@@ -135,6 +142,7 @@ const enumLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, error: 'Too many requests. Please slow down.', code: 'ENUM_RATE_LIMITED' },
+  validate: { xForwardedForHeader: false, ip: false, default: false },
 });
 
 app.use('/api', globalLimiter);
