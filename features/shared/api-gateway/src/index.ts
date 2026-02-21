@@ -170,12 +170,6 @@ app.use('/api', metricsRouter);      // /api/metrics, /api/metrics/json
 // ─── Dev: Database Reset (protected by platform admin creds) ──
 
 app.post('/api/v1/dev/reset-db', async (req, res) => {
-  // Safety: block in production
-  if (process.env.NODE_ENV === 'production') {
-    res.status(403).json({ success: false, error: 'Database reset is disabled in production.' });
-    return;
-  }
-
   const { username, password } = req.body || {};
   const adminUser = process.env.PLATFORM_ADMIN_USERNAME || 'platform_admin';
   const adminPass = process.env.PLATFORM_ADMIN_PASSWORD || 'admin123!';
