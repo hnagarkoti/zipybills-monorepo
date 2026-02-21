@@ -72,7 +72,7 @@ export default function SignupPage() {
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState<{ company: string; username: string } | null>(null);
+  const [success, setSuccess] = useState<{ company: string; username: string; slug?: string } | null>(null);
 
   // Auto-generate slug from company name
   function handleCompanyChange(value: string) {
@@ -160,11 +160,24 @@ export default function SignupPage() {
         return;
       }
 
-      setSuccess({ company: data.tenant.company_name, username: data.user.username });
+      setSuccess({ company: data.tenant.company_name, username: data.user.username, slug: data.tenant?.slug });
     } catch {
       setError('Network error. Please check your connection and try again.');
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  function copyWorkspaceId(id?: string) {
+    if (!id) return;
+    try {
+      void navigator.clipboard.writeText(id);
+      // small toast substitute — temporary UX: brief alert
+      // Could be replaced with a nicer non-blocking UI later
+      alert('Workspace ID copied to clipboard');
+    } catch {
+      // fallback
+      alert('Press Ctrl/Cmd+C to copy: ' + id);
     }
   }
 
@@ -196,6 +209,21 @@ export default function SignupPage() {
                   <span className="text-gray-500">Username:</span>{' '}
                   <span className="font-semibold text-gray-900">{success.username}</span>
                 </div>
+                {success.slug && (
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="font-mono text-sm">
+                      <span className="text-gray-500">Workspace ID:</span>{' '}
+                      <span className="font-semibold text-gray-900">{success.slug}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => copyWorkspaceId(success.slug)}
+                      className="text-xs text-brand-600 bg-white border border-gray-200 px-2 py-1 rounded-md hover:bg-gray-50"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                )}
                 <div className="text-xs text-gray-400 mt-1">Password: the one you just set</div>
               </div>
               <a
