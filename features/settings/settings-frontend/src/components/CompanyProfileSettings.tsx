@@ -314,6 +314,7 @@ export function CompanyProfileSettings() {
       });
       if (data.success) {
         setProfile(prev => ({ ...prev, logo_url: data.logo_url }));
+        setTenantInfo({ tenant_logo_url: data.logo_url });
         setSuccessMsg(t('companyProfile.logoUploaded'));
         setTimeout(() => setSuccessMsg(null), 3000);
       }
@@ -333,6 +334,7 @@ export function CompanyProfileSettings() {
       });
       if (data.success) {
         setProfile(prev => ({ ...prev, logo_url: null }));
+        setTenantInfo({ tenant_logo_url: undefined });
         setSuccessMsg(t('companyProfile.logoRemoved'));
         setTimeout(() => setSuccessMsg(null), 3000);
       }

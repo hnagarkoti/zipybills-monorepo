@@ -184,6 +184,7 @@ export default function AppLayout() {
       title={activeRoute ? t(activeRoute.labelKey) : 'FactoryOS'}
       breadcrumbs={breadcrumbs}
       brandName="FactoryOS"
+      brandLogoUrl={user.tenant_logo_url}
       brandSubtitle={
         user.tenant_name
           ? `${user.tenant_name} · ${user.full_name} · ${t('roles.' + user.role) || user.role}${user.plan ? ` (${user.plan})` : ''}`

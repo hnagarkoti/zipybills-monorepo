@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView, Image } from 'react-native';
 import { Factory, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight } from 'lucide-react-native';
 import { colors } from '@zipybills/theme-engine';
 
@@ -19,6 +19,8 @@ export interface SidebarProps {
   onToggleCollapse?: () => void;
   title?: string;
   subtitle?: string;
+  /** Tenant/company logo URL – replaces the default Factory icon when set */
+  brandLogoUrl?: string;
   footer?: React.ReactNode;
   /** Called after any nav item is pressed (used to close mobile drawer) */
   onNavigate?: () => void;
@@ -136,6 +138,7 @@ export function Sidebar({
   onToggleCollapse,
   title = 'FactoryOS',
   subtitle,
+  brandLogoUrl,
   footer,
   onNavigate,
 }: SidebarProps) {
@@ -146,8 +149,16 @@ export function Sidebar({
       {/* Brand */}
       <View className="px-4 py-5 border-b border-slate-700 dark:border-gray-800">
         <View className="flex-row items-center">
-          <View className="w-9 h-9 bg-emerald-500/20 rounded-lg items-center justify-center">
-            <Factory size={20} color={colors.emerald[400]} />
+          <View className="w-9 h-9 bg-emerald-500/20 rounded-lg items-center justify-center overflow-hidden">
+            {brandLogoUrl ? (
+              <Image
+                source={{ uri: brandLogoUrl }}
+                style={{ width: 36, height: 36 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <Factory size={20} color={colors.emerald[400]} />
+            )}
           </View>
           {!collapsed && (
             <Text className="text-lg font-bold text-emerald-400 ml-2.5">{title}</Text>

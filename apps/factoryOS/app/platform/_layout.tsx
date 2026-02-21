@@ -97,6 +97,7 @@ export default function PlatformLayout() {
       title={activeRoute ? t(activeRoute.labelKey) : t('platform.platformAdmin')}
       breadcrumbs={breadcrumbs}
       brandName="FactoryOS"
+      brandLogoUrl={user.tenant_logo_url}
       brandSubtitle={t('platform.administration')}
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">

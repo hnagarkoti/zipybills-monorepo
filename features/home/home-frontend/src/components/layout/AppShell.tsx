@@ -14,6 +14,8 @@ export interface AppShellProps {
   title?: string;
   brandName?: string;
   brandSubtitle?: string;
+  /** Tenant/company logo URL – replaces the default Factory icon in the sidebar */
+  brandLogoUrl?: string;
   sidebarFooter?: React.ReactNode;
   /** Right content for desktop header (user info, sign out, etc.) */
   headerRight?: React.ReactNode;
@@ -29,6 +31,7 @@ export function AppShell({
   title = '',
   brandName = 'FactoryOS',
   brandSubtitle,
+  brandLogoUrl,
   sidebarFooter,
   headerRight,
   mobileHeaderRight,
@@ -50,6 +53,7 @@ export function AppShell({
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
           title={brandName}
           subtitle={brandSubtitle}
+          brandLogoUrl={brandLogoUrl}
           footer={sidebarFooter}
         />
         <View className="flex-1">
@@ -75,6 +79,7 @@ export function AppShell({
                 items={navItems}
                 title={brandName}
                 subtitle={brandSubtitle}
+                brandLogoUrl={brandLogoUrl}
                 footer={sidebarFooter}
                 onNavigate={() => setMobileMenuOpen(false)}
               />
