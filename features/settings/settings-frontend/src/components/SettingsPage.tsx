@@ -15,7 +15,7 @@
 import React from 'react';
 import { View, Text, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import {
-  Palette, Shield, HardDrive, Globe, User, ChevronRight, Settings,
+  Palette, Shield, HardDrive, Globe, User, ChevronRight, Settings, Building2,
 } from 'lucide-react-native';
 import { PageHeader } from '@zipybills/ui-components';
 import { useAuthStore } from '@zipybills/ui-store';
@@ -23,7 +23,7 @@ import { useLocale } from '@zipybills/i18n-engine';
 
 // ─── Types ────────────────────────────────────
 
-export type SettingsTab = 'appearance' | 'language' | 'compliance' | 'backup';
+export type SettingsTab = 'company-profile' | 'appearance' | 'language' | 'compliance' | 'backup';
 
 interface TabConfig {
   id: SettingsTab;
@@ -41,6 +41,16 @@ interface TabConfig {
 // ─── Constants ────────────────────────────────
 
 const TABS: TabConfig[] = [
+  {
+    id: 'company-profile',
+    label: 'settings.companyProfile',
+    description: 'settings.companyProfileDesc',
+    icon: <Building2 size={20} />,
+    path: '/settings/company-profile',
+    minRole: ['ADMIN'],
+    color: '#2563EB',
+    bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+  },
   {
     id: 'appearance',
     label: 'settings.appearance',

@@ -28,6 +28,16 @@ export interface Tenant {
   company_name: string;
   domain: string | null;
   logo_url: string | null;
+  description: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  postal_code: string | null;
+  gst_number: string | null;
+  industry: string | null;
+  website: string | null;
   status: TenantStatus;
   plan: TenantPlan;
   license_type: LicenseType;
@@ -39,6 +49,8 @@ export interface Tenant {
   trial_ends_at: string | null;
   expires_at: string | null;
   locale: string;
+  contact_email: string | null;
+  contact_phone: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -161,6 +173,17 @@ export async function initializeMultiTenancySchema(): Promise<void> {
     { name: 'locale', def: "VARCHAR(10) DEFAULT 'en'" },
     { name: 'contact_email', def: 'VARCHAR(255)' },
     { name: 'contact_phone', def: 'VARCHAR(50)' },
+    // Company profile fields
+    { name: 'description', def: 'TEXT' },
+    { name: 'address_line1', def: 'VARCHAR(255)' },
+    { name: 'address_line2', def: 'VARCHAR(255)' },
+    { name: 'city', def: 'VARCHAR(100)' },
+    { name: 'state', def: 'VARCHAR(100)' },
+    { name: 'country', def: 'VARCHAR(100)' },
+    { name: 'postal_code', def: 'VARCHAR(20)' },
+    { name: 'gst_number', def: 'VARCHAR(50)' },
+    { name: 'industry', def: 'VARCHAR(100)' },
+    { name: 'website', def: 'VARCHAR(500)' },
   ]) {
     await query(`
       DO $$ BEGIN
@@ -374,7 +397,7 @@ export async function getAllTenants(page = 1, limit = 25): Promise<{ tenants: Te
 
 export async function updateTenant(
   tenantId: number,
-  updates: Partial<Pick<Tenant, 'company_name' | 'domain' | 'logo_url' | 'status' | 'plan' | 'max_users' | 'max_machines' | 'settings' | 'is_active' | 'license_type' | 'expires_at'>>,
+  updates: Partial<Pick<Tenant, 'company_name' | 'domain' | 'logo_url' | 'description' | 'address_line1' | 'address_line2' | 'city' | 'state' | 'country' | 'postal_code' | 'gst_number' | 'industry' | 'website' | 'contact_email' | 'contact_phone' | 'status' | 'plan' | 'max_users' | 'max_machines' | 'settings' | 'is_active' | 'license_type' | 'expires_at'>>,
 ): Promise<Tenant | null> {
   const fields: string[] = [];
   const values: any[] = [];

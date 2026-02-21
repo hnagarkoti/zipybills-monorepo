@@ -21,6 +21,8 @@ export interface AuthUser {
   plan?: string;
   /** Tenant display name */
   tenant_name?: string;
+  /** Tenant logo (base64 data URI or URL) */
+  tenant_logo_url?: string;
   /** Fine-grained permissions from RBAC */
   permissions?: string[];
   /** True if this user is the platform super-admin */
@@ -44,7 +46,7 @@ export interface AuthState {
   login: (user: AuthUser, token: string) => void;
   logout: () => void;
   /** H1: Update tenant metadata after login */
-  setTenantInfo: (info: { tenant_id?: number; plan?: string; tenant_name?: string }) => void;
+  setTenantInfo: (info: { tenant_id?: number; plan?: string; tenant_name?: string; tenant_logo_url?: string }) => void;
 }
 
 export const useAuthStore = create<AuthState>()(

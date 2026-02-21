@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
 import { Factory, ArrowLeft, Building2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { login as apiLogin } from '../services/api';
-import { setAuthToken } from '@zipybills/factory-api-client';
+import { setAuthToken, API_BASE } from '@zipybills/factory-api-client';
 import { Alert } from '@zipybills/ui-components';
 import { colors } from '@zipybills/theme-engine';
 import { useLocale } from '@zipybills/i18n-engine';
@@ -14,6 +14,11 @@ interface LoginPageProps {
 
 type Step = 'workspace' | 'credentials';
 
+interface TenantBranding {
+  company_name: string;
+  logo_url: string | null;
+}
+
 export function LoginPage({ onLogin }: LoginPageProps) {
   const { t } = useLocale();
   const [step, setStep] = useState<Step>('workspace');
@@ -22,6 +27,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tenantBranding, setTenantBranding] = useState<TenantBranding | null>(null);
 
   /* Refs for keyboard focus chain */
   const usernameRef = useRef<TextInput>(null);
@@ -51,7 +57,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     }
   };
 
-  const handleWorkspaceContinue = () => {
+  const handleWorkspaceContinue = async () => {
     const trimmed = workspaceId.trim().toLowerCase();
     if (!trimmed) {
       setError(t('auth.requiredWorkspace'));
@@ -59,6 +65,20 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     }
     setWorkspaceId(trimmed);
     setError(null);
+
+    // Fetch tenant branding (non-blocking — proceed even if this fails)
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/saas/tenant-branding/${encodeURIComponent(trimmed)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setTenantBranding({ company_name: data.company_name, logo_url: data.logo_url });
+        }
+      }
+    } catch {
+      // Non-critical — branding is optional, login still works
+    }
+
     setStep('credentials');
   };
 
@@ -86,6 +106,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     setError(null);
     setUsername('');
     setPassword('');
+    setTenantBranding(null);
   };
 
   return (
@@ -114,15 +135,30 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <View className="w-full max-w-sm px-6">
           {/* Logo */}
           <View className="items-center mb-8">
-            <LinearGradient
-              colors={['#2563eb', '#9333ea']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: 64, height: 64, borderRadius: 16, alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}
-            >
-              <Factory size={32} color={colors.white} />
-            </LinearGradient>
-            <Text className="text-2xl font-bold text-white">{t('common.appName')}</Text>
+            {tenantBranding?.logo_url && step === 'credentials' ? (
+              /* Show tenant logo if available */
+              <View style={{ width: 64, height: 64, borderRadius: 16, marginBottom: 16, overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                <Image
+                  source={{ uri: tenantBranding.logo_url }}
+                  style={{ width: 64, height: 64 }}
+                  resizeMode="contain"
+                />
+              </View>
+            ) : (
+              <LinearGradient
+                colors={['#2563eb', '#9333ea']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 64, height: 64, borderRadius: 16, alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}
+              >
+                <Factory size={32} color={colors.white} />
+              </LinearGradient>
+            )}
+            <Text className="text-2xl font-bold text-white">
+              {tenantBranding?.company_name && step === 'credentials'
+                ? tenantBranding.company_name
+                : t('common.appName')}
+            </Text>
             <Text className="text-sm text-blue-300/70 mt-1">{t('common.tagline')}</Text>
           </View>
 

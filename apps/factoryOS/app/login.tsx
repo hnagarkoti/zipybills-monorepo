@@ -20,12 +20,13 @@ export default function LoginScreen() {
     // H1: Fetch tenant metadata after login for plan awareness and branding
     if (user.tenant_id) {
       try {
-        const data = await apiFetch<{ success: boolean; tenant: { tenant_id: number; plan: string; company_name: string } }>('/api/tenant/me');
+        const data = await apiFetch<{ success: boolean; tenant: { tenant_id: number; plan: string; company_name: string; logo_url: string | null } }>('/api/tenant/me');
         if (data.success && data.tenant) {
           setTenantInfo({
             tenant_id: data.tenant.tenant_id,
             plan: data.tenant.plan,
             tenant_name: data.tenant.company_name,
+            tenant_logo_url: data.tenant.logo_url ?? undefined,
           });
         }
       } catch {

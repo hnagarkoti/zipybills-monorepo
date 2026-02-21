@@ -40,6 +40,7 @@ import {
   removeUserFromTenant,
   provisionTenant,
   validateTenantLimits,
+  invalidateTenantCache,
   type TenantPlan,
 } from './index.js';
 import { requirePlatformAdmin, type TenantRequest } from './middleware.js';
@@ -294,13 +295,109 @@ tenantRouter.patch('/tenant/me', requireAuth, async (req: TenantRequest, res) =>
       return;
     }
 
-    // Tenant admins can only update limited fields
-    const { company_name, logo_url, settings } = req.body;
-    const tenant = await updateTenant(currentTenant.tenant_id, { company_name, logo_url, settings });
+    // Tenant admins can update profile + limited operational fields
+    const {
+      company_name, logo_url, settings,
+      description, contact_email, contact_phone,
+      address_line1, address_line2, city, state, country, postal_code,
+      gst_number, industry, website, domain,
+    } = req.body;
+
+    // Validate fields
+    if (company_name !== undefined && (typeof company_name !== 'string' || company_name.trim().length < 2)) {
+      res.status(400).json({ success: false, error: 'Company name must be at least 2 characters' });
+      return;
+    }
+    if (contact_email !== undefined && contact_email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact_email)) {
+      res.status(400).json({ success: false, error: 'Invalid email address' });
+      return;
+    }
+    if (website !== undefined && website !== '' && !/^https?:\/\/.+/.test(website)) {
+      res.status(400).json({ success: false, error: 'Website must start with http:// or https://' });
+      return;
+    }
+    if (description !== undefined && typeof description === 'string' && description.length > 1000) {
+      res.status(400).json({ success: false, error: 'Description must be under 1000 characters' });
+      return;
+    }
+
+    const tenant = await updateTenant(currentTenant.tenant_id, {
+      company_name, logo_url, settings,
+      description, contact_email, contact_phone,
+      address_line1, address_line2, city, state, country, postal_code,
+      gst_number, industry, website, domain,
+    });
+
+    // Invalidate cache so next read picks up updates
+    invalidateTenantCache(currentTenant.tenant_id);
 
     res.json({ success: true, tenant });
   } catch (err) {
     res.status(500).json({ success: false, error: 'Failed to update tenant' });
+  }
+});
+
+// ─── Logo Upload (base64 data URI) ────────────
+// Accepts a base64 data URI (client compresses/crops before upload).
+// Max 50KB after encoding to keep Neon 500MB DB within budget.
+const MAX_LOGO_SIZE_BYTES = 50 * 1024; // 50 KB
+
+tenantRouter.post('/tenant/me/logo', requireAuth, async (req: TenantRequest, res) => {
+  try {
+    const currentTenant = await getUserTenant(req.user!.user_id);
+    if (!currentTenant) {
+      res.status(404).json({ success: false, error: 'No tenant found' });
+      return;
+    }
+
+    const { logo } = req.body; // expects base64 data URI string
+
+    if (!logo || typeof logo !== 'string') {
+      res.status(400).json({ success: false, error: 'logo (base64 data URI) is required' });
+      return;
+    }
+
+    // Validate it's a data URI of an image
+    if (!logo.startsWith('data:image/')) {
+      res.status(400).json({ success: false, error: 'Logo must be a base64-encoded image (data:image/...)' });
+      return;
+    }
+
+    // Check size (base64 string length ≈ 4/3 × raw bytes, each char = 1 byte in UTF-8 for base64)
+    const sizeBytes = Buffer.byteLength(logo, 'utf-8');
+    if (sizeBytes > MAX_LOGO_SIZE_BYTES) {
+      res.status(400).json({
+        success: false,
+        error: `Logo is too large (${Math.round(sizeBytes / 1024)}KB). Maximum ${MAX_LOGO_SIZE_BYTES / 1024}KB. Please compress or resize the image.`,
+      });
+      return;
+    }
+
+    const tenant = await updateTenant(currentTenant.tenant_id, { logo_url: logo });
+    invalidateTenantCache(currentTenant.tenant_id);
+
+    res.json({ success: true, logo_url: tenant?.logo_url });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to upload logo' });
+  }
+});
+
+// ─── Delete Logo ──────────────────────────────
+
+tenantRouter.delete('/tenant/me/logo', requireAuth, async (req: TenantRequest, res) => {
+  try {
+    const currentTenant = await getUserTenant(req.user!.user_id);
+    if (!currentTenant) {
+      res.status(404).json({ success: false, error: 'No tenant found' });
+      return;
+    }
+
+    const tenant = await updateTenant(currentTenant.tenant_id, { logo_url: null as any });
+    invalidateTenantCache(currentTenant.tenant_id);
+
+    res.json({ success: true, tenant });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to delete logo' });
   }
 });
 

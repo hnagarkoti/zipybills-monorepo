@@ -1335,6 +1335,9 @@ importers:
 
   features/settings/settings-frontend:
     dependencies:
+      '@zipybills/factory-api-client':
+        specifier: workspace:*
+        version: link:../../shared/api-client
       '@zipybills/factory-backup-service-interface':
         specifier: workspace:*
         version: link:../../shared/backup-system/service-interface

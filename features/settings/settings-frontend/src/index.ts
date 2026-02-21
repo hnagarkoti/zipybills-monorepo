@@ -1,7 +1,7 @@
 /**
  * @zipybills/factory-settings-frontend
  *
- * Settings feature module – Appearance, compliance, user preferences.
+ * Settings feature module – Appearance, compliance, user preferences, company profile.
  */
 
 // ─── Pages & Layout ─────────────────────────
@@ -13,3 +13,4 @@ export { AppearanceSettings } from './components/AppearanceSettings';
 export { ComplianceSettings } from './components/ComplianceSettings';
 export { BackupSettings } from './components/BackupSettings';
 export { LanguageSettings } from './components/LanguageSettings';
+export { CompanyProfileSettings } from './components/CompanyProfileSettings';

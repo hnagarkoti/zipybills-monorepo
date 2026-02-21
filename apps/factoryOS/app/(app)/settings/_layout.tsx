@@ -14,6 +14,7 @@ import type { SettingsTab } from '@zipybills/factory-settings-frontend';
 
 /** Map pathname to SettingsTab */
 function getActiveTab(pathname: string): SettingsTab {
+  if (pathname.includes('/settings/company-profile')) return 'company-profile';
   if (pathname.includes('/settings/language')) return 'language';
   if (pathname.includes('/settings/compliance')) return 'compliance';
   if (pathname.includes('/settings/backup')) return 'backup';

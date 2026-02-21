@@ -141,3 +141,36 @@ cloudAuthRouter.get('/saas/plans', async (_req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch plans' });
   }
 });
+
+// ─── Public Tenant Branding (for login page) ──
+// Returns company_name + logo_url for a given workspace slug.
+// No auth required — the login page needs this before the user authenticates.
+
+cloudAuthRouter.get('/saas/tenant-branding/:slug', async (req: Request, res: Response) => {
+  try {
+    const { slug } = req.params;
+    if (!slug) {
+      res.status(400).json({ success: false, error: 'Workspace slug is required' });
+      return;
+    }
+
+    const result = await query(
+      `SELECT company_name, logo_url FROM tenants WHERE tenant_slug = $1 AND is_active = true LIMIT 1`,
+      [slug.toLowerCase().trim()],
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ success: false, error: 'Workspace not found' });
+      return;
+    }
+
+    const tenant = result.rows[0];
+    res.json({
+      success: true,
+      company_name: tenant.company_name,
+      logo_url: tenant.logo_url,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to fetch tenant branding' });
+  }
+});
