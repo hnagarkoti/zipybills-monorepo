@@ -185,7 +185,7 @@ export default function AppLayout() {
       breadcrumbs={breadcrumbs}
       brandName={user.tenant_name || 'FactoryOS'}
       brandLogoUrl={user.tenant_logo_url}
-      brandSubtitle={`${user.full_name} · ${t('roles.' + user.role) || user.role}${user.plan ? ` (${user.plan})` : ''}`}
+      brandSubtitle={`${user.full_name} · ${t('roles.' + user.role) || user.role}`}
       sidebarFooter={
         <Pressable onPress={handleLogout} className="flex-row items-center py-2">
           <LogOut size={14} color={colors.gray[400]} />
