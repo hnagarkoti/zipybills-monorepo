@@ -19,13 +19,13 @@ export interface StatCardProps {
 }
 
 const bgColors: Record<StatCardColor, string> = {
-  blue: 'bg-blue-50 dark:bg-blue-900/20',
-  green: 'bg-green-50 dark:bg-green-900/20',
-  red: 'bg-red-50 dark:bg-red-900/20',
-  yellow: 'bg-yellow-50 dark:bg-yellow-900/20',
-  purple: 'bg-purple-50 dark:bg-purple-900/20',
+  blue: 'bg-blue-50 dark:bg-blue-900/30',
+  green: 'bg-green-50 dark:bg-green-900/30',
+  red: 'bg-red-50 dark:bg-red-900/30',
+  yellow: 'bg-yellow-50 dark:bg-yellow-900/30',
+  purple: 'bg-purple-50 dark:bg-purple-900/30',
   gray: 'bg-gray-50 dark:bg-gray-800',
-  emerald: 'bg-emerald-50 dark:bg-emerald-900/20',
+  emerald: 'bg-emerald-50 dark:bg-emerald-900/30',
 };
 
 const textColors: Record<StatCardColor, string> = {
@@ -57,7 +57,7 @@ export function StatCard({
   className,
 }: StatCardProps) {
   return (
-    <View className={cn(bgColors[color], 'rounded-xl p-4 border border-gray-100 dark:border-gray-800', className)}>
+    <View className={cn(bgColors[color], 'rounded-xl p-4 border border-gray-100 dark:border-gray-700', className)}>
       <View className="flex-row items-center justify-between mb-1">
         <Text className={cn('text-xs font-medium', labelColors[color])}>{label}</Text>
         {icon}

@@ -37,7 +37,7 @@ const BRAND_GRADIENT: [string, string] = ['#2563eb', '#9333ea'];
 
 /* Non-primary variant NativeWind classes */
 const variantStyles: Record<Exclude<ButtonVariant, 'primary'>, string> = {
-  secondary: 'bg-slate-700 active:bg-slate-800 dark:bg-slate-600 dark:active:bg-slate-700',
+  secondary: 'bg-gray-700 active:bg-gray-800 dark:bg-gray-700 dark:active:bg-gray-600',
   outline:
     'bg-transparent border border-gray-300 active:bg-gray-50 dark:border-gray-600 dark:active:bg-gray-800',
   ghost: 'bg-transparent active:bg-gray-100 dark:active:bg-gray-800',

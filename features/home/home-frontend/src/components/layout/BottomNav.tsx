@@ -12,7 +12,7 @@ export function BottomNav({ items }: BottomNavProps) {
     .map(({ children: _children, ...rest }) => rest);
 
   return (
-    <View className="h-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex-row items-center justify-around px-2">
+    <View className="h-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex-row items-center justify-around px-2">
       {flatItems.slice(0, 5).map((item) => (
         <Pressable
           key={item.id}

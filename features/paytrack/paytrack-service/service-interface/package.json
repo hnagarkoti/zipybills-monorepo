@@ -1,0 +1,22 @@
+{
+  "name": "@zipybills/paytrack-service-interface",
+  "version": "0.1.0",
+  "description": "PayTrack Service Interface – types and API contract for material tracking & payments",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "echo 'lint ok'"
+  },
+  "dependencies": {
+    "@zipybills/factory-api-client": "workspace:*",
+    "@zipybills/ts-config": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  },
+  "private": true
+}

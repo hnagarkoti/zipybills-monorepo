@@ -16,10 +16,11 @@ import { Slot, Redirect, usePathname, useRouter } from 'expo-router';
 import {
   LayoutDashboard, ClipboardList, Pencil, Factory,
   AlertTriangle, Clock, BarChart3, Users, LogOut, Settings,
-  ShieldCheck, Palette, Shield, HardDrive, Globe,
+  ShieldCheck, Palette, Shield, HardDrive, Globe, Receipt,
 } from 'lucide-react-native';
 import { AppShell, type NavItem, type BreadcrumbItem } from '@zipybills/factory-home-frontend';
 import { useAuthStore } from '@zipybills/ui-store';
+import OnboardingBanner from './components/OnboardingBanner';
 import { Avatar, ServerErrorPage } from '@zipybills/ui-components';
 import { useFeatureFlags } from '@zipybills/factory-feature-registry/react';
 import { colors } from '@zipybills/theme-engine';
@@ -48,6 +49,7 @@ const ROUTES: RouteConfig[] = [
     ],
   },
   { href: '/machines', labelKey: 'nav.machines', icon: <Factory size={ICON_SIZE} />, featureId: 'machines' },
+  { href: '/paytrack', labelKey: 'nav.paytrack', icon: <Receipt size={ICON_SIZE} />, featureId: 'paytrack', minPlan: 'STARTER' },
   { href: '/downtime', labelKey: 'nav.downtime', icon: <AlertTriangle size={ICON_SIZE} />, featureId: 'downtime', minPlan: 'STARTER' },
   { href: '/shifts', labelKey: 'nav.shifts', icon: <Clock size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'shifts' },
   { href: '/reports', labelKey: 'nav.reports', icon: <BarChart3 size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'], featureId: 'reports', minPlan: 'STARTER' },
@@ -57,7 +59,7 @@ const ROUTES: RouteConfig[] = [
     children: [
       { href: '/settings/appearance', labelKey: 'nav.appearance', icon: <Palette size={ICON_SIZE} /> },
       { href: '/settings/language', labelKey: 'nav.language', icon: <Globe size={ICON_SIZE} /> },
-      { href: '/settings/compliance', labelKey: 'nav.compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN', 'SUPERVISOR'] },
+      { href: '/settings/compliance', labelKey: 'nav.compliance', icon: <Shield size={ICON_SIZE} />, roles: ['ADMIN'] },
       { href: '/settings/backup', labelKey: 'nav.backupData', icon: <HardDrive size={ICON_SIZE} />, roles: ['ADMIN'] },
     ],
   },
@@ -211,6 +213,7 @@ export default function AppLayout() {
         <Avatar name={user.full_name} size="sm" />
       }
     >
+      <OnboardingBanner />
       <Slot />
     </AppShell>
   );

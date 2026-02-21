@@ -14,6 +14,7 @@ import {
 } from 'lucide-react-native';
 import {
   useTheme,
+  useThemeStore,
   useThemeBranding,
   useIsDark,
   useAppliedLayers,
@@ -49,19 +50,22 @@ export function AppearanceSettings({
   allowUserOverride = true,
   tenantDefaultLabel = 'Tenant Default',
 }: AppearanceSettingsProps) {
-  const { context, setBaseTheme } = useTheme();
+  const { context, setBaseTheme, clearExplicitChoice } = useTheme();
   const { t } = useLocale();
   const branding = useThemeBranding();
   const isDark = useIsDark();
   const appliedLayers = useAppliedLayers();
 
-  // Current selection — derive from context
+  const isExplicitChoice = useThemeStore((s) => s.isExplicitChoice);
+
+  // Current selection — derive from context + whether the user made an explicit choice.
+  // If no explicit choice, OS detection is active → show "system" as selected.
   const currentSelection = useMemo<ThemeOption['id']>(() => {
-    if (!context.baseTheme) return 'default';
+    if (!isExplicitChoice) return 'system';
     if (context.baseTheme === 'light') return 'light';
     if (context.baseTheme === 'dark') return 'dark';
     return 'default';
-  }, [context.baseTheme]);
+  }, [isExplicitChoice, context.baseTheme]);
 
   const themeOptions: ThemeOption[] = useMemo(
     () => [
@@ -113,12 +117,13 @@ export function AppearanceSettings({
     (option: ThemeOption) => {
       if (!allowUserOverride) return;
       if (option.id === 'system' || option.id === 'default') {
-        setBaseTheme('light'); // Will be overridden by auto-detect in ThemeProvider
+        // Clear the explicit lock so ThemeProvider follows OS preference again.
+        clearExplicitChoice();
       } else if (option.baseTheme) {
         setBaseTheme(option.baseTheme);
       }
     },
-    [allowUserOverride, setBaseTheme],
+    [allowUserOverride, clearExplicitChoice, setBaseTheme],
   );
 
   return (

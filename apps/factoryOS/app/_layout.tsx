@@ -1,5 +1,6 @@
 import '../global.css';
 import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryProvider } from '@zipybills/ui-query';
@@ -42,6 +43,7 @@ function ComplianceThemeSync() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       <I18nProvider>
         <ThemeProvider>
           <QueryProvider>

@@ -110,7 +110,7 @@ function SidebarTab({ tab, isActive, onPress, isLast }: {
       onPress={onPress}
       className={`
         flex-row items-center px-4 py-3.5 active:opacity-80
-        ${!isLast ? 'border-b border-gray-100 dark:border-gray-800' : ''}
+        ${!isLast ? 'border-b border-gray-100 dark:border-gray-700' : ''}
         ${isActive ? 'bg-gray-50 dark:bg-gray-800' : ''}
       `}
       style={isActive ? { borderLeftWidth: 3, borderLeftColor: tab.color } : { paddingLeft: 19 }}
@@ -119,7 +119,7 @@ function SidebarTab({ tab, isActive, onPress, isLast }: {
         {React.cloneElement(tab.icon as React.ReactElement, { color: tab.color, size: 18 })}
       </View>
       <View className="flex-1">
-        <Text className={`text-sm font-semibold ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
+        <Text className={`text-sm font-semibold ${isActive ? 'text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'}`}>
           {t(tab.label)}
         </Text>
         <Text className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5" numberOfLines={1}>
@@ -139,7 +139,7 @@ function ProfileCard({ compact }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4 mb-4">
+      <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 mb-4">
         <View className="flex-row items-center gap-3">
           <View className="w-11 h-11 rounded-full bg-blue-100 dark:bg-blue-900/40 items-center justify-center">
             <User size={20} color="#3B82F6" />
@@ -162,7 +162,7 @@ function ProfileCard({ compact }: { compact?: boolean }) {
   }
 
   return (
-    <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 mb-6 mt-2">
+    <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-6 mt-2">
       <View className="flex-row items-center gap-4">
         <View className="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/40 items-center justify-center">
           <User size={24} color="#3B82F6" />
@@ -225,7 +225,7 @@ export function SettingsLayout({
             <Text className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2 px-1">
               {t('settings.preferences')}
             </Text>
-            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               {visibleTabs.map((tab, index) => (
                 <SidebarTab
                   key={tab.id}
@@ -246,7 +246,7 @@ export function SettingsLayout({
 
           {/* Right Content Panel */}
           <ScrollView
-            className="flex-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800"
+            className="flex-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700"
             contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
           >
@@ -260,7 +260,7 @@ export function SettingsLayout({
   // ─── MOBILE: full-screen with back button ──
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-950">
-      <View className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+      <View className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
         <Pressable
           onPress={() => onNavigate('/settings')}
           className="flex-row items-center gap-2 self-start active:opacity-70"
@@ -329,14 +329,14 @@ export function SettingsPage({
           {t('settings.preferences')}
         </Text>
 
-        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden mb-6">
+        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
           {visibleTabs.map((tab, index) => (
             <Pressable
               key={tab.id}
               onPress={() => onNavigate(tab.path)}
               className={`
                 flex-row items-center px-5 py-4 active:bg-gray-50 dark:active:bg-gray-800
-                ${index > 0 ? 'border-t border-gray-100 dark:border-gray-800' : ''}
+                ${index > 0 ? 'border-t border-gray-100 dark:border-gray-700' : ''}
               `}
             >
               <View

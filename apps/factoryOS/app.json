@@ -33,6 +33,7 @@
       },
       "package": "com.zipybills.factoryos",
       "versionCode": 1,
+      "softwareKeyboardLayoutMode": "resize",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",

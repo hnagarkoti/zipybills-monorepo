@@ -84,7 +84,26 @@
     "appearance": "Appearance",
     "language": "Language",
     "compliance": "Compliance",
-    "backupData": "Backup & Data"
+    "backupData": "Backup & Data",
+    "paytrack": "PayTrack"
+  },
+  "paytrack": {
+    "subtitle": "Material tracking & payment management",
+    "modules": "Modules",
+    "tab": {
+      "dashboard": "Dashboard",
+      "materials": "Materials",
+      "projects": "Projects",
+      "vendors": "Vendors",
+      "payments": "Payments"
+    },
+    "desc": {
+      "dashboard": "Overview of materials, expenses & project status",
+      "materials": "Track raw materials, purchases & inventory",
+      "projects": "Manage construction projects & budgets",
+      "vendors": "Manage material suppliers & balances",
+      "payments": "View payment history & pending invoices"
+    }
   },
   "platform": {
     "overview": "Overview",
@@ -245,7 +264,23 @@
     "gdriveDisconnected": "Google Drive disconnected",
     "disconnectFailed": "Failed to disconnect Google Drive",
     "backupDeleted": "Backup deleted",
-    "deleteFailed": "Failed to delete backup"
+    "deleteFailed": "Failed to delete backup",
+    "selectModules": "Select Modules",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "encryptData": "Encrypt Backup",
+    "encryptDesc": "AES-256 encryption using server secret key",
+    "noModulesSelected": "No modules selected — please select at least one",
+    "pleaseSelectModule": "Please select at least one module",
+    "module": {
+      "paytrack": "PayTrack (Materials, Projects, Vendors, Payments)",
+      "planning": "Production Planning",
+      "shifts": "Shifts & Attendance",
+      "machines": "Machines & Equipment",
+      "downtime": "Downtime Records",
+      "reports": "Reports & Analytics",
+      "settings": "Settings & Configuration"
+    }
   },
   "trial": {
     "expiresToday": "Trial expires today",
@@ -262,7 +297,7 @@
   "onboarding": {
     "welcome": "Welcome! Get Started Quickly",
     "emptyFactory": "Your factory is empty. Want us to set up sample data so you can explore all features right away?",
-    "sampleDataDesc": "We'll create sample machines, shifts, operators, and 3 months of production plans with realistic data.",
+    "sampleDataDesc": "We'll create sample machines, shifts, operators, 3 months of production plans, and PayTrack data (vendors, projects, materials & payments) with realistic numbers.",
     "generateSample": "Generate Sample Data",
     "skip": "Skip",
     "allSet": "All Set!",
@@ -284,7 +319,18 @@
     "machineDetails": "2 CNC, Lathe, Press, Assembly",
     "shiftDetails": "Morning, Afternoon, Night",
     "planDetails": "Past 2 months + upcoming month",
-    "userDetails": "2 Operators + 1 Supervisor (password: Test@1234)"
+    "userDetails": "2 Operators + 1 Supervisor (password: Test@1234)",
+    "paytrackSection": "PayTrack (Materials & Payments)",
+    "vendorsLabel": "Vendors",
+    "projectsLabel": "Projects",
+    "materialsLabel": "Materials",
+    "paymentsLabel": "Payments",
+    "sixVendors": "6 Vendors",
+    "fiveProjects": "5 Projects",
+    "twentyFiveMaterials": "25 Materials & Payments",
+    "vendorDetails": "Cement, Steel, Electrical, Timber, Plumbing, Paints",
+    "projectDetails": "Factory, Office, Warehouse & more with budgets",
+    "materialDetails": "Invoices across all statuses with realistic amounts"
   },
   "userMgmt": {
     "title": "User Management",

@@ -132,7 +132,7 @@ function StatCard({ label, value, icon, color }: {
       <View className="flex-row items-center justify-between mb-2">
         <View className={`w-8 h-8 rounded-lg items-center justify-center ${color}`}>{icon}</View>
       </View>
-      <Text className="text-2xl font-bold text-gray-900 dark:text-white">{value}</Text>
+      <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</Text>
       <Text className="text-xs text-gray-500 mt-1">{label}</Text>
     </View>
   );
@@ -202,7 +202,7 @@ function ConfirmModal({
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
       <View className="flex-1 bg-black/50 justify-center items-center px-6">
         <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm">
-          <Text className="text-lg font-bold text-gray-900 dark:text-white mb-2">{title}</Text>
+          <Text className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{title}</Text>
           <Text className="text-sm text-gray-600 dark:text-gray-400 mb-5">{message}</Text>
           <View className="flex-row gap-3">
             <Pressable
@@ -339,7 +339,7 @@ export default function PlatformUsersPage() {
       <View className="p-4 md:p-6 max-w-7xl mx-auto w-full">
         {/* Header */}
         <View className="mb-6">
-          <Text className="text-2xl font-bold text-gray-900 dark:text-white">User Management</Text>
+          <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">User Management</Text>
           <Text className="text-sm text-gray-500 mt-1">
             View and manage all users across every tenant on the platform
           </Text>
@@ -474,7 +474,7 @@ export default function PlatformUsersPage() {
               >
                 {/* User Info */}
                 <View className="flex-[2]">
-                  <Text className="text-sm font-medium text-gray-900 dark:text-white">
+                  <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {user.full_name}
                   </Text>
                   <Text className="text-xs text-gray-500">{user.username}</Text>
@@ -626,7 +626,7 @@ export default function PlatformUsersPage() {
         <View className="flex-1 bg-black/50 justify-center items-center px-6">
           <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-md">
             <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-bold text-gray-900 dark:text-white">Reset Password</Text>
+              <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">Reset Password</Text>
               <Pressable onPress={() => setResetModal(null)}>
                 <X size={20} color="#6b7280" />
               </Pressable>
@@ -695,7 +695,7 @@ export default function PlatformUsersPage() {
         <View className="flex-1 bg-black/50 justify-center items-center px-6">
           <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-lg max-h-[80%]">
             <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-bold text-gray-900 dark:text-white">User Activity</Text>
+              <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">User Activity</Text>
               <Pressable onPress={() => setActivityModal(null)}>
                 <X size={20} color="#6b7280" />
               </Pressable>
@@ -711,7 +711,7 @@ export default function PlatformUsersPage() {
               <>
                 {/* User info header */}
                 <View className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
-                  <Text className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {activityQuery.data.user?.full_name}
                   </Text>
                   <Text className="text-xs text-gray-500">

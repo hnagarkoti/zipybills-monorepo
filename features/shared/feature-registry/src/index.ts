@@ -266,6 +266,17 @@ const FACTORY_FEATURES: FeatureDefinition[] = [
     availableVersions: ['v1'],
     since: '2026-02-20',
   },
+  // ─── Phase 5 Features (PayTrack Product) ───
+  {
+    id: 'paytrack',
+    label: 'PayTrack',
+    description: 'Material tracking & payment management for small factories',
+    api: 'ENABLED',
+    ui: 'ENABLED',
+    apiVersion: 'v1',
+    availableVersions: ['v1'],
+    since: '2026-06-01',
+  },
 ];
 
 // ─── Feature Registry ────────────────────────

@@ -36,7 +36,7 @@ export function LanguageSettings() {
       </View>
 
       {/* Language List */}
-      <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden mb-6">
+      <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
         {languages.map((lang, index) => {
           const isActive = locale === lang.code;
           return (
@@ -45,7 +45,7 @@ export function LanguageSettings() {
               onPress={() => changeLanguage(lang.code as SupportedLocale)}
               className={`
                 flex-row items-center px-5 py-4 active:bg-gray-50 dark:active:bg-gray-800
-                ${index > 0 ? 'border-t border-gray-100 dark:border-gray-800' : ''}
+                ${index > 0 ? 'border-t border-gray-100 dark:border-gray-700' : ''}
                 ${isActive ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}
               `}
             >

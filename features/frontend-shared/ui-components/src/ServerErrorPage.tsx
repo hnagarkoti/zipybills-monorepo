@@ -29,11 +29,11 @@ export function ServerErrorPage({ error, onRetry, onGoHome }: ServerErrorPagePro
 
   return (
     <ScrollView
-      className="flex-1 bg-slate-50 dark:bg-gray-950"
+      className="flex-1 bg-gray-50 dark:bg-gray-950"
       contentContainerClassName="items-center justify-center px-6 py-16 min-h-full"
     >
       {/* Pulsing alert indicator */}
-      <View className="w-24 h-24 bg-red-50 dark:bg-red-900/20 rounded-3xl items-center justify-center mb-6 border-2 border-red-200 dark:border-red-800">
+      <View className="w-24 h-24 bg-red-50 dark:bg-red-900/30 rounded-3xl items-center justify-center mb-6 border-2 border-red-200 dark:border-red-800">
         <AlertOctagon size={40} color={statusColors.error} />
       </View>
 
@@ -52,7 +52,7 @@ export function ServerErrorPage({ error, onRetry, onGoHome }: ServerErrorPagePro
       </Text>
 
       {/* Downtime Banner */}
-      <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3 mb-6 flex-row items-center w-full max-w-sm">
+      <View className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3 mb-6 flex-row items-center w-full max-w-sm">
         <View className="w-2.5 h-2.5 rounded-full bg-red-400 mr-2" />
         <View className="flex-1">
           <Text className="text-xs font-semibold text-red-700 dark:text-red-400">

@@ -56,6 +56,27 @@ export interface GDriveAuthUrlResult {
   error?: string;
 }
 
+/** Options for backup operations — module selection & encryption */
+export interface BackupOptions {
+  /** Which modules to include. If empty/undefined, ALL modules are included. */
+  modules?: string[];
+  /** Whether to encrypt the backup data (uses BACKUP_ENCRYPTION_KEY from server env). */
+  encrypted?: boolean;
+}
+
+/** Available module identifiers for backup selection */
+export const BACKUP_MODULES = [
+  { id: 'paytrack', labelKey: 'backup.module.paytrack', icon: 'receipt' },
+  { id: 'planning', labelKey: 'backup.module.planning', icon: 'calendar' },
+  { id: 'shifts', labelKey: 'backup.module.shifts', icon: 'clock' },
+  { id: 'machines', labelKey: 'backup.module.machines', icon: 'cog' },
+  { id: 'downtime', labelKey: 'backup.module.downtime', icon: 'alert-triangle' },
+  { id: 'reports', labelKey: 'backup.module.reports', icon: 'bar-chart' },
+  { id: 'settings', labelKey: 'backup.module.settings', icon: 'settings' },
+] as const;
+
+export type BackupModuleId = (typeof BACKUP_MODULES)[number]['id'];
+
 // ─── Typed API Client ────────────────────────
 
 export class BackupApi extends BaseApi {
@@ -71,13 +92,19 @@ export class BackupApi extends BaseApi {
   }
 
   /** Trigger a data export (JSON) */
-  async createExport(): Promise<ExportResult> {
-    return this.request<ExportResult>('/api/tenant-backups/export', { method: 'POST' });
+  async createExport(options?: BackupOptions): Promise<ExportResult> {
+    return this.request<ExportResult>('/api/tenant-backups/export', {
+      method: 'POST',
+      ...(options ? { body: JSON.stringify(options), headers: { 'Content-Type': 'application/json' } } : {}),
+    });
   }
 
   /** Trigger a cloud backup (encrypted, server-side) */
-  async createCloudBackup(): Promise<CloudBackupResult> {
-    return this.request<CloudBackupResult>('/api/tenant-backups/cloud', { method: 'POST' });
+  async createCloudBackup(options?: BackupOptions): Promise<CloudBackupResult> {
+    return this.request<CloudBackupResult>('/api/tenant-backups/cloud', {
+      method: 'POST',
+      ...(options ? { body: JSON.stringify(options), headers: { 'Content-Type': 'application/json' } } : {}),
+    });
   }
 
   /** Get the download URL for a completed backup (with auth token in query) */
@@ -98,8 +125,11 @@ export class BackupApi extends BaseApi {
   }
 
   /** Trigger a Google Drive backup */
-  async createGDriveBackup(): Promise<GDriveBackupResult> {
-    return this.request<GDriveBackupResult>('/api/tenant-backups/gdrive', { method: 'POST' });
+  async createGDriveBackup(options?: BackupOptions): Promise<GDriveBackupResult> {
+    return this.request<GDriveBackupResult>('/api/tenant-backups/gdrive', {
+      method: 'POST',
+      ...(options ? { body: JSON.stringify(options), headers: { 'Content-Type': 'application/json' } } : {}),
+    });
   }
 
   /** Disconnect Google Drive */

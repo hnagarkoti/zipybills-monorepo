@@ -46,7 +46,7 @@ export function AppShell({
 
   if (isDesktop && isWeb) {
     return (
-      <View className="flex-1 flex-row bg-gray-50">
+      <View className="flex-1 flex-row bg-gray-50 dark:bg-gray-950">
         <Sidebar
           items={navItems}
           collapsed={sidebarCollapsed}

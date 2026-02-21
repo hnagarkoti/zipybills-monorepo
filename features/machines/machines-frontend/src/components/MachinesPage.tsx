@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, Modal, ActivityIndicator, Animated, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, Modal, ActivityIndicator, Animated, KeyboardAvoidingView } from 'react-native';
 import { Factory, FolderOpen, Settings, Plus, Search, X, Eye, Wrench, CheckCircle2, AlertTriangle } from 'lucide-react-native';
 import { fetchMachines, createMachine, updateMachine, deleteMachine, type Machine } from '../services/api';
 import { Badge, PageHeader } from '@zipybills/ui-components';
@@ -66,7 +66,7 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
   return (
     <Modal visible={visible} transparent animationType="fade">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior="padding"
         className="flex-1"
       >
       <View className="flex-1 bg-black/50 items-center justify-center p-4">
@@ -84,7 +84,7 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
 
           <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 480 }} keyboardShouldPersistTaps="handled">
             {error && (
-              <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
+              <View className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
                 <Text className="text-sm text-red-600 dark:text-red-400">{error}</Text>
               </View>
             )}
@@ -96,7 +96,7 @@ function MachineFormModal({ visible, onClose, onSave, initialData, isEditing }: 
                 <View className="flex-row flex-wrap gap-2">
                   {MACHINE_TYPE_PRESETS.map((p) => (
                     <Pressable key={p.label} onPress={() => setForm({ ...form, machine_type: p.label })}
-                      className={`px-3 py-2 rounded-xl border-2 flex-row items-center ${form.machine_type === p.label ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                      className={`px-3 py-2 rounded-xl border-2 flex-row items-center ${form.machine_type === p.label ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                       <Text className="text-sm mr-1">{p.icon}</Text>
                       <Text className={`text-xs font-semibold ${form.machine_type === p.label ? 'text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}>{p.label}</Text>
                     </Pressable>
@@ -384,19 +384,19 @@ export function MachinesPage() {
       {/* Status Summary Cards */}
       {machines.length > 0 && (
         <View className="flex-row gap-2 mb-4">
-          <Pressable onPress={() => setStatusFilter('ALL')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ALL' ? 'bg-emerald-50 border-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+          <Pressable onPress={() => setStatusFilter('ALL')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ALL' ? 'bg-emerald-50 border-emerald-300 dark:bg-emerald-900/30 dark:border-emerald-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700'}`}>
             <Text className="text-xs text-gray-500 dark:text-gray-400">{t('common.total')}</Text>
             <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">{machines.length}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('ACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ACTIVE' ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+          <Pressable onPress={() => setStatusFilter('ACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'ACTIVE' ? 'bg-green-50 border-green-300 dark:bg-green-900/30 dark:border-green-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700'}`}>
             <Text className="text-xs text-green-600">{t('common.active')}</Text>
             <Text className="text-2xl font-bold text-green-700">{counts.active}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('MAINTENANCE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'MAINTENANCE' ? 'bg-yellow-50 border-yellow-300 dark:bg-yellow-900/20 dark:border-yellow-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+          <Pressable onPress={() => setStatusFilter('MAINTENANCE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'MAINTENANCE' ? 'bg-yellow-50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700'}`}>
             <Text className="text-xs text-yellow-600">{t('machines.maintenance')}</Text>
             <Text className="text-2xl font-bold text-yellow-700">{counts.maintenance}</Text>
           </Pressable>
-          <Pressable onPress={() => setStatusFilter('INACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'INACTIVE' ? 'bg-red-50 border-red-300 dark:bg-red-900/20 dark:border-red-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+          <Pressable onPress={() => setStatusFilter('INACTIVE')} className={`flex-1 rounded-xl p-3 border ${statusFilter === 'INACTIVE' ? 'bg-red-50 border-red-300 dark:bg-red-900/30 dark:border-red-700' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700'}`}>
             <Text className="text-xs text-red-600">{t('common.inactive')}</Text>
             <Text className="text-2xl font-bold text-red-700">{counts.inactive}</Text>
           </Pressable>
@@ -449,7 +449,7 @@ export function MachinesPage() {
           {filteredMachines.map((m) => {
             const borderColor = m.status === 'ACTIVE' ? 'border-l-green-400' : m.status === 'MAINTENANCE' ? 'border-l-yellow-400' : 'border-l-red-400';
             return (
-              <View key={m.machine_id} className={`bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 border-l-4 ${borderColor} p-4 mb-3 shadow-sm`}>
+              <View key={m.machine_id} className={`bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 border-l-4 ${borderColor} p-4 mb-3 shadow-sm`}>
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-row items-center flex-1">
                     <View className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 mr-3">
@@ -476,7 +476,7 @@ export function MachinesPage() {
                     </View>
                   )}
                 </View>
-                <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-800">
+                <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-700">
                   <Pressable onPress={() => router.push(`/machines/${m.machine_id}`)} className="bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg flex-row items-center">
                     <Eye size={11} color={machineStatusColors.ACTIVE.icon} />
                     <Text className="text-xs text-emerald-700 font-medium ml-1">{t('common.view')}</Text>

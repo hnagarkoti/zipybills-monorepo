@@ -24,8 +24,8 @@ const variantStyles: Record<BadgeVariant, string> = {
 
 export function Badge({ variant = 'default', children, className }: BadgeProps) {
   const colorClass = variantStyles[variant];
-  const bgClass = colorClass.split(' ').filter((c) => c.startsWith('bg-') || c.startsWith('border')).join(' ');
-  const textClass = colorClass.split(' ').filter((c) => c.startsWith('text-')).join(' ');
+  const bgClass = colorClass.split(' ').filter((c) => c.startsWith('bg-') || c.startsWith('border') || c.startsWith('dark:bg-') || c.startsWith('dark:border')).join(' ');
+  const textClass = colorClass.split(' ').filter((c) => c.startsWith('text-') || c.startsWith('dark:text-')).join(' ');
 
   return (
     <View className={cn('px-2 py-0.5 rounded-full self-start', bgClass, className)}>

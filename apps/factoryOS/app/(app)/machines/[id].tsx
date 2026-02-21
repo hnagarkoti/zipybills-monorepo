@@ -112,9 +112,9 @@ export default function MachineDetailRoute() {
       </Pressable>
 
       {/* Machine Header Card */}
-      <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 mb-4 shadow-sm">
+      <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-5 mb-4 shadow-sm">
         <View className="flex-row items-start">
-          <View className={`w-14 h-14 rounded-2xl items-center justify-center mr-4 ${machine.status === 'ACTIVE' ? 'bg-green-50 dark:bg-green-900/20' : machine.status === 'MAINTENANCE' ? 'bg-yellow-50 dark:bg-yellow-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
+          <View className={`w-14 h-14 rounded-2xl items-center justify-center mr-4 ${machine.status === 'ACTIVE' ? 'bg-green-50 dark:bg-green-900/30' : machine.status === 'MAINTENANCE' ? 'bg-yellow-50 dark:bg-yellow-900/30' : 'bg-red-50 dark:bg-red-900/30'}`}>
             <Factory size={28} color={machine.status === 'ACTIVE' ? machineStatusColors.ACTIVE.icon : machine.status === 'MAINTENANCE' ? machineStatusColors.MAINTENANCE.icon : machineStatusColors.INACTIVE.icon} />
           </View>
           <View className="flex-1">
@@ -141,13 +141,13 @@ export default function MachineDetailRoute() {
         </View>
 
         {/* Quick Status Actions */}
-        <View className="flex-row gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+        <View className="flex-row gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
           {['ACTIVE', 'MAINTENANCE', 'INACTIVE'].filter((s) => s !== machine.status).map((s) => (
             <Pressable
               key={s}
               onPress={() => handleStatusChange(s)}
               className={`flex-1 py-2 rounded-lg items-center border ${
-                s === 'ACTIVE' ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : s === 'MAINTENANCE' ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800' : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                s === 'ACTIVE' ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800' : s === 'MAINTENANCE' ? 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800' : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800'
               }`}
             >
               <Text className={`text-xs font-medium ${
@@ -171,7 +171,7 @@ export default function MachineDetailRoute() {
 
       {/* Production Progress */}
       {totalTarget > 0 && (
-        <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 mb-4">
+        <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-4 mb-4">
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">Production Progress</Text>
             <Text className="text-sm font-bold text-emerald-600">{efficiency}%</Text>
@@ -191,7 +191,7 @@ export default function MachineDetailRoute() {
           {todayPlans.map((p) => {
             const pct = p.target_quantity > 0 ? Math.round(((Number(p.actual_quantity) || 0) / p.target_quantity) * 100) : 0;
             return (
-              <View key={p.plan_id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-800 p-3 mb-2">
+              <View key={p.plan_id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-700 p-3 mb-2">
                 <View className="flex-row items-center justify-between mb-1">
                   <Text className="font-medium text-gray-800 dark:text-gray-200">{p.product_name}</Text>
                   <Badge variant={p.status === 'COMPLETED' ? 'success' : p.status === 'IN_PROGRESS' ? 'warning' : 'info'}>{p.status.replace('_', ' ')}</Badge>
@@ -212,11 +212,11 @@ export default function MachineDetailRoute() {
       {/* Downtime Overview */}
       <Text className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Downtime</Text>
       <View className="flex-row gap-2 mb-3">
-        <View className={`flex-1 rounded-xl p-3 border ${activeDowntime.length > 0 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'}`}>
+        <View className={`flex-1 rounded-xl p-3 border ${activeDowntime.length > 0 ? 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800'}`}>
           <Text className={`text-xs ${activeDowntime.length > 0 ? 'text-red-500' : 'text-green-500'}`}>Active Issues</Text>
           <Text className={`text-xl font-bold ${activeDowntime.length > 0 ? 'text-red-700' : 'text-green-700'}`}>{activeDowntime.length}</Text>
         </View>
-        <View className="flex-1 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-3">
+        <View className="flex-1 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800 rounded-xl p-3">
           <Text className="text-xs text-orange-500">Total Downtime</Text>
           <Text className="text-xl font-bold text-orange-700">{formatDuration(totalDowntimeMin)}</Text>
         </View>
@@ -226,7 +226,7 @@ export default function MachineDetailRoute() {
       {activeDowntime.map((log) => {
         const elapsedMin = Math.round((Date.now() - new Date(log.started_at).getTime()) / 60000);
         return (
-          <View key={log.downtime_id} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 mb-2">
+          <View key={log.downtime_id} className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-3 mb-2">
             <View className="flex-row items-center justify-between mb-1">
               <Text className="font-medium text-red-800">{log.category}</Text>
               <View className="bg-red-100 rounded-md px-2 py-0.5">
@@ -244,7 +244,7 @@ export default function MachineDetailRoute() {
         <View className="mt-2">
           <Text className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Recent Resolved</Text>
           {recentResolved.map((log) => (
-            <View key={log.downtime_id} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg p-2.5 mb-1.5">
+            <View key={log.downtime_id} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-lg p-2.5 mb-1.5">
               <View className="flex-row items-center justify-between">
                 <Text className="text-xs font-medium text-gray-700 dark:text-gray-300">{log.category}</Text>
                 <Text className="text-xs text-orange-600 font-medium">{formatDuration(log.duration_min || 0)}</Text>
@@ -258,7 +258,7 @@ export default function MachineDetailRoute() {
       )}
 
       {downtimeLogs.length === 0 && (
-        <View className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 items-center mb-4">
+        <View className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-4 items-center mb-4">
           <CheckCircle size={20} color={colors.emerald[500]} />
           <Text className="text-sm text-green-700 mt-1">No downtime recorded</Text>
         </View>

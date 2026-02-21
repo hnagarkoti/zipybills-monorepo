@@ -140,7 +140,7 @@ export function OperatorInputPage() {
           Tap a production plan to log hourly output for {today}
         </Text>
         {currentShift && (
-          <View className="mt-2 flex-row items-center bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-lg self-start">
+          <View className="mt-2 flex-row items-center bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-lg self-start">
             <View className="w-2 h-2 rounded-full bg-emerald-500 mr-2" />
             <Text className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
               Current shift: {currentShift.shift_name}
@@ -172,7 +172,7 @@ export function OperatorInputPage() {
       {loading ? (
         <Text className="text-center text-gray-400 py-8">Loading plans...</Text>
       ) : plans.length === 0 ? (
-        <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-6 mb-4 items-center">
+        <View className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl p-6 mb-4 items-center">
           <AlertTriangle size={32} color={colors.amber[500]} />
           <Text className="text-sm font-medium text-amber-700 dark:text-amber-400 mt-3">
             No active plans for today
@@ -416,7 +416,7 @@ function LogProductionModal({
   return (
     <Modal visible animationType="slide" transparent onRequestClose={onClose}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior="padding"
         className="flex-1"
       >
         <Pressable className="flex-1 bg-black/50 justify-end" onPress={onClose}>
@@ -431,7 +431,7 @@ function LogProductionModal({
 
             <ScrollView showsVerticalScrollIndicator={false} bounces={false} keyboardShouldPersistTaps="handled">
               {/* ─── Plan Summary Header ─── */}
-              <View className="px-5 pb-4 border-b border-gray-100 dark:border-gray-800">
+              <View className="px-5 pb-4 border-b border-gray-100 dark:border-gray-700">
                 <View className="flex-row items-start justify-between">
                   <View className="flex-1 mr-3">
                     <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -561,7 +561,7 @@ function LogProductionModal({
                           }}
                           className={`px-3 py-2 rounded-lg border ${
                             selected
-                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30'
                               : 'border-gray-200 dark:border-gray-700'
                           }`}
                         >

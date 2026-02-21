@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, KeyboardAvoidingView } from 'react-native';
 import {
   Wrench, Hammer, RefreshCw, Package, Zap, Search, Pin,
   AlertTriangle, CheckCircle, CircleOff, Plus, Calendar,
@@ -11,12 +11,12 @@ import { colors, statusColors, downtimeCategoryColors, useSemanticColors } from 
 import { useCompliance } from '@zipybills/ui-store';
 
 const DOWNTIME_CATEGORIES = [
-  { value: 'BREAKDOWN', label: 'Breakdown', icon: Wrench, color: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' },
-  { value: 'MAINTENANCE', label: 'Maintenance', icon: Hammer, color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400' },
-  { value: 'CHANGEOVER', label: 'Changeover', icon: RefreshCw, color: 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400' },
-  { value: 'MATERIAL', label: 'Material', icon: Package, color: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400' },
-  { value: 'POWER', label: 'Power', icon: Zap, color: 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400' },
-  { value: 'QUALITY', label: 'Quality', icon: Search, color: 'bg-pink-50 dark:bg-pink-900/20 border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-400' },
+  { value: 'BREAKDOWN', label: 'Breakdown', icon: Wrench, color: 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' },
+  { value: 'MAINTENANCE', label: 'Maintenance', icon: Hammer, color: 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400' },
+  { value: 'CHANGEOVER', label: 'Changeover', icon: RefreshCw, color: 'bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400' },
+  { value: 'MATERIAL', label: 'Material', icon: Package, color: 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400' },
+  { value: 'POWER', label: 'Power', icon: Zap, color: 'bg-orange-50 dark:bg-orange-900/30 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400' },
+  { value: 'QUALITY', label: 'Quality', icon: Search, color: 'bg-pink-50 dark:bg-pink-900/30 border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-400' },
   { value: 'OTHER', label: 'Other', icon: Pin, color: 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300' },
 ];
 
@@ -89,7 +89,7 @@ export function DowntimePage() {
   const totalDowntimeToday = resolvedLogs.reduce((s, l) => s + (l.duration_min || 0), 0);
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+    <KeyboardAvoidingView behavior="padding" className="flex-1">
     <ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
       <PageHeader
         title="Downtime Tracking"
@@ -126,15 +126,15 @@ export function DowntimePage() {
       </ScrollView>
 
       <View className="flex-row gap-2 mb-4">
-        <View className={`flex-1 rounded-xl p-3 ${activeLogs.length > 0 ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}>
+        <View className={`flex-1 rounded-xl p-3 ${activeLogs.length > 0 ? 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800'}`}>
           <Text className={`text-xs ${activeLogs.length > 0 ? 'text-red-500' : 'text-green-500'}`}>Active Issues</Text>
           <Text className={`text-2xl font-bold ${activeLogs.length > 0 ? 'text-red-700' : 'text-green-700'}`}>{activeLogs.length}</Text>
         </View>
-        <View className="flex-1 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-3">
+        <View className="flex-1 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800 rounded-xl p-3">
           <Text className="text-xs text-orange-500">Total Downtime</Text>
           <Text className="text-2xl font-bold text-orange-700">{formatDuration(totalDowntimeToday)}</Text>
         </View>
-        <View className="flex-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3">
+        <View className="flex-1 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-3">
           <Text className="text-xs text-blue-500">Events Today</Text>
           <Text className="text-2xl font-bold text-blue-700">{logs.length}</Text>
         </View>
@@ -152,7 +152,7 @@ export function DowntimePage() {
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">Machine *</Text>
           <View className="flex-row flex-wrap gap-2 mb-3">
             {machines.filter((m) => m.status === 'ACTIVE').map((m) => (
-              <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+              <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-red-500 bg-red-50 dark:bg-red-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                 <Text className={`text-sm ${form.machine_id === String(m.machine_id) ? 'text-red-700 dark:text-red-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{m.machine_name}</Text>
               </Pressable>
             ))}
@@ -162,7 +162,7 @@ export function DowntimePage() {
             {DOWNTIME_CATEGORIES.map((cat) => {
               const CatIcon = cat.icon;
               return (
-              <Pressable key={cat.value} onPress={() => setForm({ ...form, category: cat.value })} className={`flex-row items-center px-3 py-2 rounded-lg border ${form.category === cat.value ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+              <Pressable key={cat.value} onPress={() => setForm({ ...form, category: cat.value })} className={`flex-row items-center px-3 py-2 rounded-lg border ${form.category === cat.value ? 'border-red-500 bg-red-50 dark:bg-red-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                 <CatIcon size={14} color={form.category === cat.value ? colors.red[700] : sc.iconDefault} />
                 <Text className={`text-sm ml-1.5 ${form.category === cat.value ? 'text-red-700 dark:text-red-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{cat.label}</Text>
               </Pressable>
@@ -186,7 +186,7 @@ export function DowntimePage() {
           {activeLogs.map((log) => {
             const elapsedMin = Math.round((Date.now() - new Date(log.started_at).getTime()) / 60000);
             return (
-            <View key={log.downtime_id} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-2">
+            <View key={log.downtime_id} className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-2">
               <View className="flex-row items-center justify-between mb-2">
                 <Text className="font-semibold text-gray-900 dark:text-gray-100">{log.machine_name}</Text>
                 <CategoryBadge category={log.category} />
@@ -211,7 +211,7 @@ export function DowntimePage() {
         <View>
           <Text className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Resolved Today</Text>
           {resolvedLogs.map((log) => (
-            <View key={log.downtime_id} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 mb-2">
+            <View key={log.downtime_id} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl p-3 mb-2">
               <View className="flex-row items-center justify-between mb-1">
                 <Text className="font-medium text-gray-800 dark:text-gray-200">{log.machine_name}</Text>
                 <CategoryBadge category={log.category} />

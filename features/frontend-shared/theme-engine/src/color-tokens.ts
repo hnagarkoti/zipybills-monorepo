@@ -35,11 +35,11 @@ export const colors = {
     300: '#D1D5DB',
     400: '#9CA3AF',
     500: '#6B7280',
-    600: '#4B5563',
-    700: '#374151',
-    800: '#1F2937',
-    900: '#111827',
-    950: '#030712',
+    600: '#475569',   // slate-600
+    700: '#334155',   // slate-700
+    800: '#1e293b',   // slate-800
+    900: '#0f172a',   // slate-900
+    950: '#020617',   // slate-950
   },
 
   emerald: {
@@ -122,9 +122,9 @@ export const statusColors = {
 // Consistent mapping across all machine-related UI.
 
 export const machineStatusColors = {
-  ACTIVE:      { icon: '#059669', bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-200 dark:border-emerald-800' },
-  MAINTENANCE: { icon: '#D97706', bg: 'bg-amber-50 dark:bg-amber-900/20',    text: 'text-amber-700 dark:text-amber-400',     border: 'border-amber-200 dark:border-amber-800' },
-  INACTIVE:    { icon: '#DC2626', bg: 'bg-red-50 dark:bg-red-900/20',        text: 'text-red-700 dark:text-red-400',         border: 'border-red-200 dark:border-red-800' },
+  ACTIVE:      { icon: '#059669', bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-200 dark:border-emerald-700' },
+  MAINTENANCE: { icon: '#D97706', bg: 'bg-amber-50 dark:bg-amber-900/30',    text: 'text-amber-700 dark:text-amber-400',     border: 'border-amber-200 dark:border-amber-700' },
+  INACTIVE:    { icon: '#DC2626', bg: 'bg-red-50 dark:bg-red-900/30',        text: 'text-red-700 dark:text-red-400',         border: 'border-red-200 dark:border-red-700' },
 } as const;
 
 // ─── Downtime Category Colors ────────────────────────────────────────
@@ -153,9 +153,9 @@ export const kpiColors = {
 // Visual distinction for shifts in calendar/planning views.
 
 export const shiftColors = {
-  morning:   { icon: colors.blue[500],   bg: 'bg-blue-50 dark:bg-blue-900/20',   text: 'text-blue-700 dark:text-blue-400' },
-  afternoon: { icon: colors.amber[500],  bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-700 dark:text-amber-400' },
-  night:     { icon: colors.violet[500], bg: 'bg-violet-50 dark:bg-violet-900/20', text: 'text-violet-700 dark:text-violet-400' },
+  morning:   { icon: colors.blue[500],   bg: 'bg-blue-50 dark:bg-blue-900/30',   text: 'text-blue-700 dark:text-blue-400' },
+  afternoon: { icon: colors.amber[500],  bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400' },
+  night:     { icon: colors.violet[500], bg: 'bg-violet-50 dark:bg-violet-900/30', text: 'text-violet-700 dark:text-violet-400' },
 } as const;
 
 // ─── Progress Bar Color Thresholds ──────────────────────────────────
@@ -178,15 +178,15 @@ type SemanticColorKey =
   | 'surfaceBg' | 'cardBg';
 
 const SEMANTIC_MAP: Record<SemanticColorKey, { light: string; dark: string }> = {
-  textPrimary:   { light: colors.gray[900], dark: '#F9FAFB' },
-  textSecondary: { light: colors.gray[600], dark: '#9CA3AF' },
-  textMuted:     { light: colors.gray[400], dark: '#6B7280' },
-  iconDefault:   { light: colors.gray[500], dark: '#9CA3AF' },
-  iconMuted:     { light: colors.gray[400], dark: '#6B7280' },
-  border:        { light: colors.gray[200], dark: '#374151' },
-  divider:       { light: colors.gray[100], dark: '#1F2937' },
-  surfaceBg:     { light: colors.white,     dark: '#030712' },
-  cardBg:        { light: colors.white,     dark: colors.gray[900] },
+  textPrimary:   { light: colors.gray[900], dark: '#F8FAFC' },  // slate-50
+  textSecondary: { light: colors.gray[600], dark: '#94A3B8' },  // slate-400
+  textMuted:     { light: colors.gray[400], dark: '#64748B' },  // slate-500
+  iconDefault:   { light: colors.gray[500], dark: '#94A3B8' },  // slate-400
+  iconMuted:     { light: colors.gray[400], dark: '#64748B' },  // slate-500
+  border:        { light: colors.gray[200], dark: '#334155' },  // slate-700
+  divider:       { light: colors.gray[100], dark: '#1e293b' },  // slate-800
+  surfaceBg:     { light: colors.white,     dark: '#020617' },  // slate-950
+  cardBg:        { light: colors.white,     dark: '#0f172a' },  // slate-900
 };
 
 /**

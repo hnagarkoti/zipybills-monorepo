@@ -10,6 +10,9 @@ import {
   type CloudBackupResult,
   type GDriveBackupResult,
   type GDriveAuthUrlResult,
+  type BackupOptions,
+  BACKUP_MODULES,
+  type BackupModuleId,
 } from '@zipybills/factory-backup-service-interface';
 
 export type {
@@ -19,7 +22,11 @@ export type {
   CloudBackupResult,
   GDriveBackupResult,
   GDriveAuthUrlResult,
+  BackupOptions,
+  BackupModuleId,
 } from '@zipybills/factory-backup-service-interface';
+
+export { BACKUP_MODULES } from '@zipybills/factory-backup-service-interface';
 
 export const backupApi = new BackupApi();
 
@@ -31,12 +38,12 @@ export async function fetchCapabilities(): Promise<BackupCapabilities> {
   return backupApi.getCapabilities();
 }
 
-export async function createExport(): Promise<ExportResult> {
-  return backupApi.createExport();
+export async function createExport(options?: BackupOptions): Promise<ExportResult> {
+  return backupApi.createExport(options);
 }
 
-export async function createCloudBackup(): Promise<CloudBackupResult> {
-  return backupApi.createCloudBackup();
+export async function createCloudBackup(options?: BackupOptions): Promise<CloudBackupResult> {
+  return backupApi.createCloudBackup(options);
 }
 
 export function getDownloadUrl(backupId: string): string {
@@ -51,8 +58,8 @@ export async function getGDriveAuthUrl(): Promise<GDriveAuthUrlResult> {
   return backupApi.getGDriveAuthUrl();
 }
 
-export async function createGDriveBackup(): Promise<GDriveBackupResult> {
-  return backupApi.createGDriveBackup();
+export async function createGDriveBackup(options?: BackupOptions): Promise<GDriveBackupResult> {
+  return backupApi.createGDriveBackup(options);
 }
 
 export async function disconnectGDrive(): Promise<void> {

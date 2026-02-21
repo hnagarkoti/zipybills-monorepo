@@ -20,9 +20,9 @@ export interface NotFoundPageProps {
 export function NotFoundPage({ onGoHome, onGoBack }: NotFoundPageProps) {
   const sc = useSemanticColors();
   return (
-    <View className="flex-1 bg-slate-50 dark:bg-gray-950 items-center justify-center px-6">
+    <View className="flex-1 bg-gray-50 dark:bg-gray-950 items-center justify-center px-6">
       {/* Visual */}
-      <View className="w-24 h-24 bg-slate-100 dark:bg-gray-800 rounded-3xl items-center justify-center mb-6 border-2 border-dashed border-slate-300 dark:border-gray-600">
+      <View className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-3xl items-center justify-center mb-6 border-2 border-dashed border-gray-300 dark:border-gray-600">
         <SearchX size={40} color={sc.iconMuted} />
       </View>
 
@@ -41,7 +41,7 @@ export function NotFoundPage({ onGoHome, onGoBack }: NotFoundPageProps) {
       </Text>
 
       {/* Status Indicator */}
-      <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl px-4 py-3 mb-8 flex-row items-center">
+      <View className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl px-4 py-3 mb-8 flex-row items-center">
         <View className="w-2 h-2 rounded-full bg-amber-400 mr-2" />
         <Text className="text-xs text-amber-700 dark:text-amber-400 font-medium">
           System Status: All services operational

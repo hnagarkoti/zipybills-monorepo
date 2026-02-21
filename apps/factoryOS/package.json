@@ -23,6 +23,7 @@
     "@zipybills/factory-feature-registry": "workspace:*",
     "@zipybills/factory-home-frontend": "workspace:*",
     "@zipybills/factory-machines-frontend": "workspace:*",
+    "@zipybills/factory-paytrack-frontend": "workspace:*",
     "@zipybills/factory-planning-frontend": "workspace:*",
     "@zipybills/factory-reports-frontend": "workspace:*",
     "@zipybills/factory-settings-frontend": "workspace:*",

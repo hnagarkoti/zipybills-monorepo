@@ -46,6 +46,7 @@ export function ThemeProvider({
   const tokens = useThemeStore((s) => s.tokens);
   const context = useThemeStore((s) => s.context);
   const isReady = useThemeStore((s) => s.isReady);
+  const isExplicitChoice = useThemeStore((s) => s.isExplicitChoice);
   const updateContext = useThemeStore((s) => s.updateContext);
   const resolveTheme = useThemeStore((s) => s.resolveTheme);
 
@@ -55,14 +56,21 @@ export function ThemeProvider({
   useEffect(() => {
     const updates: Partial<typeof context> = { deploymentMode };
 
-    // Set base theme: prop > stored > system preference > light
+    // Set base theme priority:
+    //   1. Explicit prop override (e.g. storybook / tests)
+    //   2. User's persisted explicit choice (never override with OS preference)
+    //   3. OS colour-scheme auto-detection (only when no choice has been made)
+    //   4. Default 'light'
     if (initialBaseTheme) {
       updates.baseTheme = initialBaseTheme;
-    } else if (!context.baseTheme || context.baseTheme === 'light') {
+    } else if (!isExplicitChoice) {
+      // No saved user choice yet — respect OS dark mode preference
       if (autoDetectColorScheme && systemColorScheme === 'dark') {
         updates.baseTheme = 'dark';
       }
     }
+    // else: isExplicitChoice === true → user has manually picked a theme,
+    //       leave context.baseTheme exactly as persisted (light or dark).
 
     if (tenantId && tenantId !== context.tenantId) {
       updates.tenantId = tenantId;
@@ -80,11 +88,12 @@ export function ThemeProvider({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ─── Sync system color scheme changes ───────
-  // Only auto-detect on first mount when no explicit user choice is stored.
-  // After that, respect the user's manual theme selection and don't override.
-  // Users can toggle theme via Settings; system dark mode only applies at
-  // initial launch when no preference has been persisted yet.
+  // ─── Note on system colour-scheme sync ─────
+  // We intentionally do NOT re-run the init logic when systemColorScheme
+  // changes at runtime. Once the user has made an explicit choice
+  // (isExplicitChoice === true), their preference is locked in until they
+  // change it again via Settings or call reset(). OS dark mode toggling
+  // will never silently override the user's selection.
 
   // ─── Apply CSS variables on web ─────────────
   useEffect(() => {

@@ -71,10 +71,10 @@ export function AdminPage() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-950">
       {/* Header */}
-      <View className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 pt-4 pb-0">
+      <View className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 pt-4 pb-0">
         <View className="flex-row items-center mb-3">
           <Shield size={22} color={colors.blue[600]} />
-          <Text className="text-xl font-bold text-gray-900 dark:text-white ml-2">
+          <Text className="text-xl font-bold text-gray-900 dark:text-gray-100 ml-2">
             {t('admin.title')}
           </Text>
         </View>
@@ -226,7 +226,7 @@ function AuditLogsTab() {
       <View className="bg-white dark:bg-gray-900 rounded-xl p-3 mb-4 flex-row items-center border border-gray-200 dark:border-gray-700">
         <Search size={16} color={colors.gray[400]} />
         <TextInput
-          className="flex-1 ml-2 text-sm text-gray-900 dark:text-white"
+          className="flex-1 ml-2 text-sm text-gray-900 dark:text-gray-100"
           placeholder={t('admin.searchAuditLogs')}
           placeholderTextColor={colors.gray[400]}
           value={search}
@@ -306,7 +306,7 @@ function BackupsTab() {
       {/* Create Backup */}
       <SectionCard title={t('admin.createBackup')}>
         <TextInput
-          className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white mb-3"
+          className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-gray-100 mb-3"
           placeholder={t('admin.notesOptional')}
           placeholderTextColor={colors.gray[400]}
           value={notes}
@@ -343,10 +343,10 @@ function BackupsTab() {
           data?.backups.map((b) => (
             <View
               key={b.id}
-              className="flex-row items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800"
+              className="flex-row items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700"
             >
               <View className="flex-1">
-                <Text className="text-sm font-medium text-gray-900 dark:text-white">
+                <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {b.id}
                 </Text>
                 <Text className="text-xs text-gray-500 dark:text-gray-400">
@@ -473,7 +473,7 @@ function ExportTab() {
           <View className="flex-1">
             <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('admin.startDate')}</Text>
             <TextInput
-              className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-gray-100"
               placeholder="YYYY-MM-DD"
               placeholderTextColor={colors.gray[400]}
               value={startDate}
@@ -483,7 +483,7 @@ function ExportTab() {
           <View className="flex-1">
             <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('admin.endDate')}</Text>
             <TextInput
-              className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-white"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm text-gray-900 dark:text-gray-100"
               placeholder="YYYY-MM-DD"
               placeholderTextColor={colors.gray[400]}
               value={endDate}
@@ -518,7 +518,7 @@ function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: s
         {icon}
         <Text className="text-xs text-gray-500 dark:text-gray-400 ml-1.5">{label}</Text>
       </View>
-      <Text className="text-2xl font-bold text-gray-900 dark:text-white">{value}</Text>
+      <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</Text>
       {sub && <Text className="text-xs text-gray-400 mt-0.5">{sub}</Text>}
     </View>
   );
@@ -527,7 +527,7 @@ function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: s
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 mb-4">
-      <Text className="text-base font-semibold text-gray-900 dark:text-white mb-3">{title}</Text>
+      <Text className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">{title}</Text>
       {children}
     </View>
   );
@@ -535,11 +535,11 @@ function SectionCard({ title, children }: { title: string; children: React.React
 
 function InfoRow({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <View className="flex-row items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800">
+    <View className="flex-row items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700">
       <Text className="text-sm text-gray-500 dark:text-gray-400">{label}</Text>
       <Text
         className={`text-sm font-medium ${
-          accent ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-white'
+          accent ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-gray-100'
         }`}
       >
         {value}
@@ -586,9 +586,9 @@ function FeatureFlagRow({ flag }: { flag: { feature_id: string; name: string; en
   });
 
   return (
-    <View className="flex-row items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800">
+    <View className="flex-row items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700">
       <View className="flex-1 mr-3">
-        <Text className="text-sm font-medium text-gray-900 dark:text-white">{flag.name}</Text>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">{flag.name}</Text>
         {flag.description && (
           <Text className="text-xs text-gray-500 dark:text-gray-400">{flag.description}</Text>
         )}
@@ -642,10 +642,10 @@ function ExportReportRow({
   const disabled = !startDate || !endDate;
 
   return (
-    <View className="flex-row items-center justify-between py-3 border-b border-gray-50 dark:border-gray-800">
+    <View className="flex-row items-center justify-between py-3 border-b border-gray-50 dark:border-gray-700">
       <View className="flex-row items-center flex-1">
         {report.icon}
-        <Text className="text-sm text-gray-900 dark:text-white ml-2">{report.label}</Text>
+        <Text className="text-sm text-gray-900 dark:text-gray-100 ml-2">{report.label}</Text>
       </View>
       <View className="flex-row gap-2">
         <Pressable

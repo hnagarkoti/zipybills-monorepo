@@ -18,7 +18,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
   if (items.length === 0) return null;
 
   return (
-    <View className="flex-row items-center px-4 py-2 bg-gray-50 dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800">
+    <View className="flex-row items-center px-4 py-2 bg-gray-50 dark:bg-gray-950 border-b border-gray-100 dark:border-gray-700">
       {/* Home icon as first crumb */}
       <Pressable
         onPress={items[0]?.onPress}

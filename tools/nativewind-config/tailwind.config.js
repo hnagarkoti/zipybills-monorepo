@@ -71,6 +71,10 @@ module.exports = {
           800: '#232255',
           900: '#12112A',
         },
+        // Gray scale uses slate-tinted values (600–950) for a richer dark mode.
+        // Light shades (50–500) remain neutral; dark shades carry a subtle
+        // blue undertone that provides better visual hierarchy and warmth
+        // compared to pure gray.
         gray: {
           50:  '#F9FAFB',
           100: '#F3F4F6',
@@ -78,11 +82,11 @@ module.exports = {
           300: '#D1D5DB',
           400: '#9CA3AF',
           500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827',
-          950: '#030712',
+          600: '#475569',   // slate-600 (was #4B5563)
+          700: '#334155',   // slate-700 (was #374151)
+          800: '#1e293b',   // slate-800 (was #1F2937)
+          900: '#0f172a',   // slate-900 (was #111827)
+          950: '#020617',   // slate-950 (was #030712)
         },
 
         // ─── Semantic status colors ─────────────────────────────

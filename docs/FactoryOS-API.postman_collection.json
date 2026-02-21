@@ -1,0 +1,1092 @@
+{
+  "info": {
+    "name": "FactoryOS API",
+    "description": "Complete API collection for FactoryOS — a multi-tenant factory management SaaS platform.\n\nBase URL: http://localhost:4000\nAuth: Bearer token (JWT) — obtained via /api/v1/auth/login or /api/v1/saas/login\n\n## Phases\n- Phase 1: Core Production (Machines, Shifts, Plans, Downtime, Reports)\n- Phase 2: Enterprise (License, Permissions, Audit, Backups, Export, Compliance)\n- Phase 3: SaaS (Multi-tenant auth, Billing, Tenant management)\n- Phase 4: Super Admin (Cross-tenant admin, Sync)\n- Phase 5: PayTrack (Vendors, Projects, Materials, Payments)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" },
+    { "key": "tenant_id", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Core",
+      "description": "Health checks, feature flags, and metrics",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": "{{base_url}}/api/health", "description": "Basic health check — returns server status" }
+        },
+        {
+          "name": "Health (Live)",
+          "request": { "method": "GET", "url": "{{base_url}}/api/health/live", "description": "Liveness probe for k8s/container orchestration" }
+        },
+        {
+          "name": "Health (Ready)",
+          "request": { "method": "GET", "url": "{{base_url}}/api/health/ready", "description": "Readiness probe — checks DB connectivity" }
+        },
+        {
+          "name": "Health (Startup)",
+          "request": { "method": "GET", "url": "{{base_url}}/api/health/startup", "description": "Startup probe — confirms all services initialized" }
+        },
+        {
+          "name": "Get Features",
+          "request": { "method": "GET", "url": "{{base_url}}/api/features", "description": "List all enabled feature flags" }
+        },
+        {
+          "name": "Metrics (Prometheus)",
+          "request": { "method": "GET", "url": "{{base_url}}/api/metrics", "description": "Prometheus-format metrics" }
+        },
+        {
+          "name": "Metrics (JSON)",
+          "request": { "method": "GET", "url": "{{base_url}}/api/metrics/json", "description": "JSON-format metrics for dashboards" }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication & user profile management",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/auth/login",
+            "description": "Tenant-scoped login — returns JWT token",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"YourPassword123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/auth/me", "description": "Get authenticated user's profile (requires Bearer token)" }
+        },
+        {
+          "name": "Get Account Details",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/auth/account", "description": "Detailed account info including tenant metadata" }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/v1/auth/change-password",
+            "description": "Change current user's password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"OldPassword123\",\n  \"newPassword\": \"NewPassword456\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User CRUD (admin-only)",
+      "item": [
+        {
+          "name": "List Users",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/users", "description": "List all users in the tenant" }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/users",
+            "description": "Create a new user in the tenant",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"Test@1234\",\n  \"full_name\": \"New User\",\n  \"role\": \"OPERATOR\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/users/:id",
+            "description": "Update an existing user",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Updated Name\",\n  \"role\": \"SUPERVISOR\",\n  \"is_active\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/users/:id", "description": "Soft-delete a user" }
+        }
+      ]
+    },
+    {
+      "name": "Machines",
+      "description": "Machine management CRUD",
+      "item": [
+        {
+          "name": "List Machines",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/machines", "description": "List all machines for the tenant" }
+        },
+        {
+          "name": "Get Machine",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/machines/:id", "description": "Get a single machine by ID" }
+        },
+        {
+          "name": "Create Machine",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/machines",
+            "description": "Create a new machine",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_name\": \"CNC Machine B1\",\n  \"machine_code\": \"CNC-B1\",\n  \"machine_type\": \"CNC\",\n  \"department\": \"Machining\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Machine",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/machines/:id",
+            "description": "Update machine details",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_name\": \"Updated CNC B1\",\n  \"status\": \"MAINTENANCE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Machine",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/machines/:id", "description": "Soft-delete a machine" }
+        }
+      ]
+    },
+    {
+      "name": "Shifts",
+      "description": "Shift management",
+      "item": [
+        {
+          "name": "List Shifts",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/shifts", "description": "List all shifts for the tenant" }
+        },
+        {
+          "name": "Create Shift",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/shifts",
+            "description": "Create a new shift",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shift_name\": \"Morning\",\n  \"start_time\": \"06:00\",\n  \"end_time\": \"14:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Shift",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/shifts/:id",
+            "description": "Update shift details",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shift_name\": \"Morning Extended\",\n  \"end_time\": \"15:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Shift",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/shifts/:id", "description": "Soft-delete a shift" }
+        },
+        {
+          "name": "Bulk Create Shifts",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/shifts/bulk-create",
+            "description": "Create multiple shifts at once",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shifts\": [\n    { \"shift_name\": \"Morning\", \"start_time\": \"06:00\", \"end_time\": \"14:00\" },\n    { \"shift_name\": \"Evening\", \"start_time\": \"14:00\", \"end_time\": \"22:00\" }\n  ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Production Plans",
+      "description": "Production planning — CRUD, bulk ops, status changes",
+      "item": [
+        {
+          "name": "List Plans",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/plans?date=2025-01-15&machine_id=1&shift_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "plans"],
+              "query": [
+                { "key": "date", "value": "2025-01-15", "description": "Filter by date (YYYY-MM-DD)" },
+                { "key": "machine_id", "value": "1", "description": "Filter by machine" },
+                { "key": "shift_id", "value": "1", "description": "Filter by shift" }
+              ]
+            },
+            "description": "List production plans with optional date/machine/shift filters"
+          }
+        },
+        {
+          "name": "Get Plan",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/plans/:id", "description": "Get a single production plan by ID" }
+        },
+        {
+          "name": "Create Plan",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/plans",
+            "description": "Create a new production plan",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": 1,\n  \"shift_id\": 1,\n  \"plan_date\": \"2025-01-20\",\n  \"product_name\": \"Gear Shaft A-200\",\n  \"product_code\": \"GS-A200\",\n  \"target_quantity\": 500\n}"
+            }
+          }
+        },
+        {
+          "name": "Bulk Create Plans",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/plans/bulk",
+            "description": "Create multiple plans at once",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plans\": [\n    { \"machine_id\": 1, \"shift_id\": 1, \"plan_date\": \"2025-01-20\", \"product_name\": \"Part A\", \"target_quantity\": 100 },\n    { \"machine_id\": 2, \"shift_id\": 2, \"plan_date\": \"2025-01-20\", \"product_name\": \"Part B\", \"target_quantity\": 200 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Duplicate Plan",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/plans/duplicate",
+            "description": "Duplicate an existing plan to a new date",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": 1,\n  \"new_date\": \"2025-01-25\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Plan",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/plans/:id",
+            "description": "Update a production plan",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"target_quantity\": 600,\n  \"product_name\": \"Updated Product\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Plan Status",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/plans/:id/status",
+            "description": "Change plan status (PLANNED → IN_PROGRESS → COMPLETED / CANCELLED)",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Plan",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/plans/:id", "description": "Delete a production plan" }
+        }
+      ]
+    },
+    {
+      "name": "Production Logs",
+      "description": "Actual production output logging",
+      "item": [
+        {
+          "name": "List Production Logs",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/production-logs", "description": "List production logs with optional plan/date filters" }
+        },
+        {
+          "name": "Create Production Log",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/production-logs",
+            "description": "Log actual production output for a plan",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": 1,\n  \"machine_id\": 1,\n  \"shift_id\": 1,\n  \"quantity_produced\": 480,\n  \"quantity_ok\": 470,\n  \"quantity_rejected\": 10\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Downtime",
+      "description": "Machine downtime tracking",
+      "item": [
+        {
+          "name": "List Downtime Events",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/downtime", "description": "List all downtime events for the tenant" }
+        },
+        {
+          "name": "Create Downtime",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/downtime",
+            "description": "Record a new downtime event",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": 1,\n  \"reason\": \"Scheduled maintenance\",\n  \"category\": \"planned\",\n  \"start_time\": \"2025-01-15T08:00:00Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Downtime",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/downtime/:id",
+            "description": "Update a downtime event",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Updated reason\",\n  \"notes\": \"Additional notes\"\n}"
+            }
+          }
+        },
+        {
+          "name": "End Downtime",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/downtime/:id/end",
+            "description": "Mark a downtime event as ended",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"end_time\": \"2025-01-15T10:30:00Z\",\n  \"resolution\": \"Belt replaced\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Downtime",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/downtime/:id", "description": "Delete a downtime event" }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "description": "Dashboard data aggregation",
+      "item": [
+        {
+          "name": "Get Dashboard",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/dashboard", "description": "Aggregated dashboard metrics — today's plans, production, downtime, efficiency" }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "description": "Production & efficiency reports",
+      "item": [
+        {
+          "name": "Production Report",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/reports/production", "description": "Production summary with date range filters" }
+        },
+        {
+          "name": "Machine-wise Report",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/reports/machine-wise", "description": "Performance breakdown by machine" }
+        },
+        {
+          "name": "Shift-wise Report",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/reports/shift-wise", "description": "Performance breakdown by shift" }
+        },
+        {
+          "name": "Rejections Report",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/reports/rejections", "description": "Rejection rates and trends" }
+        }
+      ]
+    },
+    {
+      "name": "Theme",
+      "description": "UI theme resolution",
+      "item": [
+        {
+          "name": "Resolve Theme",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/theme/resolve",
+            "description": "Resolve the active theme for current tenant/user",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Available Themes",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/theme/available", "description": "List all available themes" }
+        },
+        {
+          "name": "Theme Stats",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/theme/stats", "description": "Theme usage statistics" }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Tenant admin operations — setup, seeding, config",
+      "item": [
+        {
+          "name": "Admin Features",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/features", "description": "Get admin-visible feature flags" }
+        },
+        {
+          "name": "Admin Dashboard",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/dashboard", "description": "Admin dashboard — system stats, user counts, etc." }
+        },
+        {
+          "name": "Admin Users",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/users", "description": "List all users (admin view with activity data)" }
+        },
+        {
+          "name": "Setup Status",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/setup-status", "description": "Check if tenant has initial data (machines, shifts, plans, vendors, materials). Returns needsSetup boolean." }
+        },
+        {
+          "name": "Seed Sample Data (SSE)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/admin/seed-sample-data",
+            "description": "Generate sample factory + PayTrack data. Returns Server-Sent Events (SSE) stream with progress updates. Final event contains created counts and test credentials."
+          }
+        },
+        {
+          "name": "DB Stats",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/db-stats", "description": "Database table sizes and row counts" }
+        },
+        {
+          "name": "Config",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/config", "description": "Current server configuration (safe values only)" }
+        },
+        {
+          "name": "Admin Health",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/health", "description": "Detailed health check for admin (DB, memory, uptime)" }
+        }
+      ]
+    },
+    {
+      "name": "License",
+      "description": "License / plan management",
+      "item": [
+        {
+          "name": "License Status",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/license/status", "description": "Current license tier and features" }
+        },
+        {
+          "name": "Activate License",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/license/activate",
+            "description": "Activate a license key",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"license_key\": \"XXXX-XXXX-XXXX-XXXX\"\n}" }
+          }
+        },
+        {
+          "name": "License Tiers",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/license/tiers", "description": "Available license tiers and pricing" }
+        }
+      ]
+    },
+    {
+      "name": "Permissions",
+      "description": "Role-based access control",
+      "item": [
+        {
+          "name": "My Permissions",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/permissions/me", "description": "Get current user's resolved permissions" }
+        },
+        {
+          "name": "All Roles",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/permissions/roles", "description": "List all available roles" }
+        },
+        {
+          "name": "All Permissions",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/permissions/all", "description": "Full permissions matrix" }
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "description": "Audit log tracking",
+      "item": [
+        {
+          "name": "Audit Logs",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/audit/logs", "description": "List audit log entries with pagination" }
+        },
+        {
+          "name": "Export Audit",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/audit/export", "description": "Export audit logs as CSV/JSON" }
+        },
+        {
+          "name": "Audit Stats",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/audit/stats", "description": "Audit activity statistics" }
+        },
+        {
+          "name": "Global Audit",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/audit/global", "description": "Cross-tenant audit (super-admin only)" }
+        }
+      ]
+    },
+    {
+      "name": "Backups",
+      "description": "Database backup management",
+      "item": [
+        {
+          "name": "List Backups",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/backups", "description": "List all backups for the tenant" }
+        },
+        {
+          "name": "Create Backup",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/backups",
+            "description": "Trigger a new backup",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"Pre-upgrade backup\"\n}" }
+          }
+        },
+        {
+          "name": "Download Backup",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/backups/:id/download", "description": "Download backup file" }
+        },
+        {
+          "name": "Restore Backup",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/backups/:id/restore",
+            "description": "Restore from a backup"
+          }
+        },
+        {
+          "name": "Delete Backup",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/backups/:id", "description": "Delete a backup" }
+        }
+      ]
+    },
+    {
+      "name": "Export",
+      "description": "Data export (CSV/Excel)",
+      "item": [
+        {
+          "name": "Export Production",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/production", "description": "Export production data" }
+        },
+        {
+          "name": "Export Machine-wise",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/machine-wise", "description": "Export machine-wise report" }
+        },
+        {
+          "name": "Export Shift-wise",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/shift-wise", "description": "Export shift-wise report" }
+        },
+        {
+          "name": "Export Downtime",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/downtime", "description": "Export downtime events" }
+        },
+        {
+          "name": "Export Efficiency",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/efficiency", "description": "Export efficiency metrics" }
+        },
+        {
+          "name": "Export Summary",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/export/summary", "description": "Export overall summary" }
+        }
+      ]
+    },
+    {
+      "name": "Compliance",
+      "description": "Compliance & data governance settings",
+      "item": [
+        {
+          "name": "Get Compliance Settings",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/compliance/settings", "description": "Current compliance configuration" }
+        },
+        {
+          "name": "Update Compliance Settings",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/compliance/settings",
+            "description": "Update compliance settings",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data_retention_days\": 365,\n  \"require_reason_for_delete\": true\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tenant Backups",
+      "description": "Tenant-level data export/import",
+      "item": [
+        {
+          "name": "List Tenant Backups",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenant-backups", "description": "List tenant data exports" }
+        },
+        {
+          "name": "Export Tenant Data",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/tenant-backups/export",
+            "description": "Export all tenant data as a portable archive"
+          }
+        },
+        {
+          "name": "Download Tenant Backup",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenant-backups/:id/download", "description": "Download a tenant data export" }
+        }
+      ]
+    },
+    {
+      "name": "SaaS Auth",
+      "description": "SaaS multi-tenant authentication & onboarding",
+      "item": [
+        {
+          "name": "SaaS Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/saas/login",
+            "description": "Login with tenant slug — resolves tenant and authenticates",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"YourPassword123\",\n  \"tenant_slug\": \"my-factory\"\n}"
+            }
+          }
+        },
+        {
+          "name": "SaaS Signup",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/saas/signup",
+            "description": "Register a new tenant + admin user",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"My Factory\",\n  \"slug\": \"my-factory\",\n  \"username\": \"admin\",\n  \"password\": \"SecurePass123\",\n  \"full_name\": \"Factory Admin\",\n  \"email\": \"admin@myfactory.com\",\n  \"plan\": \"TRIAL\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Check Slug",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/saas/check-slug",
+            "description": "Check if a tenant slug is available",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"slug\": \"my-factory\"\n}" }
+          }
+        },
+        {
+          "name": "Check Username",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/saas/check-username",
+            "description": "Check if a username is available",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"newadmin\"\n}" }
+          }
+        },
+        {
+          "name": "SaaS Plans",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/saas/plans", "description": "List available SaaS plans and pricing" }
+        },
+        {
+          "name": "Tenant Branding",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/saas/tenant-branding/:slug", "description": "Get tenant branding (logo, colors) by slug — public endpoint" }
+        }
+      ]
+    },
+    {
+      "name": "Tenant Self-Service",
+      "description": "Current tenant's own account management",
+      "item": [
+        {
+          "name": "List All Tenants",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenants", "description": "List tenants (platform admin only)" }
+        },
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/tenants",
+            "description": "Provision a new tenant (platform admin)",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"New Corp\",\n  \"slug\": \"new-corp\",\n  \"plan\": \"STARTER\"\n}"
+            }
+          }
+        },
+        {
+          "name": "My Tenant",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenant/me", "description": "Get current tenant details" }
+        },
+        {
+          "name": "Update My Tenant",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/v1/tenant/me",
+            "description": "Update current tenant settings (name, logo, etc.)",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"Updated Company Name\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Tenant Users",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenant/me/users", "description": "List users in current tenant" }
+        },
+        {
+          "name": "Tenant Usage",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/tenant/me/usage", "description": "Current usage vs plan limits" }
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "description": "Subscription & billing management",
+      "item": [
+        {
+          "name": "Billing Plans",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/billing/plans", "description": "Available billing plans" }
+        },
+        {
+          "name": "Current Subscription",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/billing/subscription", "description": "Get current subscription details" }
+        },
+        {
+          "name": "Update Subscription",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/billing/subscription",
+            "description": "Change subscription plan",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"plan\": \"PROFESSIONAL\"\n}" }
+          }
+        },
+        {
+          "name": "Invoices",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/billing/invoices", "description": "List billing invoices" }
+        },
+        {
+          "name": "Usage",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/billing/usage", "description": "Current billing period usage" }
+        }
+      ]
+    },
+    {
+      "name": "SaaS Dashboard",
+      "description": "Platform-wide analytics (platform admin)",
+      "item": [
+        {
+          "name": "Overview",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/saas-dashboard/overview", "description": "Platform overview — total tenants, users, revenue" }
+        },
+        {
+          "name": "Tenants",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/saas-dashboard/tenants", "description": "Tenant list with status/usage" }
+        },
+        {
+          "name": "Growth",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/saas-dashboard/growth", "description": "Growth metrics over time" }
+        }
+      ]
+    },
+    {
+      "name": "Super Admin",
+      "description": "Platform super-admin operations",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/super-admin/dashboard", "description": "Super admin dashboard with cross-tenant stats" }
+        },
+        {
+          "name": "Tenants",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/super-admin/tenants", "description": "Manage all tenants" }
+        },
+        {
+          "name": "Users",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/super-admin/users", "description": "Manage all users across tenants" }
+        },
+        {
+          "name": "Revenue",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/super-admin/revenue", "description": "Revenue analytics" }
+        },
+        {
+          "name": "Impersonate",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/super-admin/impersonate",
+            "description": "Impersonate a tenant admin for debugging",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"tenant_id\": 1,\n  \"user_id\": 1\n}" }
+          }
+        },
+        {
+          "name": "List Announcements",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/super-admin/announcements", "description": "List platform-wide announcements" }
+        },
+        {
+          "name": "Create Announcement",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/super-admin/announcements",
+            "description": "Create a new platform announcement",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Planned Maintenance\",\n  \"message\": \"System will be down for 2 hours on Jan 20\",\n  \"type\": \"info\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sync",
+      "description": "Offline-first data sync",
+      "item": [
+        {
+          "name": "Push Changes",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/sync/push",
+            "description": "Push local changes to server",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"changes\": [],\n  \"lastSyncAt\": \"2025-01-15T00:00:00Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Pull Changes",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/sync/pull",
+            "description": "Pull server changes since last sync",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lastSyncAt\": \"2025-01-15T00:00:00Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Sync Status",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/sync/status", "description": "Current sync status and pending changes count" }
+        }
+      ]
+    },
+    {
+      "name": "PayTrack",
+      "description": "Phase 5 — Payment & material tracking for construction/manufacturing",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/dashboard", "description": "PayTrack dashboard — totals, pending payments, recent activity" }
+        },
+        {
+          "name": "Vendors",
+          "description": "Vendor/supplier management",
+          "item": [
+            {
+              "name": "List Vendors",
+              "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/vendors", "description": "List all vendors for the tenant" }
+            },
+            {
+              "name": "Create Vendor",
+              "request": {
+                "method": "POST",
+                "url": "{{base_url}}/api/v1/paytrack/vendors",
+                "description": "Add a new vendor/supplier",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"New Supplier\",\n  \"phone\": \"+91 98765 43210\",\n  \"email\": \"supplier@example.com\",\n  \"gstin\": \"09AADCS0472N1ZT\",\n  \"address\": \"123 Industrial Area\",\n  \"notes\": \"Reliable supplier\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Update Vendor",
+              "request": {
+                "method": "PUT",
+                "url": "{{base_url}}/api/v1/paytrack/vendors/:id",
+                "description": "Update vendor details",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Supplier Name\",\n  \"phone\": \"+91 11111 22222\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Delete Vendor",
+              "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/paytrack/vendors/:id", "description": "Soft-delete a vendor" }
+            }
+          ]
+        },
+        {
+          "name": "Projects",
+          "description": "Project management",
+          "item": [
+            {
+              "name": "List Projects",
+              "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/projects", "description": "List all projects" }
+            },
+            {
+              "name": "Create Project",
+              "request": {
+                "method": "POST",
+                "url": "{{base_url}}/api/v1/paytrack/projects",
+                "description": "Create a new project",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"New Project\",\n  \"client_name\": \"Client Corp\",\n  \"description\": \"Project description\",\n  \"budget\": 1000000,\n  \"status\": \"active\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Update Project",
+              "request": {
+                "method": "PUT",
+                "url": "{{base_url}}/api/v1/paytrack/projects/:id",
+                "description": "Update project details",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Project\",\n  \"budget\": 1500000\n}"
+                }
+              }
+            },
+            {
+              "name": "Delete Project",
+              "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/paytrack/projects/:id", "description": "Soft-delete a project" }
+            }
+          ]
+        },
+        {
+          "name": "Materials",
+          "description": "Material entry, approval, payment workflow",
+          "item": [
+            {
+              "name": "List Materials",
+              "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/materials", "description": "List all material entries with filters" }
+            },
+            {
+              "name": "Create Material",
+              "request": {
+                "method": "POST",
+                "url": "{{base_url}}/api/v1/paytrack/materials",
+                "description": "Add a new material entry (purchase record)",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"project_id\": 1,\n  \"vendor_id\": 1,\n  \"material_name\": \"Cement OPC 53\",\n  \"quantity\": 100,\n  \"unit\": \"bags\",\n  \"invoice_number\": \"INV-001\",\n  \"amount\": 36000,\n  \"gst_amount\": 6480,\n  \"total_amount\": 42480\n}"
+                }
+              }
+            },
+            {
+              "name": "Update Material",
+              "request": {
+                "method": "PUT",
+                "url": "{{base_url}}/api/v1/paytrack/materials/:id",
+                "description": "Update material entry details",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantity\": 150,\n  \"amount\": 54000,\n  \"gst_amount\": 9720,\n  \"total_amount\": 63720\n}"
+                }
+              }
+            },
+            {
+              "name": "Approve Material",
+              "request": {
+                "method": "POST",
+                "url": "{{base_url}}/api/v1/paytrack/materials/:id/approve",
+                "description": "Approve a material entry for payment"
+              }
+            },
+            {
+              "name": "Pay Material",
+              "request": {
+                "method": "POST",
+                "url": "{{base_url}}/api/v1/paytrack/materials/:id/pay",
+                "description": "Mark material as paid and record payment",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_mode\": \"bank_transfer\",\n  \"transaction_id\": \"NEFT1234567\",\n  \"notes\": \"Paid via NEFT\"\n}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Payments",
+          "description": "Payment records",
+          "item": [
+            {
+              "name": "List Payments",
+              "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/payments", "description": "List all payment records" }
+            }
+          ]
+        },
+        {
+          "name": "Invoice Check",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/paytrack/check-invoice", "description": "Check if an invoice number already exists (for duplicate prevention)" }
+        }
+      ]
+    },
+    {
+      "name": "Dev Tools",
+      "description": "Development-only endpoints (disabled in production)",
+      "item": [
+        {
+          "name": "Reset Database",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/dev/reset-db",
+            "description": "⚠️ DESTRUCTIVE — Reset all data in the database. Development only."
+          }
+        }
+      ]
+    }
+  ]
+}

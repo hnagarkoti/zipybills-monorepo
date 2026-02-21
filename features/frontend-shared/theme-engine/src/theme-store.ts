@@ -58,10 +58,24 @@ export interface ThemeState {
   /** Whether a remote resolution is in-flight */
   isLoading: boolean;
 
+  /**
+   * Whether the user has explicitly chosen a theme via the Settings UI.
+   * When true, the ThemeProvider will NOT override with the OS colour-scheme
+   * preference on (re)mount — the user's choice always wins.
+   */
+  isExplicitChoice: boolean;
+
   // ─── Actions ────────────────────────────────
 
   /** Set base theme (light/dark/high-contrast) */
   setBaseTheme: (baseTheme: BaseThemeId) => void;
+
+  /**
+   * Clear the explicit user choice so the OS colour-scheme preference
+   * is used again on the next mount. Call this when the user selects
+   * the "Follow system" / "Auto" option in Settings.
+   */
+  clearExplicitChoice: () => void;
 
   /** Set tenant ID (triggers re-resolution) */
   setTenantId: (tenantId: string | undefined) => void;
@@ -111,11 +125,20 @@ export const useThemeStore = create<ThemeState>()(
       tokens: DEFAULT_TOKENS,
       isReady: false,
       isLoading: false,
+      isExplicitChoice: false,
 
       setBaseTheme: (baseTheme) => {
         const context = { ...get().context, baseTheme };
         const { resolvedTheme, tokens } = resolveFromContext(context);
-        set({ context, resolvedTheme, tokens, isReady: true });
+        // Mark that the user has made a deliberate choice — this persists
+        // across refreshes and prevents the OS colour-scheme from overriding.
+        set({ context, resolvedTheme, tokens, isReady: true, isExplicitChoice: true });
+      },
+
+      clearExplicitChoice: () => {
+        // Drop back to OS colour-scheme detection. The actual baseTheme will
+        // be re-applied by ThemeProvider on the next mount (e.g. page refresh).
+        set({ isExplicitChoice: false });
       },
 
       setTenantId: (tenantId) => {
@@ -162,11 +185,13 @@ export const useThemeStore = create<ThemeState>()(
 
       reset: () => {
         const { resolvedTheme, tokens } = resolveFromContext(DEFAULT_CONTEXT);
+        // Clearing isExplicitChoice so OS colour-scheme detection resumes.
         set({
           context: DEFAULT_CONTEXT,
           resolvedTheme,
           tokens,
           isReady: true,
+          isExplicitChoice: false,
         });
       },
     }),
@@ -176,6 +201,7 @@ export const useThemeStore = create<ThemeState>()(
       // Only persist user preferences, not the full resolved theme
       partialize: (state) => ({
         context: state.context,
+        isExplicitChoice: state.isExplicitChoice,
       }),
       onRehydrateStorage: () => (state) => {
         // Defer re-resolution to avoid state updates before mount

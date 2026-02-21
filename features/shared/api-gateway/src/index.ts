@@ -68,6 +68,9 @@ import { tenantBackupRouter, initTenantBackupSchema } from '@zipybills/factory-b
 // Multi-tenancy middleware (tenant isolation for SaaS mode)
 import { requireTenant, requirePlanFeature, enforceFreePlanReadOnly } from '@zipybills/factory-multi-tenancy/middleware';
 
+// PayTrack (Material Tracking & Payment Management)
+import { paytrackRouter, initializePayTrackSchema } from '@zipybills/paytrack-service-runtime';
+
 // Compliance enforcement
 import { complianceRouter, enforceCompliance } from './compliance.js';
 
@@ -198,6 +201,7 @@ app.post('/api/v1/dev/reset-db', async (req, res) => {
     await initializeOfflineSyncSchema();
     await initializeEnterpriseBackupSchema();
     await initTenantBackupSchema();
+    await initializePayTrackSchema();
 
     // Re-seed
     if (SAAS_MODE) {
@@ -305,6 +309,9 @@ const FEATURE_MOUNTS: FeatureMount[] = [
 
   // Compliance settings API
   { featureId: 'compliance',    router: complianceRouter,    prefixes: ['/compliance'], critical: true },
+
+  // PayTrack (Material Tracking & Payment Management)
+  { featureId: 'paytrack',      router: paytrackRouter,      prefixes: ['/paytrack'] },
 ];
 
 /**
@@ -335,7 +342,7 @@ function scopedFeatureGate(featureId: string, prefixes: string[]) {
 const TENANT_SCOPED_FEATURES = new Set([
   'machines', 'shifts', 'planning', 'downtime', 'dashboard',
   'reports', 'theme', 'permissions', 'audit', 'backups',
-  'export', 'billing', 'offline-sync', 'tenant-backup',
+  'export', 'billing', 'offline-sync', 'tenant-backup', 'paytrack',
 ]);
 
 /**
@@ -469,6 +476,9 @@ async function startServer(): Promise<void> {
     await initializeEnterpriseBackupSchema();
     await initTenantBackupSchema();
 
+    // PayTrack schema
+    await initializePayTrackSchema();
+
     if (SAAS_MODE) {
       // SaaS: seed platform admin which creates its own tenant + admin user
       await seedPlatformAdmin();
@@ -520,41 +530,147 @@ async function startServer(): Promise<void> {
       console.log(`\n🏭 FactoryOS API Gateway running on http://${HOST}:${PORT}`);
       console.log(`   Features:   ${enabledCount}/${features.length} enabled`);
       console.log(`   Versions:   v1`);
-      console.log(`   ─────────────────────────────────────`);
-      console.log(`   Health:     GET  /api/health`);
-      console.log(`   Features:   GET  /api/features`);
-      console.log(`   Auth:       POST /api/v1/auth/login`);
-      console.log(`   Machines:   GET  /api/v1/machines`);
-      console.log(`   Shifts:     GET  /api/v1/shifts`);
-      console.log(`   Plans:      GET  /api/v1/plans`);
-      console.log(`   Downtime:   GET  /api/v1/downtime`);
-      console.log(`   Dashboard:  GET  /api/v1/dashboard`);
-      console.log(`   Reports:    GET  /api/v1/reports/production`);
-      console.log(`   Theme:      POST /api/v1/theme/resolve`);
-      console.log(`   Admin:      GET  /api/v1/admin/features`);
-      console.log(`   ─── Phase 2 ────────────────────────`);
-      console.log(`   License:    GET  /api/v1/license/status`);
-      console.log(`   Perms:      GET  /api/v1/permissions/me`);
-      console.log(`   Audit:      GET  /api/v1/audit/logs`);
-      console.log(`   Backups:    GET  /api/v1/backups`);
-      console.log(`   Admin:      GET  /api/v1/admin/dashboard`);
-      console.log(`   Export:     GET  /api/v1/export/production`);
-      console.log(`   ─── Phase 3 (SaaS) ────────────────`);
-      console.log(`   Tenants:    GET  /api/v1/tenants`);
-      console.log(`   Billing:    GET  /api/v1/billing/plans`);
-      console.log(`   SaaS Auth:  POST /api/v1/saas/login`);
-      console.log(`   Signup:     POST /api/v1/saas/signup`);
-      console.log(`   SaaS Dash:  GET  /api/v1/saas-dashboard/overview`);
-      console.log(`   ─── Phase 4 (Enterprise) ──────────`);
-      console.log(`   SuperAdmin: GET  /api/v1/super-admin/dashboard`);
-      console.log(`   Sync:       POST /api/v1/sync/push`);
-      console.log(`   Health:     GET  /api/health`);
-      console.log(`   Metrics:    GET  /api/metrics`);
+      console.log(`   ═══════════════════════════════════════════════════════`);
+      console.log(`   ─── Core ──────────────────────────────────────────`);
+      console.log(`   Health:       GET    /api/health`);
+      console.log(`                 GET    /api/health/live`);
+      console.log(`                 GET    /api/health/ready`);
+      console.log(`                 GET    /api/health/startup`);
+      console.log(`   Features:     GET    /api/features`);
+      console.log(`   Metrics:      GET    /api/metrics`);
+      console.log(`                 GET    /api/metrics/json`);
+      console.log(`   ─── Phase 1 (Production) ─────────────────────────`);
+      console.log(`   Auth:         POST   /api/v1/auth/login`);
+      console.log(`                 GET    /api/v1/auth/me`);
+      console.log(`                 GET    /api/v1/auth/account`);
+      console.log(`                 PATCH  /api/v1/auth/change-password`);
+      console.log(`   Users:        GET    /api/v1/users`);
+      console.log(`                 POST   /api/v1/users`);
+      console.log(`                 PUT    /api/v1/users/:id`);
+      console.log(`                 DELETE /api/v1/users/:id`);
+      console.log(`   Machines:     GET    /api/v1/machines`);
+      console.log(`                 GET    /api/v1/machines/:id`);
+      console.log(`                 POST   /api/v1/machines`);
+      console.log(`                 PUT    /api/v1/machines/:id`);
+      console.log(`                 DELETE /api/v1/machines/:id`);
+      console.log(`   Shifts:       GET    /api/v1/shifts`);
+      console.log(`                 POST   /api/v1/shifts`);
+      console.log(`                 PUT    /api/v1/shifts/:id`);
+      console.log(`                 DELETE /api/v1/shifts/:id`);
+      console.log(`                 POST   /api/v1/shifts/bulk-create`);
+      console.log(`   Plans:        GET    /api/v1/plans`);
+      console.log(`                 GET    /api/v1/plans/:id`);
+      console.log(`                 POST   /api/v1/plans`);
+      console.log(`                 POST   /api/v1/plans/bulk`);
+      console.log(`                 POST   /api/v1/plans/duplicate`);
+      console.log(`                 PUT    /api/v1/plans/:id`);
+      console.log(`                 PUT    /api/v1/plans/:id/status`);
+      console.log(`                 DELETE /api/v1/plans/:id`);
+      console.log(`   Prod Logs:    GET    /api/v1/production-logs`);
+      console.log(`                 POST   /api/v1/production-logs`);
+      console.log(`   Downtime:     GET    /api/v1/downtime`);
+      console.log(`                 POST   /api/v1/downtime`);
+      console.log(`                 PUT    /api/v1/downtime/:id`);
+      console.log(`                 DELETE /api/v1/downtime/:id`);
+      console.log(`                 PUT    /api/v1/downtime/:id/end`);
+      console.log(`   Dashboard:    GET    /api/v1/dashboard`);
+      console.log(`   Reports:      GET    /api/v1/reports/production`);
+      console.log(`                 GET    /api/v1/reports/machine-wise`);
+      console.log(`                 GET    /api/v1/reports/shift-wise`);
+      console.log(`                 GET    /api/v1/reports/rejections`);
+      console.log(`   Theme:        POST   /api/v1/theme/resolve`);
+      console.log(`                 GET    /api/v1/theme/available`);
+      console.log(`                 GET    /api/v1/theme/stats`);
+      console.log(`   Admin:        GET    /api/v1/admin/features`);
+      console.log(`                 GET    /api/v1/admin/dashboard`);
+      console.log(`                 GET    /api/v1/admin/users`);
+      console.log(`                 GET    /api/v1/admin/setup-status`);
+      console.log(`                 POST   /api/v1/admin/seed-sample-data`);
+      console.log(`                 GET    /api/v1/admin/db-stats`);
+      console.log(`                 GET    /api/v1/admin/config`);
+      console.log(`                 GET    /api/v1/admin/health`);
+      console.log(`   ─── Phase 2 (Enterprise Features) ────────────────`);
+      console.log(`   License:      GET    /api/v1/license/status`);
+      console.log(`                 POST   /api/v1/license/activate`);
+      console.log(`                 GET    /api/v1/license/tiers`);
+      console.log(`   Permissions:  GET    /api/v1/permissions/me`);
+      console.log(`                 GET    /api/v1/permissions/roles`);
+      console.log(`                 GET    /api/v1/permissions/all`);
+      console.log(`   Audit:        GET    /api/v1/audit/logs`);
+      console.log(`                 GET    /api/v1/audit/export`);
+      console.log(`                 GET    /api/v1/audit/stats`);
+      console.log(`                 GET    /api/v1/audit/global`);
+      console.log(`   Backups:      GET    /api/v1/backups`);
+      console.log(`                 POST   /api/v1/backups`);
+      console.log(`                 GET    /api/v1/backups/:id/download`);
+      console.log(`                 POST   /api/v1/backups/:id/restore`);
+      console.log(`                 DELETE /api/v1/backups/:id`);
+      console.log(`   Export:       GET    /api/v1/export/production`);
+      console.log(`                 GET    /api/v1/export/machine-wise`);
+      console.log(`                 GET    /api/v1/export/shift-wise`);
+      console.log(`                 GET    /api/v1/export/downtime`);
+      console.log(`                 GET    /api/v1/export/efficiency`);
+      console.log(`                 GET    /api/v1/export/summary`);
+      console.log(`   Compliance:   GET    /api/v1/compliance/settings`);
+      console.log(`                 PUT    /api/v1/compliance/settings`);
+      console.log(`   TenantBackup: GET    /api/v1/tenant-backups`);
+      console.log(`                 POST   /api/v1/tenant-backups/export`);
+      console.log(`                 GET    /api/v1/tenant-backups/:id/download`);
+      console.log(`   ─── Phase 3 (SaaS) ──────────────────────────────`);
+      console.log(`   SaaS Auth:    POST   /api/v1/saas/login`);
+      console.log(`                 POST   /api/v1/saas/signup`);
+      console.log(`                 POST   /api/v1/saas/check-slug`);
+      console.log(`                 POST   /api/v1/saas/check-username`);
+      console.log(`                 GET    /api/v1/saas/plans`);
+      console.log(`                 GET    /api/v1/saas/tenant-branding/:slug`);
+      console.log(`   Tenants:      GET    /api/v1/tenants`);
+      console.log(`                 POST   /api/v1/tenants`);
+      console.log(`                 GET    /api/v1/tenant/me`);
+      console.log(`                 PATCH  /api/v1/tenant/me`);
+      console.log(`                 GET    /api/v1/tenant/me/users`);
+      console.log(`                 GET    /api/v1/tenant/me/usage`);
+      console.log(`   Billing:      GET    /api/v1/billing/plans`);
+      console.log(`                 GET    /api/v1/billing/subscription`);
+      console.log(`                 POST   /api/v1/billing/subscription`);
+      console.log(`                 GET    /api/v1/billing/invoices`);
+      console.log(`                 GET    /api/v1/billing/usage`);
+      console.log(`   SaaS Dash:    GET    /api/v1/saas-dashboard/overview`);
+      console.log(`                 GET    /api/v1/saas-dashboard/tenants`);
+      console.log(`                 GET    /api/v1/saas-dashboard/growth`);
+      console.log(`   ─── Phase 4 (Enterprise Admin) ───────────────────`);
+      console.log(`   SuperAdmin:   GET    /api/v1/super-admin/dashboard`);
+      console.log(`                 GET    /api/v1/super-admin/tenants`);
+      console.log(`                 GET    /api/v1/super-admin/users`);
+      console.log(`                 GET    /api/v1/super-admin/revenue`);
+      console.log(`                 POST   /api/v1/super-admin/impersonate`);
+      console.log(`                 GET    /api/v1/super-admin/announcements`);
+      console.log(`                 POST   /api/v1/super-admin/announcements`);
+      console.log(`   Sync:         POST   /api/v1/sync/push`);
+      console.log(`                 POST   /api/v1/sync/pull`);
+      console.log(`                 GET    /api/v1/sync/status`);
+      console.log(`   ─── Phase 5 (PayTrack) ──────────────────────────`);
+      console.log(`   Dashboard:    GET    /api/v1/paytrack/dashboard`);
+      console.log(`   Vendors:      GET    /api/v1/paytrack/vendors`);
+      console.log(`                 POST   /api/v1/paytrack/vendors`);
+      console.log(`                 PUT    /api/v1/paytrack/vendors/:id`);
+      console.log(`                 DELETE /api/v1/paytrack/vendors/:id`);
+      console.log(`   Projects:     GET    /api/v1/paytrack/projects`);
+      console.log(`                 POST   /api/v1/paytrack/projects`);
+      console.log(`                 PUT    /api/v1/paytrack/projects/:id`);
+      console.log(`                 DELETE /api/v1/paytrack/projects/:id`);
+      console.log(`   Materials:    GET    /api/v1/paytrack/materials`);
+      console.log(`                 POST   /api/v1/paytrack/materials`);
+      console.log(`                 PUT    /api/v1/paytrack/materials/:id`);
+      console.log(`                 POST   /api/v1/paytrack/materials/:id/approve`);
+      console.log(`                 POST   /api/v1/paytrack/materials/:id/pay`);
+      console.log(`   Payments:     GET    /api/v1/paytrack/payments`);
+      console.log(`   Invoice:      GET    /api/v1/paytrack/check-invoice`);
+      console.log(`   ═══════════════════════════════════════════════════════`);
       if (process.env.NODE_ENV !== 'production') {
         console.log(`   ─── Dev Tools ─────────────────────`);
         console.log(`   Reset DB:   POST /api/v1/dev/reset-db`);
       }
-      console.log(`   ─────────────────────────────────────\n`);
+      console.log(`   Total: ~198 endpoints across ${features.length} features\n`);
     });
   } catch (err) {
     console.error('[FactoryOS] ❌ Failed to start server:', err);

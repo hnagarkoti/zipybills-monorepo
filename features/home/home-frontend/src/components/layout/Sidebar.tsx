@@ -147,7 +147,7 @@ export function Sidebar({
       className={`bg-slate-900 dark:bg-gray-950 h-full ${collapsed ? 'w-16' : 'w-64'}`}
     >
       {/* Brand */}
-      <View className="px-4 py-5 border-b border-slate-700 dark:border-gray-800">
+      <View className="px-4 py-5 border-b border-slate-700 dark:border-gray-700">
         <View className="flex-row items-center">
           <View className="w-9 h-9 bg-emerald-500/20 rounded-lg items-center justify-center overflow-hidden">
             {brandLogoUrl ? (
@@ -183,7 +183,7 @@ export function Sidebar({
       {onToggleCollapse && (
         <Pressable
           onPress={onToggleCollapse}
-          className="mx-2 mb-2 px-3 py-2.5 rounded-lg items-center bg-slate-800 dark:bg-gray-900 flex-row justify-center"
+          className="mx-2 mb-2 px-3 py-2.5 rounded-lg items-center bg-slate-800 dark:bg-gray-800 flex-row justify-center"
         >
           {collapsed
             ? <PanelLeftOpen size={16} color={colors.gray[400]} />
@@ -192,7 +192,7 @@ export function Sidebar({
       )}
 
       {footer && (
-        <View className="px-4 py-3 border-t border-slate-700 dark:border-gray-800">{footer}</View>
+        <View className="px-4 py-3 border-t border-slate-700 dark:border-gray-700">{footer}</View>
       )}
     </View>
   );

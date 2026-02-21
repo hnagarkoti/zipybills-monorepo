@@ -210,7 +210,7 @@ export function ProductionPlanPage() {
             </Pressable>
             <Pressable
               onPress={() => { setShowImport(!showImport); setShowForm(false); setShowDuplicate(false); }}
-              className="bg-blue-50 dark:bg-blue-900/20 px-3 py-2.5 rounded-lg flex-row items-center"
+              className="bg-blue-50 dark:bg-blue-900/30 px-3 py-2.5 rounded-lg flex-row items-center"
             >
               <Upload size={14} color={colors.blue[600]} />
               <Text className="text-blue-700 dark:text-blue-400 font-medium text-sm ml-1.5">{t('common.import')}</Text>
@@ -218,7 +218,7 @@ export function ProductionPlanPage() {
             {plans.length > 0 && (
               <Pressable
                 onPress={() => { setShowDuplicate(!showDuplicate); setShowForm(false); setShowImport(false); }}
-                className="bg-purple-50 dark:bg-purple-900/20 px-3 py-2.5 rounded-lg flex-row items-center"
+                className="bg-purple-50 dark:bg-purple-900/30 px-3 py-2.5 rounded-lg flex-row items-center"
               >
                 <Copy size={14} color={colors.violet[600]} />
                 <Text className="text-purple-700 dark:text-purple-400 font-medium text-sm ml-1.5">{t('planning.duplicate')}</Text>
@@ -297,7 +297,7 @@ export function ProductionPlanPage() {
 
       {/* ─── Setup Prerequisites Guide ────────────── */}
       {!loading && (machines.length === 0 || shifts.length === 0) && (
-        <View className="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5 mb-4">
+        <View className="bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800 p-5 mb-4">
           <View className="items-center mb-4">
             <View className="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/40 items-center justify-center mb-3">
               <ClipboardList size={28} color={colors.blue[500]} />
@@ -310,7 +310,7 @@ export function ProductionPlanPage() {
 
           <View className="gap-3">
             {/* Machines status */}
-            <View className={`flex-row items-center p-3 rounded-lg border ${machines.length > 0 ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
+            <View className={`flex-row items-center p-3 rounded-lg border ${machines.length > 0 ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
               <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${machines.length > 0 ? 'bg-green-100 dark:bg-green-900/40' : 'bg-gray-100 dark:bg-gray-700'}`}>
                 {machines.length > 0 ? (
                   <Text className="text-green-600 font-bold text-sm">{"\u2713"}</Text>
@@ -329,7 +329,7 @@ export function ProductionPlanPage() {
             </View>
 
             {/* Shifts status */}
-            <View className={`flex-row items-center p-3 rounded-lg border ${shifts.length > 0 ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
+            <View className={`flex-row items-center p-3 rounded-lg border ${shifts.length > 0 ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
               <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${shifts.length > 0 ? 'bg-green-100 dark:bg-green-900/40' : 'bg-gray-100 dark:bg-gray-700'}`}>
                 {shifts.length > 0 ? (
                   <Text className="text-green-600 font-bold text-sm">{"\u2713"}</Text>
@@ -356,7 +356,7 @@ export function ProductionPlanPage() {
 
       {/* ─── Duplicate Panel ──────────────────────── */}
       {showDuplicate && (
-        <View className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-4 mb-4">
+        <View className="bg-purple-50 dark:bg-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-800 p-4 mb-4">
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-row items-center">
               <Copy size={18} color={colors.violet[600]} />
@@ -400,7 +400,7 @@ export function ProductionPlanPage() {
 
       {/* ─── Import Panel ─────────────────────────── */}
       {showImport && (
-        <View className="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-4 mb-4">
+        <View className="bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800 p-4 mb-4">
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-row items-center">
               <Upload size={18} color={colors.blue[600]} />
@@ -497,7 +497,7 @@ export function ProductionPlanPage() {
 
           {/* Import Errors */}
           {importErrors.length > 0 && (
-            <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+            <View className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3">
               <Text className="text-xs font-bold text-red-600 mb-1">Errors ({importErrors.length})</Text>
               {importErrors.slice(0, 5).map((e, i) => (
                 <Text key={i} className="text-xs text-red-500">• {e}</Text>
@@ -521,14 +521,14 @@ export function ProductionPlanPage() {
           </View>
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.machine')} *</Text>
           {machines.length === 0 ? (
-            <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+            <View className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
               <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No machines available</Text>
               <Text className="text-xs text-amber-600 dark:text-amber-500 mt-0.5">Go to the Machines page to add machines first.</Text>
             </View>
           ) : (
             <View className="flex-row flex-wrap gap-2 mb-3">
               {machines.map((m) => (
-                <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                <Pressable key={m.machine_id} onPress={() => setForm({ ...form, machine_id: String(m.machine_id) })} className={`px-3 py-2 rounded-lg border ${form.machine_id === String(m.machine_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                   <Text className={`text-sm ${form.machine_id === String(m.machine_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{m.machine_name}</Text>
                 </Pressable>
               ))}
@@ -536,14 +536,14 @@ export function ProductionPlanPage() {
           )}
           <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('planning.shift')} *</Text>
           {shifts.length === 0 ? (
-            <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+            <View className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
               <Text className="text-sm text-amber-700 dark:text-amber-400 font-medium">No shifts available</Text>
               <Text className="text-xs text-amber-600 dark:text-amber-500 mt-0.5">Go to the Shifts page to set up shifts first.</Text>
             </View>
           ) : (
             <View className="flex-row flex-wrap gap-2 mb-3">
               {shifts.map((s) => (
-                <Pressable key={s.shift_id} onPress={() => setForm({ ...form, shift_id: String(s.shift_id) })} className={`px-3 py-2 rounded-lg border ${form.shift_id === String(s.shift_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                <Pressable key={s.shift_id} onPress={() => setForm({ ...form, shift_id: String(s.shift_id) })} className={`px-3 py-2 rounded-lg border ${form.shift_id === String(s.shift_id) ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                   <Text className={`text-sm ${form.shift_id === String(s.shift_id) ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{s.shift_name} ({s.start_time}–{s.end_time})</Text>
                 </Pressable>
               ))}
@@ -601,7 +601,7 @@ export function ProductionPlanPage() {
             const rejected = Number(p.actual_rejected) || 0;
 
             return (
-              <View key={p.plan_id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 mb-3 shadow-sm">
+              <View key={p.plan_id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-4 mb-3 shadow-sm">
                 {/* Top row: product + status */}
                 <View className="flex-row items-start justify-between mb-2">
                   <View className="flex-1 mr-2">
@@ -639,7 +639,7 @@ export function ProductionPlanPage() {
 
                 {/* Rejection warning */}
                 {rejected > 0 && (
-                  <View className="flex-row items-center mb-2 bg-red-50 dark:bg-red-900/20 rounded-md px-2 py-1">
+                  <View className="flex-row items-center mb-2 bg-red-50 dark:bg-red-900/30 rounded-md px-2 py-1">
                     <AlertTriangle size={10} color={statusColors.error} />
                     <Text className="text-xs text-red-600 ml-1 font-medium">{rejected} {t('common.rejected')}</Text>
                   </View>
@@ -647,16 +647,16 @@ export function ProductionPlanPage() {
 
                 {/* Actions */}
                 {p.status !== 'COMPLETED' && p.status !== 'CANCELLED' && (
-                  <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-800">
+                  <View className="flex-row gap-2 pt-2 border-t border-gray-50 dark:border-gray-700">
                     {p.status === 'PLANNED' && (
-                      <Pressable onPress={() => handleStatusChange(p.plan_id, 'IN_PROGRESS')} className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 px-3 py-1.5 rounded-lg">
+                      <Pressable onPress={() => handleStatusChange(p.plan_id, 'IN_PROGRESS')} className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 px-3 py-1.5 rounded-lg">
                         <Text className="text-xs text-yellow-700 font-medium">▶ {t('planning.start')}</Text>
                       </Pressable>
                     )}
-                    <Pressable onPress={() => handleStatusChange(p.plan_id, 'COMPLETED')} className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 px-3 py-1.5 rounded-lg">
+                    <Pressable onPress={() => handleStatusChange(p.plan_id, 'COMPLETED')} className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-3 py-1.5 rounded-lg">
                       <Text className="text-xs text-green-700 font-medium">✓ {t('planning.complete')}</Text>
                     </Pressable>
-                    <Pressable onPress={() => handleStatusChange(p.plan_id, 'CANCELLED')} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-3 py-1.5 rounded-lg">
+                    <Pressable onPress={() => handleStatusChange(p.plan_id, 'CANCELLED')} className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-3 py-1.5 rounded-lg">
                       <Text className="text-xs text-red-700 font-medium">✕ {t('common.cancel')}</Text>
                     </Pressable>
                   </View>

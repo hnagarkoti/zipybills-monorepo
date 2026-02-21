@@ -59,14 +59,14 @@ function StatCard({ icon, label, value, subtitle, color }: {
   color: string;
 }) {
   return (
-    <View className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex-1 min-w-[160px]">
+    <View className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 flex-1 min-w-[160px]">
       <View className="flex-row items-center mb-2">
         <View className="w-8 h-8 rounded-lg items-center justify-center mr-2" style={{ backgroundColor: color + '20' }}>
           {icon}
         </View>
         <Text className="text-xs text-slate-500 dark:text-slate-400 font-medium">{label}</Text>
       </View>
-      <Text className="text-2xl font-bold text-slate-900 dark:text-white">{value}</Text>
+      <Text className="text-2xl font-bold text-slate-900 dark:text-gray-100">{value}</Text>
       {subtitle && <Text className="text-xs text-slate-400 mt-1">{subtitle}</Text>}
     </View>
   );
@@ -148,13 +148,13 @@ export default function PlatformOverviewPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-slate-50 dark:bg-slate-900"
+      className="flex-1 bg-gray-50 dark:bg-gray-950"
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <View className="p-4 md:p-6 max-w-[1400px]">
         {/* Header */}
         <View className="mb-6">
-          <Text className="text-2xl font-bold text-slate-900 dark:text-white">Platform Overview</Text>
+          <Text className="text-2xl font-bold text-slate-900 dark:text-gray-100">Platform Overview</Text>
           <Text className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Monitor all tenants, usage, and platform health
           </Text>
@@ -221,12 +221,12 @@ export default function PlatformOverviewPage() {
         </View>
 
         {/* Plan Distribution */}
-        <View className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 mb-6">
-          <Text className="text-base font-semibold text-slate-900 dark:text-white mb-3">Plan Distribution</Text>
+        <View className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 mb-6">
+          <Text className="text-base font-semibold text-slate-900 dark:text-gray-100 mb-3">Plan Distribution</Text>
           {planDist.map((p) => (
             <View key={p.plan} className="flex-row items-center mb-2">
               <PlanBadge plan={p.plan} />
-              <View className="flex-1 mx-3 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+              <View className="flex-1 mx-3 h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                 <View
                   className="h-full rounded-full bg-emerald-500"
                   style={{ width: `${p.percentage}%` }}
@@ -241,10 +241,10 @@ export default function PlatformOverviewPage() {
 
         {/* Growth Metrics */}
         {growth.length > 0 && (
-          <View className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 mb-6">
-            <Text className="text-base font-semibold text-slate-900 dark:text-white mb-3">Growth (Last 6 Months)</Text>
+          <View className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 mb-6">
+            <Text className="text-base font-semibold text-slate-900 dark:text-gray-100 mb-3">Growth (Last 6 Months)</Text>
             {growth.map((g) => (
-              <View key={g.month} className="flex-row items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700">
+              <View key={g.month} className="flex-row items-center justify-between py-2 border-b border-slate-100 dark:border-gray-700">
                 <Text className="text-sm text-slate-600 dark:text-slate-400 w-24">{g.month}</Text>
                 <View className="flex-row items-center gap-4">
                   <Text className="text-sm text-emerald-600 dark:text-emerald-400">+{g.new_tenants} tenants</Text>
@@ -259,13 +259,13 @@ export default function PlatformOverviewPage() {
         )}
 
         {/* Recent Tenants Table */}
-        <View className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 mb-6">
-          <View className="p-4 border-b border-slate-200 dark:border-slate-700">
-            <Text className="text-base font-semibold text-slate-900 dark:text-white">Recent Tenants</Text>
+        <View className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 mb-6">
+          <View className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <Text className="text-base font-semibold text-slate-900 dark:text-gray-100">Recent Tenants</Text>
           </View>
 
           {/* Table Header */}
-          <View className="flex-row px-4 py-2 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700">
+          <View className="flex-row px-4 py-2 bg-gray-50 dark:bg-gray-950/50 border-b border-gray-200 dark:border-gray-700">
             <Text className="flex-1 text-xs font-medium text-slate-500 uppercase">Company</Text>
             <Text className="w-20 text-xs font-medium text-slate-500 uppercase text-center">Status</Text>
             <Text className="w-24 text-xs font-medium text-slate-500 uppercase text-center">Plan</Text>
@@ -276,9 +276,9 @@ export default function PlatformOverviewPage() {
 
           {/* Table Rows */}
           {tenants.map((t) => (
-            <View key={t.tenant_id} className="flex-row px-4 py-3 items-center border-b border-slate-100 dark:border-slate-700/50">
+            <View key={t.tenant_id} className="flex-row px-4 py-3 items-center border-b border-slate-100 dark:border-gray-700/50">
               <View className="flex-1">
-                <Text className="text-sm font-medium text-slate-900 dark:text-white">{t.company_name}</Text>
+                <Text className="text-sm font-medium text-slate-900 dark:text-gray-100">{t.company_name}</Text>
                 <Text className="text-xs text-slate-400">{t.tenant_slug}</Text>
               </View>
               <View className="w-20 items-center">

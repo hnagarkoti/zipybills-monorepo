@@ -123,7 +123,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
   return (
     <Modal visible={visible} transparent animationType="fade">
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior="padding"
         className="flex-1"
       >
       <View className="flex-1 bg-black/50 items-center justify-center p-4">
@@ -141,7 +141,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
 
           <ScrollView ref={scrollRef} className="p-5" style={{ maxHeight: 520 }} keyboardShouldPersistTaps="handled">
             {error && (
-              <View className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
+              <View className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
                 <Text className="text-sm text-red-600 dark:text-red-400">{error}</Text>
               </View>
             )}
@@ -153,7 +153,7 @@ function ShiftFormModal({ visible, onClose, onSave, initialData, isEditing }: Sh
                 <View className="flex-row gap-2">
                   {PRESETS.map((p) => (
                     <Pressable key={p.label} onPress={() => setForm({ ...form, shift_name: p.label, start_time: p.start, end_time: p.end })}
-                      className={`flex-1 p-3 rounded-xl border-2 items-center ${form.shift_name === p.label ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                      className={`flex-1 p-3 rounded-xl border-2 items-center ${form.shift_name === p.label ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-200 dark:border-gray-700'}`}>
                       <Text className="text-lg mb-0.5">{p.icon}</Text>
                       <Text className={`text-xs font-semibold ${form.shift_name === p.label ? 'text-emerald-700 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`}>{p.label}</Text>
                       <Text className="text-[10px] text-gray-400 mt-0.5">{p.start}–{p.end}</Text>
@@ -325,7 +325,7 @@ export function ShiftsPage() {
       />
 
       {error && (
-        <View className="bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800 p-4 mb-4">
+        <View className="bg-amber-50 dark:bg-amber-900/30 rounded-xl border border-amber-200 dark:border-amber-800 p-4 mb-4">
           <View className="flex-row items-start justify-between">
             <View className="flex-1 mr-3">
               <Text className="text-sm font-medium text-amber-800 dark:text-amber-300">
@@ -364,7 +364,7 @@ export function ShiftsPage() {
 
             {/* 2-Shift */}
             <Pressable onPress={() => handleBulkCreate(2)} disabled={bulkLoading !== null}
-              className={`border-2 rounded-xl p-4 mb-3 ${bulkLoading === 2 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'}`}>
+              className={`border-2 rounded-xl p-4 mb-3 ${bulkLoading === 2 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'}`}>
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center flex-1">
                   <View className="flex-row mr-3">
@@ -379,7 +379,7 @@ export function ShiftsPage() {
 
             {/* 3-Shift */}
             <Pressable onPress={() => handleBulkCreate(3)} disabled={bulkLoading !== null}
-              className={`border-2 rounded-xl p-4 ${bulkLoading === 3 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'}`}>
+              className={`border-2 rounded-xl p-4 ${bulkLoading === 3 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'}`}>
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center flex-1">
                   <View className="flex-row mr-3">
@@ -424,7 +424,7 @@ export function ShiftsPage() {
 
           {/* Shifts list */}
           {shifts.map((s) => (
-            <View key={s.shift_id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 mb-2">
+            <View key={s.shift_id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-4 mb-2">
               <View className="flex-row items-center justify-between mb-1">
                 <View className="flex-row items-center">
                   <StatusDot color={s.is_active ? 'green' : 'gray'} size="sm" />
@@ -434,7 +434,7 @@ export function ShiftsPage() {
                   <Pressable onPress={() => { setEditingShift(s); setShowFormModal(true); }} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
                     <Text className="text-xs text-gray-600 dark:text-gray-400">{t('common.edit')}</Text>
                   </Pressable>
-                  <Pressable onPress={() => setDeleteTarget(s)} className="bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-lg">
+                  <Pressable onPress={() => setDeleteTarget(s)} className="bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded-lg">
                     <Text className="text-xs text-red-600">{t('common.delete')}</Text>
                   </Pressable>
                 </View>

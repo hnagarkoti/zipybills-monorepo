@@ -265,7 +265,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         </Pressable>
 
         {/* ── Header banner ── */}
-        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-6 flex-row items-center">
+        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 mb-6 flex-row items-center">
           <View className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 items-center justify-center mr-4">
             {isEdit
               ? <UserCog size={22} color={colors.emerald[600]} />
@@ -293,7 +293,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         {/* ━━━ Section 1: Personal Information ━━━ */}
         <SectionHeader label={t('userForm.personalInfo')} />
 
-        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
+        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 mb-6">
           {/* Full Name */}
           <FormField
             label={t('userForm.fullName')}
@@ -329,7 +329,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         {/* ━━━ Section 2: Security ━━━ */}
         <SectionHeader label={t('userForm.security')} />
 
-        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
+        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 mb-6">
           {/* Password with toggle */}
           <View className="mb-1">
             <View className="flex-row items-center mb-1.5">
@@ -407,7 +407,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
         {/* ━━━ Section 3: Role & Permissions ━━━ */}
         <SectionHeader label={t('userForm.rolePermissions')} />
 
-        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
+        <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 mb-6">
           <Text className="text-xs text-gray-400 dark:text-gray-500 mb-3">
             {t('userForm.chooseAccessLevel')}
           </Text>
@@ -472,7 +472,7 @@ export function UserFormPage({ mode, userId, onBack }: UserFormPageProps) {
           <>
             <SectionHeader label={t('userForm.accountStatus')} />
 
-            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
+            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 mb-6">
               <Pressable
                 onPress={() => updateField('is_active', !form.is_active)}
                 className="flex-row items-center justify-between"

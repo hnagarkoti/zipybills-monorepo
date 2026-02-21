@@ -33,9 +33,15 @@ export interface UsersPageProps {
   onAddUser?: () => void;
   /** Called when user taps "Edit" on a user card — navigate to /users/:id */
   onEditUser?: (userId: number) => void;
+  /**
+   * Increment this number to force-refresh the user list.
+   * The route layer increments it via useFocusEffect every time the
+   * screen gains focus (e.g. after returning from Add / Edit).
+   */
+  refreshTrigger?: number;
 }
 
-export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
+export function UsersPage({ onAddUser, onEditUser, refreshTrigger }: UsersPageProps = {}) {
   const sc = useSemanticColors();
   const { t } = useLocale();
   const [users, setUsers] = useState<User[]>([]);
@@ -56,7 +62,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
     }
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => { loadData(); }, [loadData, refreshTrigger]);
 
   /* ── Derived data ── */
   const roleCounts = useMemo(() => {
@@ -168,7 +174,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
                   className={`flex-row items-center px-3.5 py-2 rounded-xl border ${
                     isActive
                       ? `${palette.bg} dark:${palette.bgDark} ${palette.border} dark:${palette.borderDark}`
-                      : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'
+                      : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700'
                   }`}
                 >
                   <RoleIcon
@@ -255,7 +261,7 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
             </View>
           )}
           {filteredUsers.map((u) => (
-          <View key={u.user_id} className={`bg-white dark:bg-gray-900 rounded-xl border p-4 mb-2 ${u.is_active ? 'border-gray-100 dark:border-gray-800' : 'border-gray-200 dark:border-gray-700 opacity-60'}`}>
+          <View key={u.user_id} className={`bg-white dark:bg-gray-900 rounded-xl border p-4 mb-2 ${u.is_active ? 'border-gray-100 dark:border-gray-700' : 'border-gray-200 dark:border-gray-700 opacity-60'}`}>
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center flex-1">
                 <View className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${u.is_active ? 'bg-emerald-100 dark:bg-emerald-900/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
@@ -268,14 +274,14 @@ export function UsersPage({ onAddUser, onEditUser }: UsersPageProps = {}) {
               </View>
               <View className="flex-row items-center gap-2">
                 <Badge variant={ROLE_VARIANT[u.role] ?? 'default'}>{u.role}</Badge>
-                <Pressable onPress={() => onEditUser?.(u.user_id)} className="bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1.5 rounded-lg" hitSlop={4}>
+                <Pressable onPress={() => onEditUser?.(u.user_id)} className="bg-amber-50 dark:bg-amber-900/30 px-2.5 py-1.5 rounded-lg" hitSlop={4}>
                   <Key size={13} color="#d97706" />
                 </Pressable>
                 <Pressable onPress={() => onEditUser?.(u.user_id)} className="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg flex-row items-center gap-1" hitSlop={4}>
                   <Pencil size={12} color="#6b7280" />
                   <Text className="text-xs text-gray-600 dark:text-gray-400">{t('common.edit')}</Text>
                 </Pressable>
-                <Pressable onPress={() => handleDelete(u)} className="bg-red-50 dark:bg-red-900/20 px-2.5 py-1.5 rounded-lg" hitSlop={4}>
+                <Pressable onPress={() => handleDelete(u)} className="bg-red-50 dark:bg-red-900/30 px-2.5 py-1.5 rounded-lg" hitSlop={4}>
                   <Trash2 size={13} color="#dc2626" />
                 </Pressable>
               </View>

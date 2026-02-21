@@ -30,6 +30,7 @@ export function useTheme() {
   const context = useThemeStore((s) => s.context);
   const isReady = useThemeStore((s) => s.isReady);
   const setBaseTheme = useThemeStore((s) => s.setBaseTheme);
+  const clearExplicitChoice = useThemeStore((s) => s.clearExplicitChoice);
   const setRole = useThemeStore((s) => s.setRole);
   const setEnvironment = useThemeStore((s) => s.setEnvironment);
   const setComplianceMode = useThemeStore((s) => s.setComplianceMode);
@@ -47,6 +48,7 @@ export function useTheme() {
 
     // Actions
     setBaseTheme,
+    clearExplicitChoice,
     setRole,
     setEnvironment,
     setComplianceMode,

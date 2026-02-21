@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
+import { View, Text, Pressable, TextInput, KeyboardAvoidingView, ScrollView, Image } from 'react-native';
 import { Factory, ArrowLeft, Building2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { login as apiLogin } from '../services/api';
@@ -111,7 +111,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior="padding"
       className="flex-1"
     >
       <ScrollView

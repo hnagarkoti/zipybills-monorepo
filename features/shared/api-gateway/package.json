@@ -35,6 +35,7 @@
     "@zipybills/factory-shifts-service-runtime": "workspace:*",
     "@zipybills/factory-subscription-billing": "workspace:*",
     "@zipybills/factory-theme-service": "workspace:*",
+    "@zipybills/paytrack-service-runtime": "workspace:*",
     "@zipybills/ts-config": "workspace:*",
     "cors": "catalog:",
     "dotenv": "catalog:",

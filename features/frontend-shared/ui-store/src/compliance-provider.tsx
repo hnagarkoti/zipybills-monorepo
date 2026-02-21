@@ -231,7 +231,7 @@ export function ComplianceProvider({ children }: { children: React.ReactNode }) 
         onRequestClose={handleCancel}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior="padding"
           style={{ flex: 1 }}
         >
           <Pressable

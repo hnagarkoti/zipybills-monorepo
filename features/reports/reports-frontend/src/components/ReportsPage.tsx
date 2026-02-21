@@ -114,15 +114,15 @@ export function ReportsPage() {
       ) : (
         <View>
           {tab === 'production' && data.map((row, idx) => (
-            <View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 mb-2">
-              <View className="flex-row items-center justify-between mb-1"><Text className="font-semibold text-gray-900 dark:text-gray-100">{row.plan_date?.split('T')[0]}</Text><View className="bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-full"><Text className="text-xs text-blue-600 dark:text-blue-400">{row.product_name}</Text></View></View>
+            <View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-3 mb-2">
+              <View className="flex-row items-center justify-between mb-1"><Text className="font-semibold text-gray-900 dark:text-gray-100">{row.plan_date?.split('T')[0]}</Text><View className="bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full"><Text className="text-xs text-blue-600 dark:text-blue-400">{row.product_name}</Text></View></View>
               <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{row.machine_name as string} · {row.shift_name as string}</Text>
               <View className="flex-row gap-3"><Text className="text-sm text-gray-700 dark:text-gray-300">{t('reports.target')}: <Text className="font-medium">{row.target_quantity}</Text></Text><Text className="text-sm text-green-600 dark:text-green-400">{t('reports.ok')}: <Text className="font-medium">{row.total_ok || 0}</Text></Text><Text className="text-sm text-red-600 dark:text-red-400">{t('reports.rejected')}: <Text className="font-medium">{row.total_rejected || 0}</Text></Text></View>
             </View>
           ))}
           {tab === 'machine' && data.map((row, idx) => {
             const eff = row.target_quantity > 0 ? ((Number(row.total_ok) || 0) / Number(row.target_quantity)) * 100 : 0;
-            return (<View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 mb-2">
+            return (<View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-3 mb-2">
               <View className="flex-row items-center justify-between mb-2"><Text className="font-semibold text-gray-900 dark:text-gray-100">{row.machine_name}</Text><Text className={`text-sm font-bold ${eff >= 90 ? 'text-green-600' : eff >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>{eff.toFixed(1)}% {t('reports.eff')}</Text></View>
               <View className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mb-1"><View className={`h-full rounded-full ${eff >= 90 ? 'bg-green-400' : eff >= 70 ? 'bg-yellow-400' : 'bg-red-400'}`} style={{ width: `${Math.min(eff, 100)}%` }} /></View>
               <View className="flex-row gap-3"><Text className="text-xs text-gray-500 dark:text-gray-400">Target: {row.target_quantity}</Text><Text className="text-xs text-green-600 dark:text-green-400">OK: {row.total_ok || 0}</Text><Text className="text-xs text-red-600 dark:text-red-400">Rejected: {row.total_rejected || 0}</Text><Text className="text-xs text-gray-500 dark:text-gray-400">Plans: {row.plan_count}</Text></View>
@@ -130,14 +130,14 @@ export function ReportsPage() {
           })}
           {tab === 'shift' && data.map((row, idx) => {
             const eff = row.target_quantity > 0 ? ((Number(row.total_ok) || 0) / Number(row.target_quantity)) * 100 : 0;
-            return (<View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 mb-2">
+            return (<View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-3 mb-2">
               <View className="flex-row items-center justify-between mb-2"><View className="flex-row items-center"><Clock size={14} color={sc.iconDefault} /><Text className="font-semibold text-gray-900 dark:text-gray-100 ml-1">{row.shift_name as string}</Text></View><Text className={`text-sm font-bold ${eff >= 90 ? 'text-green-600' : eff >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>{eff.toFixed(1)}%</Text></View>
               <View className="flex-row gap-3"><Text className="text-xs text-gray-500 dark:text-gray-400">Target: {row.target_quantity}</Text><Text className="text-xs text-green-600 dark:text-green-400">OK: {row.total_ok || 0}</Text><Text className="text-xs text-red-600 dark:text-red-400">Rejected: {row.total_rejected || 0}</Text><Text className="text-xs text-gray-500 dark:text-gray-400">Plans: {row.plan_count}</Text></View>
             </View>);
           })}
           {tab === 'rejection' && data.map((row, idx) => (
-            <View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 mb-2">
-              <View className="flex-row items-center justify-between mb-1"><Text className="font-semibold text-gray-900 dark:text-gray-100">{row.plan_date?.split('T')[0]}</Text><View className="bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full"><Text className="text-xs text-red-600 dark:text-red-400">{row.quantity_rejected} rejected</Text></View></View>
+            <View key={idx} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-3 mb-2">
+              <View className="flex-row items-center justify-between mb-1"><Text className="font-semibold text-gray-900 dark:text-gray-100">{row.plan_date?.split('T')[0]}</Text><View className="bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-full"><Text className="text-xs text-red-600 dark:text-red-400">{row.quantity_rejected} rejected</Text></View></View>
               <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">{row.product_name as string} · {row.machine_name as string}</Text>
               <Text className="text-sm text-gray-700 dark:text-gray-300">Produced: {row.quantity_produced} · OK: {row.quantity_ok}</Text>
               {row.rejection_reason && (<View className="bg-red-50 rounded-lg px-2 py-1 mt-1 flex-row items-center"><FileText size={10} color={statusColors.error} /><Text className="text-xs text-red-600 ml-1">{row.rejection_reason as string}</Text></View>)}

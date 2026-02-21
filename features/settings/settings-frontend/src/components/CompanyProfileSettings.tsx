@@ -366,7 +366,7 @@ export function CompanyProfileSettings() {
     <View className="flex-1">
       {/* Title */}
       <View className="mb-6">
-        <Text className="text-xl font-bold text-gray-900 dark:text-white">
+        <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">
           {t('companyProfile.title')}
         </Text>
         <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -387,7 +387,7 @@ export function CompanyProfileSettings() {
       )}
 
       {!isAdmin && (
-        <View className="mb-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+        <View className="mb-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
           <Text className="text-xs text-amber-700 dark:text-amber-300">
             {t('companyProfile.adminOnly')}
           </Text>

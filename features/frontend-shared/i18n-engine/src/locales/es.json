@@ -83,7 +83,26 @@
     "appearance": "Apariencia",
     "language": "Idioma",
     "compliance": "Cumplimiento",
-    "backupData": "Respaldo y datos"
+    "backupData": "Respaldo y datos",
+    "paytrack": "PayTrack"
+  },
+  "paytrack": {
+    "subtitle": "Seguimiento de materiales y gestión de pagos",
+    "modules": "Módulos",
+    "tab": {
+      "dashboard": "Panel",
+      "materials": "Materiales",
+      "projects": "Proyectos",
+      "vendors": "Proveedores",
+      "payments": "Pagos"
+    },
+    "desc": {
+      "dashboard": "Resumen de materiales, gastos y estado de proyectos",
+      "materials": "Seguimiento de materias primas, compras e inventario",
+      "projects": "Gestionar proyectos de construcción y presupuestos",
+      "vendors": "Gestionar proveedores de materiales y saldos",
+      "payments": "Ver historial de pagos y facturas pendientes"
+    }
   },
   "platform": {
     "overview": "Visión general",
@@ -244,7 +263,23 @@
     "gdriveDisconnected": "Google Drive desconectado",
     "disconnectFailed": "Error al desconectar Google Drive",
     "backupDeleted": "Respaldo eliminado",
-    "deleteFailed": "Error al eliminar el respaldo"
+    "deleteFailed": "Error al eliminar el respaldo",
+    "selectModules": "Seleccionar módulos",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo",
+    "encryptData": "Cifrar respaldo",
+    "encryptDesc": "Cifrado AES-256 con clave secreta del servidor",
+    "noModulesSelected": "Ningún módulo seleccionado — seleccione al menos uno",
+    "pleaseSelectModule": "Seleccione al menos un módulo",
+    "module": {
+      "paytrack": "PayTrack (Materiales, Proyectos, Proveedores, Pagos)",
+      "planning": "Planificación de producción",
+      "shifts": "Turnos y asistencia",
+      "machines": "Máquinas y equipos",
+      "downtime": "Registros de tiempo de inactividad",
+      "reports": "Informes y análisis",
+      "settings": "Configuración y ajustes"
+    }
   },
   "trial": {
     "expiresToday": "La prueba expira hoy",
@@ -261,7 +296,7 @@
   "onboarding": {
     "welcome": "¡Bienvenido! Comience rápidamente",
     "emptyFactory": "Su fábrica está vacía. ¿Quiere que configuremos datos de ejemplo para que pueda explorar todas las funciones de inmediato?",
-    "sampleDataDesc": "Crearemos máquinas de ejemplo, turnos, operadores y 3 meses de planes de producción con datos realistas.",
+    "sampleDataDesc": "Crearemos máquinas de ejemplo, turnos, operadores, 3 meses de planes de producción y datos PayTrack (proveedores, proyectos, materiales y pagos) con números realistas.",
     "generateSample": "Generar datos de ejemplo",
     "skip": "Omitir",
     "allSet": "¡Todo listo!",
@@ -283,7 +318,18 @@
     "machineDetails": "2 CNC, Torno, Prensa, Ensamblaje",
     "shiftDetails": "Mañana, Tarde, Noche",
     "planDetails": "Últimos 2 meses + mes próximo",
-    "userDetails": "2 Operadores + 1 Supervisor (contraseña: Test@1234)"
+    "userDetails": "2 Operadores + 1 Supervisor (contraseña: Test@1234)",
+    "paytrackSection": "PayTrack (Materiales y Pagos)",
+    "vendorsLabel": "Proveedores",
+    "projectsLabel": "Proyectos",
+    "materialsLabel": "Materiales",
+    "paymentsLabel": "Pagos",
+    "sixVendors": "6 Proveedores",
+    "fiveProjects": "5 Proyectos",
+    "twentyFiveMaterials": "25 Materiales y Pagos",
+    "vendorDetails": "Cemento, Acero, Eléctrico, Madera, Fontanería, Pinturas",
+    "projectDetails": "Fábrica, Oficina, Almacén y más con presupuestos",
+    "materialDetails": "Facturas en todos los estados con montos realistas"
   },
   "userMgmt": {
     "title": "Gestión de usuarios",

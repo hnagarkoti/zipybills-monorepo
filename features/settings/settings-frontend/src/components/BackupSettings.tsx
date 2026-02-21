@@ -8,8 +8,8 @@
  *   - Backup history list
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Pressable, ActivityIndicator, ScrollView, Platform, Linking } from 'react-native';
-import { Download, Cloud, HardDrive, RefreshCw, Trash2, ExternalLink, Check, AlertCircle, Lock } from 'lucide-react-native';
+import { View, Text, Pressable, ActivityIndicator, ScrollView, Platform, Linking, Switch } from 'react-native';
+import { Download, Cloud, HardDrive, RefreshCw, Trash2, ExternalLink, Check, AlertCircle, Lock, Shield, Package } from 'lucide-react-native';
 import { useLocale } from '@zipybills/i18n-engine';
 import {
   fetchBackups,
@@ -21,8 +21,10 @@ import {
   getGDriveAuthUrl,
   createGDriveBackup,
   disconnectGDrive,
+  BACKUP_MODULES,
   type BackupItem,
   type BackupCapabilities,
+  type BackupOptions,
 } from '../services/backup-api';
 
 // ─── Helpers ──────────────────────────────────
@@ -74,7 +76,7 @@ function ActionCard({ icon, title, description, buttonLabel, onPress, loading, d
         </View>
         <View className="flex-1">
           <View className="flex-row items-center gap-2">
-            <Text className="text-base font-semibold text-gray-900 dark:text-white">{title}</Text>
+            <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">{title}</Text>
             {badge && (
               <View className="bg-amber-100 px-2 py-0.5 rounded-full">
                 <Text className="text-xs font-medium text-amber-700">{badge}</Text>
@@ -129,7 +131,7 @@ function BackupRow({ backup, onDelete, t }: { backup: BackupItem; onDelete: (id:
     <View className="flex-row items-center py-3 px-3 border-b border-gray-100 dark:border-gray-700">
       <View className="mr-3">{typeIcons[backup.type] || <Download size={14} color={colors.gray} />}</View>
       <View className="flex-1">
-        <Text className="text-sm font-medium text-gray-900 dark:text-white" numberOfLines={1}>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-100" numberOfLines={1}>
           {typeLabels[backup.type] || backup.type}
         </Text>
         <Text className="text-xs text-gray-500 mt-0.5">
@@ -165,7 +167,7 @@ function BackupRow({ backup, onDelete, t }: { backup: BackupItem; onDelete: (id:
                 Linking.openURL(url);
               }
             }}
-            className="flex-row items-center gap-1 px-2 py-1.5 rounded-md bg-purple-50 dark:bg-purple-900/20"
+            className="flex-row items-center gap-1 px-2 py-1.5 rounded-md bg-purple-50 dark:bg-purple-900/30"
           >
             <ExternalLink size={12} color={colors.purple} />
             <Text className="text-xs font-medium" style={{ color: colors.purple }}>{t('backup.viewInDrive')}</Text>
@@ -175,6 +177,105 @@ function BackupRow({ backup, onDelete, t }: { backup: BackupItem; onDelete: (id:
         <Pressable onPress={() => onDelete(backup.id)} className="p-1.5 rounded-md bg-red-50">
           <Trash2 size={14} color={colors.red} />
         </Pressable>
+      </View>
+    </View>
+  );
+}
+
+// ─── Module Selector ──────────────────────────
+
+function ModuleSelector({
+  selectedModules,
+  onToggleModule,
+  onSelectAll,
+  encrypted,
+  onToggleEncrypt,
+  t,
+}: {
+  selectedModules: Set<string>;
+  onToggleModule: (id: string) => void;
+  onSelectAll: () => void;
+  encrypted: boolean;
+  onToggleEncrypt: (val: boolean) => void;
+  t: (key: string) => string;
+}) {
+  const allSelected = BACKUP_MODULES.every((m) => selectedModules.has(m.id));
+
+  return (
+    <View className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 mb-4 overflow-hidden">
+      {/* Header */}
+      <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+        <View className="flex-row items-center gap-2">
+          <Package size={16} color={colors.primary} />
+          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {t('backup.selectModules') || 'Select Modules'}
+          </Text>
+        </View>
+        <Pressable onPress={onSelectAll}>
+          <Text className="text-xs font-medium" style={{ color: colors.primary }}>
+            {allSelected
+              ? (t('backup.deselectAll') || 'Deselect All')
+              : (t('backup.selectAll') || 'Select All')}
+          </Text>
+        </Pressable>
+      </View>
+
+      {/* Module checkboxes */}
+      <View className="px-4 py-2">
+        {BACKUP_MODULES.map((mod) => {
+          const checked = selectedModules.has(mod.id);
+          return (
+            <Pressable
+              key={mod.id}
+              onPress={() => onToggleModule(mod.id)}
+              className="flex-row items-center py-2.5 border-b border-gray-50 dark:border-gray-700"
+            >
+              <View
+                className="w-5 h-5 rounded border mr-3 items-center justify-center"
+                style={{
+                  backgroundColor: checked ? colors.primary : 'transparent',
+                  borderColor: checked ? colors.primary : '#d1d5db',
+                  borderWidth: 1.5,
+                }}
+              >
+                {checked && <Check size={12} color="#fff" />}
+              </View>
+              <Text className={`text-sm flex-1 ${checked ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-500 dark:text-gray-400'}`}>
+                {t(mod.labelKey) || mod.id}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      {/* Encryption toggle */}
+      <View className="flex-row items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-700">
+        <View className="flex-row items-center gap-2 flex-1">
+          <Shield size={14} color={encrypted ? colors.primary : colors.gray} />
+          <View className="flex-1">
+            <Text className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {t('backup.encryptData') || 'Encrypt Backup'}
+            </Text>
+            <Text className="text-xs text-gray-500 dark:text-gray-400">
+              {t('backup.encryptDesc') || 'AES-256 encryption using server secret key'}
+            </Text>
+          </View>
+        </View>
+        <Switch
+          value={encrypted}
+          onValueChange={onToggleEncrypt}
+          trackColor={{ false: '#d1d5db', true: '#a7f3d0' }}
+          thumbColor={encrypted ? colors.primary : '#f4f3f4'}
+        />
+      </View>
+
+      {/* Selected count */}
+      <View className="px-4 py-2 bg-emerald-50 dark:bg-emerald-900/10">
+        <Text className="text-xs text-emerald-700 dark:text-emerald-400">
+          {selectedModules.size === 0
+            ? (t('backup.noModulesSelected') || 'No modules selected — please select at least one')
+            : `${selectedModules.size} ${selectedModules.size === 1 ? 'module' : 'modules'} selected${encrypted ? ' · Encrypted' : ''}`}
+        </Text>
       </View>
     </View>
   );
@@ -191,6 +292,33 @@ export function BackupSettings() {
   const [cloudBacking, setCloudBacking] = useState(false);
   const [gdriveBacking, setGdriveBacking] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+
+  // ─── Module selection & encryption state ──
+  const [selectedModules, setSelectedModules] = useState<Set<string>>(
+    () => new Set(BACKUP_MODULES.map((m) => m.id)),
+  );
+  const [encrypted, setEncrypted] = useState(true);
+
+  const toggleModule = (id: string) => {
+    setSelectedModules((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleSelectAll = () => {
+    setSelectedModules((prev) => {
+      const allSelected = BACKUP_MODULES.every((m) => prev.has(m.id));
+      return allSelected ? new Set<string>() : new Set(BACKUP_MODULES.map((m) => m.id));
+    });
+  };
+
+  /** Build BackupOptions from current selection */
+  const getBackupOptions = (): BackupOptions => ({
+    modules: Array.from(selectedModules),
+    encrypted,
+  });
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToast({ msg, type });
@@ -217,10 +345,13 @@ export function BackupSettings() {
 
   // ─── Actions ────────────────────────────────
 
+  const noModulesSelected = selectedModules.size === 0;
+
   const handleExport = async () => {
+    if (noModulesSelected) { showToast(t('backup.pleaseSelectModule') || 'Please select at least one module', 'error'); return; }
     try {
       setExporting(true);
-      const res = await createExport();
+      const res = await createExport(getBackupOptions());
       if (res.success) {
         showToast(t('backup.exportCreated'));
         // Auto-download on web
@@ -239,9 +370,10 @@ export function BackupSettings() {
   };
 
   const handleCloudBackup = async () => {
+    if (noModulesSelected) { showToast(t('backup.pleaseSelectModule') || 'Please select at least one module', 'error'); return; }
     try {
       setCloudBacking(true);
-      const res = await createCloudBackup();
+      const res = await createCloudBackup(getBackupOptions());
       if (res.success) {
         showToast(t('backup.cloudBackupCreated'));
         loadData();
@@ -282,9 +414,10 @@ export function BackupSettings() {
   };
 
   const handleGDriveBackup = async () => {
+    if (noModulesSelected) { showToast(t('backup.pleaseSelectModule') || 'Please select at least one module', 'error'); return; }
     try {
       setGdriveBacking(true);
-      const res = await createGDriveBackup();
+      const res = await createGDriveBackup(getBackupOptions());
       if (res.success) {
         showToast(t('backup.gdriveBackupDone'));
         loadData();
@@ -353,7 +486,7 @@ export function BackupSettings() {
 
       {/* Plan badge */}
       <View className="flex-row items-center gap-2 mb-4">
-        <Text className="text-lg font-bold text-gray-900 dark:text-white">{t('settings.backup')}</Text>
+        <Text className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('settings.backup')}</Text>
         <View className="bg-emerald-100 px-2.5 py-0.5 rounded-full">
           <Text className="text-xs font-semibold text-emerald-700">{plan}</Text>
         </View>
@@ -362,6 +495,16 @@ export function BackupSettings() {
       <Text className="text-sm text-gray-500 dark:text-gray-400 mb-4">
         {t('backup.subtitle')}
       </Text>
+
+      {/* ─── Module Selection ──────────────── */}
+      <ModuleSelector
+        selectedModules={selectedModules}
+        onToggleModule={toggleModule}
+        onSelectAll={toggleSelectAll}
+        encrypted={encrypted}
+        onToggleEncrypt={setEncrypted}
+        t={t}
+      />
 
       {/* ─── Action Cards ──────────────────── */}
 
@@ -398,7 +541,7 @@ export function BackupSettings() {
             <HardDrive size={20} color={colors.purple} />
           </View>
           <View className="flex-1">
-            <Text className="text-base font-semibold text-gray-900 dark:text-white">{t('backup.gdriveBackup')}</Text>
+            <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">{t('backup.gdriveBackup')}</Text>
             <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               {gdriveConnected
                 ? `${t('backup.connectedAs')} ${cap?.googleDrive?.email}. ${t('backup.backupDirectly')}`
@@ -440,7 +583,7 @@ export function BackupSettings() {
                     Linking.openURL(url);
                   }
                 }}
-                className="flex-row items-center justify-center gap-2 py-2 rounded-lg bg-purple-50 dark:bg-purple-900/20"
+                className="flex-row items-center justify-center gap-2 py-2 rounded-lg bg-purple-50 dark:bg-purple-900/30"
               >
                 <ExternalLink size={14} color={colors.purple} />
                 <Text className="text-sm font-medium" style={{ color: colors.purple }}>{t('backup.openDriveFolder')}</Text>
@@ -461,7 +604,7 @@ export function BackupSettings() {
 
       {/* ─── Backup History ────────────────── */}
       <View className="mt-2 mb-2 flex-row items-center justify-between">
-        <Text className="text-base font-semibold text-gray-900 dark:text-white">{t('backup.backupHistory')}</Text>
+        <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">{t('backup.backupHistory')}</Text>
         <Pressable onPress={loadData} className="p-2 rounded-md bg-gray-100 dark:bg-gray-700">
           <RefreshCw size={14} color={colors.gray} />
         </Pressable>

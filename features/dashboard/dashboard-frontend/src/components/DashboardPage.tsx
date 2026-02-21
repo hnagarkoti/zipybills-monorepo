@@ -130,7 +130,7 @@ interface MiniKpiProps {
 
 function MiniKpi({ icon, label, value, subtitle, accentColor, bgClass }: MiniKpiProps) {
   return (
-    <View className={`${bgClass} rounded-2xl p-4 flex-1 min-w-[47%] border border-gray-100 dark:border-gray-800`}>
+    <View className={`${bgClass} rounded-2xl p-4 flex-1 min-w-[47%] border border-gray-100 dark:border-gray-700`}>
       <View className="flex-row items-center gap-2 mb-2">
         <View className="w-8 h-8 rounded-xl items-center justify-center" style={{ backgroundColor: accentColor + '18' }}>
           {icon}
@@ -159,7 +159,7 @@ interface TrendCardProps {
 
 function TrendCard({ title, icon, period, accentColor, periodLabel }: TrendCardProps) {
   return (
-    <View className="bg-white dark:bg-gray-900 rounded-2xl p-4 flex-1 min-w-[47%] border border-gray-100 dark:border-gray-800">
+    <View className="bg-white dark:bg-gray-900 rounded-2xl p-4 flex-1 min-w-[47%] border border-gray-100 dark:border-gray-700">
       <View className="flex-row items-center gap-2 mb-3">
         <View className="w-8 h-8 rounded-xl items-center justify-center" style={{ backgroundColor: accentColor + '18' }}>
           {icon}
@@ -203,7 +203,7 @@ function TrendCard({ title, icon, period, accentColor, periodLabel }: TrendCardP
       </View>
 
       {/* Rejected & Downtime mini-stats */}
-      <View className="flex-row items-center gap-3 mt-2 pt-2 border-t border-gray-50 dark:border-gray-800">
+      <View className="flex-row items-center gap-3 mt-2 pt-2 border-t border-gray-50 dark:border-gray-700">
         <View className="flex-row items-center gap-1">
           <XCircle size={10} color="#ef4444" />
           <Text className="text-[10px] text-gray-500">{formatNumber(period.rejected)} rejected</Text>
@@ -230,7 +230,7 @@ function ComparisonStat({ label, today, yesterday, icon, accentColor }: {
   const isNeutral = diff === 0;
 
   return (
-    <View className="flex-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-800">
+    <View className="flex-1 bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700">
       <View className="flex-row items-center gap-2 mb-2">
         <View className="w-7 h-7 rounded-lg items-center justify-center" style={{ backgroundColor: accentColor + '15' }}>
           {icon}
@@ -276,7 +276,7 @@ function MachineCard({ machine }: { machine: MachineStatus }) {
   const barColor = pct >= 90 ? '#10b981' : pct >= 60 ? '#3b82f6' : pct >= 30 ? '#f59e0b' : '#ef4444';
 
   return (
-    <View className="bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-800 flex-1 min-w-[47%]">
+    <View className="bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 flex-1 min-w-[47%]">
       {/* Header */}
       <View className="flex-row items-center justify-between mb-3">
         <View className="flex-row items-center gap-2 flex-1">
@@ -327,7 +327,7 @@ function ShiftRow({ shift, maxTarget }: { shift: { shift_name: string; produced:
   const pctColor = pct >= 90 ? '#10b981' : pct >= 60 ? '#3b82f6' : pct >= 30 ? '#f59e0b' : '#ef4444';
 
   return (
-    <View className="flex-row items-center py-3 border-b border-gray-50 dark:border-gray-800/50">
+    <View className="flex-row items-center py-3 border-b border-gray-50 dark:border-gray-700/50">
       <View className="w-[100px] flex-row items-center gap-2">
         <Text style={{ fontSize: 16 }}>{shiftIcon}</Text>
         <Text className="text-sm font-semibold text-gray-800 dark:text-gray-200">{shift.shift_name}</Text>
@@ -658,7 +658,7 @@ function ShiftHistoryChart({ history, isDesktop }: { history: ShiftHistoryDay[];
       </View>
 
       {/* Summary row beneath chart */}
-      <View className="flex-row mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 gap-4">
+      <View className="flex-row mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 gap-4">
         {(() => {
           const weekTotal = byDate.reduce((s, [, shifts]) => s + shifts.reduce((ss, sh) => ss + sh.produced, 0), 0);
           const weekTarget = byDate.reduce((s, [, shifts]) => s + shifts.reduce((ss, sh) => ss + sh.target, 0), 0);
@@ -700,7 +700,7 @@ function RejectionReasonRow({ reason, index, isLast }: { reason: TopRejectionRea
   const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : null;
 
   return (
-    <View className={`py-3 px-1 ${!isLast ? 'border-b border-gray-50 dark:border-gray-800/50' : ''}`}>
+    <View className={`py-3 px-1 ${!isLast ? 'border-b border-gray-50 dark:border-gray-700/50' : ''}`}>
       <View className="flex-row items-center mb-2">
         <View className="flex-row items-center gap-2 flex-1">
           {medal ? (
@@ -752,8 +752,8 @@ function ActivityRow({ item, isLast }: { item: { activity_id: number; action: st
   const actionLabel = item.action.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (l: string) => l.toUpperCase());
 
   return (
-    <View className={`flex-row items-center py-3 ${!isLast ? 'border-b border-gray-50 dark:border-gray-800/50' : ''}`}>
-      <View className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/20 items-center justify-center mr-3">
+    <View className={`flex-row items-center py-3 ${!isLast ? 'border-b border-gray-50 dark:border-gray-700/50' : ''}`}>
+      <View className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 items-center justify-center mr-3">
         <Activity size={14} color={colors.violet[500]} />
       </View>
       <View className="flex-1">
@@ -827,7 +827,7 @@ export function DashboardPage() {
       <View className="p-4">
 
         {/* ── Hero Section: Live Status + Efficiency ── */}
-        <View className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 overflow-hidden mb-4">
+        <View className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-700 overflow-hidden mb-4">
           {/* Live status strip */}
           <View className={`px-4 py-2.5 flex-row items-center gap-2 ${d.rejectionRate > 5 ? 'bg-red-50 dark:bg-red-950/30' : 'bg-emerald-50 dark:bg-emerald-950/30'}`}>
             <PulseDot color={d.rejectionRate > 5 ? '#ef4444' : '#10b981'} size={8} />
@@ -1018,10 +1018,10 @@ export function DashboardPage() {
               icon={<BarChart3 size={18} color={colors.violet[500]} />}
               count={d.shiftSummary.length}
             />
-            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
               {/* Today's summary */}
               <View className="px-4 py-1">
-                <View className="flex-row items-center gap-1.5 pt-3 pb-1 mb-1 border-b border-gray-100 dark:border-gray-800">
+                <View className="flex-row items-center gap-1.5 pt-3 pb-1 mb-1 border-b border-gray-100 dark:border-gray-700">
                   <Text className="text-xs font-semibold text-gray-500">Today</Text>
                 </View>
                 {d.shiftSummary.map((shift, i) => (
@@ -1031,7 +1031,7 @@ export function DashboardPage() {
 
               {/* Weekly chart */}
               {d.shiftHistory && d.shiftHistory.length > 0 && (
-                <View className="px-4 pt-4 pb-4 border-t border-gray-100 dark:border-gray-800">
+                <View className="px-4 pt-4 pb-4 border-t border-gray-100 dark:border-gray-700">
                   <View className="flex-row items-center justify-between mb-3">
                     <View className="flex-row items-center gap-2">
                       <Calendar size={14} color="#6366f1" />
@@ -1054,8 +1054,8 @@ export function DashboardPage() {
               icon={<AlertOctagon size={18} color="#ef4444" />}
               count={d.topRejectionReasons.length}
             />
-            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-              <View className="px-3 py-2 bg-red-50/50 dark:bg-red-950/20 border-b border-gray-100 dark:border-gray-800">
+            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+              <View className="px-3 py-2 bg-red-50/50 dark:bg-red-950/20 border-b border-gray-100 dark:border-gray-700">
                 <Text className="text-[10px] font-medium text-gray-500">
                   {t('dashboard.rejectionReasonsDesc')}
                 </Text>
@@ -1098,7 +1098,7 @@ export function DashboardPage() {
               icon={<Activity size={18} color={colors.violet[500]} />}
               count={d.recentActivity.length}
             />
-            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 px-4 py-1">
+            <View className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 px-4 py-1">
               {d.recentActivity.slice(0, 8).map((a, i) => (
                 <ActivityRow key={a.activity_id} item={a} isLast={i === Math.min(d.recentActivity.length - 1, 7)} />
               ))}
