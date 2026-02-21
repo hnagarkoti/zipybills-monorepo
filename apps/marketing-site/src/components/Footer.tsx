@@ -50,6 +50,7 @@ export default function Footer() {
               {[
                 { href: '/about', label: 'About Us' },
                 { href: '/solutions', label: 'Our Solutions' },
+                { href: '/pricing', label: 'Pricing' },
                 { href: '/download', label: '📱 Download App' },
                 { href: '/brochure', label: 'Download Brochure' },
                 { href: '/contact', label: 'Contact Us' },
